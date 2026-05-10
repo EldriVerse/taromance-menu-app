@@ -32,7 +32,15 @@ export function getMenuItems(categoryId: CategoryId, tabId?: string): MenuItem[]
         return category?.tabs.length ? item.tabId === tabId : true
       }
 
-      return tab.kinds.includes(item.kind) && (!item.tabId || item.tabId === tab.id)
+      if (!tab.kinds.includes(item.kind)) {
+        return false
+      }
+
+      if (tab.id === 'all') {
+        return true
+      }
+
+      return !item.tabId || item.tabId === tab.id
     }),
   )
 }
