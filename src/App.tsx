@@ -16,7 +16,7 @@ function App() {
   const [entered, setEntered] = useState(false)
   const [language, setLanguage] = useState<LanguageCode>('ko')
   const categories = useMemo(() => getAvailableCategories(), [])
-  const [activeCategoryId, setActiveCategoryId] = useState<CategoryId>('cocktail')
+  const [activeCategoryId, setActiveCategoryId] = useState<CategoryId>('guide')
   const activeCategory = categories.find((category) => category.id === activeCategoryId) ?? categories[0]
   const [activeTabId, setActiveTabId] = useState<string | undefined>(activeCategory.tabs[0]?.id)
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)

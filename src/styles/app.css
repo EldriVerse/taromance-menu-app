@@ -53,27 +53,55 @@
 }
 
 .language-toggle {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  border: 1px solid rgb(212 167 77 / 34%);
-  border-radius: 999px;
-  background: rgb(18 16 13 / 72%);
+  position: relative;
+  display: inline-block;
 }
 
 .language-toggle button {
-  min-width: 56px;
-  min-height: 34px;
+  min-height: 38px;
   border: 0;
-  border-radius: 999px;
-  color: rgb(255 244 209 / 72%);
-  background: transparent;
   cursor: pointer;
 }
 
-.language-toggle button.is-active {
+.language-toggle__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 82px;
+  padding: 0 14px;
+  border-radius: 999px;
   color: var(--color-ink);
   background: var(--color-gold);
+  font-weight: 900;
+}
+
+.language-toggle__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  display: grid;
+  width: 142px;
+  padding: 6px;
+  border: 1px solid rgb(212 167 77 / 52%);
+  border-radius: var(--radius-card);
+  background: rgb(27 23 18 / 96%);
+  box-shadow: 0 16px 30px rgb(0 0 0 / 34%);
+  z-index: 30;
+}
+
+.language-toggle__menu button {
+  width: 100%;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: rgb(255 244 209 / 78%);
+  background: transparent;
+  text-align: left;
+}
+
+.language-toggle__menu button.is-active {
+  color: var(--color-ink);
+  background: var(--color-gold);
+  font-weight: 900;
 }
 
 .app-shell {
