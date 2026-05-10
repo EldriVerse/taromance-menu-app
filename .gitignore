@@ -21,6 +21,10 @@ out/
 .env
 .env.*
 !.env.example
+!.env.local.example
+
+# Temporary scaffolds
+_scaffold/
 
 # Editor
 .idea/

@@ -1,15 +1,21 @@
 # Taromance Menu App
 
-타로맨스 메뉴판 앱 프로젝트입니다.
+타로맨스 매장용 태블릿 메뉴 앱 리뉴얼 프로젝트입니다.
 
-## Project Status
+## Status
 
-- Git repository initialized
-- Default branch: `main`
-- GitHub repository: `EldriVerse/taromance-menu-app`
+- Repository: `EldriVerse/taromance-menu-app`
+- App stack: React + Vite + TypeScript
+- First MVP shell: portal screen, responsive menu layout, local data, tarot card selector
+- Planning doc: [docs/taromance-menu-app-planning.md](docs/taromance-menu-app-planning.md)
 
-## Next Steps
+## Commands
 
-1. Clone the repository on the development laptop.
-2. Scaffold the app framework.
-3. Keep project direction in repository docs so work can continue across Codex sessions.
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+```
+
+Firebase credentials are intentionally kept out of git. Copy `.env.local.example` to `.env.local` when Firebase integration starts.
