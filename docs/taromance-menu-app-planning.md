@@ -283,6 +283,7 @@ UX 원칙:
 - 가로 모드는 RPG 사이드 메뉴처럼, 세로 모드는 하단 퀵슬롯처럼 느껴지게 한다.
 - 하위 탭은 항상 Grimoire Scroll 상단에 위치한다.
 - 필터, 추천, 언어, 설정은 카테고리 버튼과 섞지 않는다.
+- 하위 탭 아래 또는 스크롤 상단에는 해당 메뉴 영역의 한줄 안내문을 표시한다.
 
 ## 7. 신규 앱 권장 방향
 
@@ -308,11 +309,39 @@ UX 원칙:
 
 매장용 태블릿 기준:
 
-- 10인치 이상 가로 모드 우선
+- Lenovo Xiaoxin Pad 2024 12.7인치 제품을 1차 기준 디바이스로 사용
+- 12.7인치, 16:10 화면비, 3K급 해상도 기준으로 UI 검증
+- 가로 모드 우선이지만 세로 모드도 정식 지원
 - 터치 타겟 44px 이상
 - 가격과 이름 가독성 우선
 - 과한 애니메이션보다 빠른 전환
 - 어두운 바 환경에서도 읽히는 대비
+
+### 기준 디바이스
+
+1차 매장 운영 디바이스:
+
+- 제품: Lenovo Xiaoxin Pad 2024 12.7인치 계열
+- 화면 크기: 12.7인치
+- 화면비: 16:10
+- 해상도 기준: 2944 x 1840
+- 운영 방향: 태블릿 앱/PWA/WebView 형태
+
+디자인 기준:
+
+- Landscape는 16:10 가로 화면을 기준으로 좌측 Category Rail과 우측 Grimoire Scroll을 배치한다.
+- Portrait는 16:10 세로 화면을 기준으로 하단 Category Dock과 중앙 Grimoire Scroll을 배치한다.
+- UI는 고해상도 화면에서 지나치게 작아지지 않도록 CSS 픽셀 기준의 터치/글자 크기를 우선한다.
+- 카드, 버튼, 탭, 필터칩은 손가락 터치 기준 최소 44px 이상의 조작 영역을 유지한다.
+- 실제 검증은 브라우저 viewport뿐 아니라 실기기에서 최종 확인한다.
+
+권장 검증 viewport:
+
+- Landscape: `1472 x 920` CSS px 근처
+- Portrait: `920 x 1472` CSS px 근처
+- 보조 검증: `1280 x 800`, `1024 x 768`
+
+정확한 CSS viewport는 Android 브라우저/WebView의 device pixel ratio, 주소창/시스템바/전체화면 여부에 따라 달라질 수 있으므로, 개발 중 실기기에서 `window.innerWidth`, `window.innerHeight`, `devicePixelRatio`를 확인해 최종 보정한다.
 
 ### 데이터/이미지 연동 방향
 
@@ -477,6 +506,7 @@ type MenuItem = {
   id: string;
   code?: string;
   order: number;
+  sort_code: number;
   status: "active" | "hidden" | "sold_out";
   category: "guide" | "whisky" | "cocktail" | "wine_other_spirits";
   subcategory: string;
@@ -491,6 +521,7 @@ type MenuItem = {
     glass?: number;
     bottle?: number;
     customLabel?: string;
+    displayMode?: "short_thousand" | "full";
   };
   image?: {
     url: string;
@@ -505,6 +536,8 @@ type MenuItem = {
   };
 };
 ```
+
+가격 표시는 기본적으로 `short_thousand`를 사용한다. 예를 들어 `16000`은 리스트에서 `16`으로 표시하고, 상세/주문 확인처럼 금액 오해가 생기면 안 되는 화면에서는 `16,000원` 전체 표기를 사용할 수 있다.
 
 ### SpiritDetail
 
@@ -633,42 +666,330 @@ type LocalizedText = {
 
 ## 10. MVP 범위
 
-1차 MVP:
+MVP는 “매장 태블릿에서 실제 메뉴판으로 시연 가능한 앱”을 목표로 한다. 단, 어드민 페이지 구현은 본 저장소의 MVP 범위에 포함하지 않는다. 초기 개발은 로컬 샘플 데이터로 진행하고, 원격 Firestore 연동은 구조가 안정된 뒤 붙인다.
 
-- 메뉴판 메인 화면
-- 카테고리/하위 카테고리 이동
-- Guide 카테고리는 이용 안내/공지사항/외부 음식 안내 카드로 구성
-- Whisky 카테고리는 Recommend, Scotch, American, Others 탭 제공
-- 칵테일 카테고리는 Tarot Signature Cocktail, Custom Cocktail 2개 탭만 제공
-- Tarot Signature Cocktail은 10종 카드 캐러셀/캐릭터 선택창 방식으로 제공
-- Custom Cocktail 탭은 설정값에 따라 ON/OFF 가능
-- Wine & Other Spirits는 통합 카테고리로 제공하고 내부 필터칩으로 구분
-- 메뉴 리스트
+### MVP-0: 프로젝트 기반
+
+목표:
+
+- 앱 개발을 시작할 수 있는 최소 기반을 만든다.
+
+포함:
+
+- React + Vite + TypeScript 프로젝트 생성
+- GitHub 저장소 연결
+- 기본 라우트/앱 셸 구성
+- 전역 스타일 토큰 초안
+- `.env.local` 사용 규칙과 `.gitignore` 정리
+- 로컬 샘플 데이터 위치 생성
+
+제외:
+
+- Firebase 실연동
+- 실제 메뉴 전체 입력
+- 카드 캐러셀 고급 애니메이션
+
+완료 기준:
+
+- 로컬 개발 서버가 실행된다.
+- 첫 화면이 빈 페이지가 아니라 앱 프레임을 표시한다.
+- Git 커밋/푸시가 가능하다.
+
+### MVP-1: 메뉴판 앱 셸
+
+목표:
+
+- 기존 UI 구조를 계승한 가로/세로 반응형 메뉴판 뼈대를 만든다.
+
+포함:
+
+- Portal 시작 화면
+- Grimoire 메뉴판 화면
+- Landscape: 좌측 Category Rail + 우측 Grimoire Scroll
+- Portrait: 중앙 Grimoire Scroll + 하단 Category Dock
+- 상위 카테고리: Guide, Whisky, Cocktail, Wine & Other Spirits
+- 현재 선택 카테고리 상태 유지
+- 기본 배경/스크롤 컨셉 스타일
+
+제외:
+
+- 실제 상세 데이터 표시
+- Firebase 데이터 로딩
+- 복잡한 필터
+
+완료 기준:
+
+- 가로/세로 화면 전환 시 카테고리 위치가 바뀐다.
+- 선택한 카테고리가 유지된다.
+- 태블릿 크기에서 주요 UI가 겹치지 않는다.
+- Lenovo Xiaoxin Pad 2024 12.7인치 실기기 또는 동등 viewport에서 레이아웃이 깨지지 않는다.
+
+### MVP-2: 로컬 데이터와 기본 메뉴 탐색
+
+목표:
+
+- 로컬 샘플 데이터만으로 주요 메뉴 탐색이 가능하게 한다.
+
+포함:
+
+- `MenuItem`, `SpiritDetail`, `CocktailDetail`, `AppSettings` 타입 정의
+- `MenuNotice` 타입 정의
+- `LocalMenuRepository`
+- `sort_code` 기준 정렬
+- 천 원 단위 축약 가격 표시
+- Guide 카드: 이용 안내, 공지사항, 외부 음식/배달 안내
+- Whisky 탭: Recommend, Scotch, American, Others
+- Wine & Other Spirits 필터칩: All, Wine, Spirits, Liqueur, Other
+- 일반 메뉴 리스트/카드
+- 카테고리/세부탭별 안내문 티커
+- 품절/숨김 상태 반영
+- 추천 배지 표시
+
+제외:
+
+- Tarot Signature 카드 캐러셀
+- 원격 데이터 연동
+- 고급 검색/필터
+
+완료 기준:
+
+- 로컬 샘플 데이터 수정만으로 메뉴 목록이 바뀐다.
+- 로컬 샘플 안내문 수정만으로 상단 안내문이 바뀐다.
+- 숨김 메뉴는 화면에 보이지 않는다.
+- 품절 메뉴는 시각적으로 구분된다.
+- 품절 메뉴에는 붉은색 2줄 취소선과 SOLD OUT 표시가 적용된다.
+- 가격 `16000`은 리스트에서 `16`으로 표시된다.
+
+### MVP-3: Tarot Signature Cocktail 경험
+
+목표:
+
+- 앱의 대표 경험인 타로 카드 선택 UI를 구현한다.
+
+포함:
+
+- Cocktail 탭: Tarot Signature Cocktail, Custom Cocktail
+- Tarot Signature Cocktail 10종 샘플 데이터
+- 7:12 비율 카드 이미지 컨테이너
+- 좌우 버튼 이동
+- 터치 스와이프 이동
+- 중앙 선택 카드 + 좌우 카드 일부 노출
+- 현재 위치 인디케이터 또는 미니 카드 스트립
+- 카드 하단 이름, 가격, 베이스/맛 태그/도수 요약
+- 카드 선택 시 상세 모달 열기
+- 카드 이미지 fallback
+
+Custom Cocktail 처리:
+
+- `AppSettings.features.customCocktail.enabled`가 `false`이면 Custom Cocktail 탭/버튼을 숨긴다.
+- `true`이면 임시 안내 화면을 표시한다.
+- 실제 커스텀 칵테일 설계는 후속 단계에서 다룬다.
+
+제외:
+
+- 최종 타로 카드 일러스트 완성본
+- 커스텀 칵테일 주문 플로우
+- 3D/고급 카드 전환 효과
+
+완료 기준:
+
+- 10종 카드를 좌우 버튼과 스와이프로 탐색할 수 있다.
+- 카드 비율이 모든 화면에서 7:12로 유지된다.
+- 카드 탭 시 해당 칵테일 상세 모달이 열린다.
+- Landscape와 Portrait 모두에서 카드가 Category Rail/Dock과 겹치지 않는다.
+
+### MVP-4: 상세 보기와 4개국어
+
+목표:
+
+- 손님이 메뉴를 이해하고 주문할 수 있을 만큼 상세 정보와 언어 전환을 완성한다.
+
+포함:
+
 - 메뉴 상세 모달
+- 주류 상세: 이미지, 이름, 가격, ABV, 지역/증류소, 설명
+- 칵테일 상세: 이미지, 이름, 가격, ABV, 베이스, 레시피/스토리, 맛 태그
+- Guide 상세 패널
 - 한국어/영어/일본어/중국어 전환
-- 품절/숨김 상태
-- 추천 메뉴 표시
-- 로컬 데이터 기반 메뉴 관리
-- 외부 이미지 URL 로딩 및 fallback 처리
-- 가로/세로 반응형 카테고리 레이아웃
-- 태블릿 가로 화면 최적화
+- 언어 변경 시 현재 화면/선택 상태 유지
+- 번역 누락 시 `ko` fallback
+- 외부 이미지 URL 로딩
+- 이미지 로딩 실패 fallback
+- 메뉴/타로카드/좌석배치 fallback 이미지 정책
 
-2차:
+제외:
 
-- Firebase/Supabase/API 데이터 연동
+- 번역 품질 최종 검수
+- 관리자 번역 편집 기능
+- 오프라인 이미지 캐시 고도화
+
+완료 기준:
+
+- 모든 주요 화면에서 4개국어 전환이 가능하다.
+- 상세 모달의 필수 정보가 언어별로 표시된다.
+- 이미지 실패 상황에서도 레이아웃이 깨지지 않는다.
+
+### MVP-5: Firebase 읽기 연동 준비
+
+목표:
+
+- 외부 어드민/Firestore와 연결 가능한 구조를 만든다.
+
+포함:
+
+- `FirebaseMenuRepository` 초안
+- `.env.local` 기반 Firebase config 로딩
+- Firestore 읽기 전용 연결
+- 확인된 컬렉션 기준 데이터 매핑 초안
+- 안내문 데이터 읽기 구조
+- 로컬 데이터 fallback
+- Portal 단계 데이터 변경 확인
+- 변경분이 있을 때만 로컬 캐시 갱신
+- 로딩/오류/빈 상태 UI
+
+확인된 Firestore 후보:
+
+- `admin_draft_menu_board_items`
+- `admin_draft_menu_board_tabs`
+- `admin_draft_cocktails`
+- `admin_draft_spirits`
+- `admin_draft_guide`
+- `live_cocktails`
+- `meta`
+
+제외:
+
+- 어드민 쓰기 기능
+- 인증/권한 관리 UI
+- 데이터 마이그레이션 자동화
+- 운영 배포 자동화
+
+완료 기준:
+
+- `.env.local`이 있으면 Firestore에서 읽기를 시도한다.
+- Firestore 연결 실패 시 로컬 샘플 데이터로 앱이 동작한다.
+- Firebase 설정값은 Git에 커밋되지 않는다.
+- 메뉴 화면 사용 중에는 Firestore 변경이 실시간으로 끼어들지 않는다.
+
+### Post-MVP
+
 - 이미지 CDN/외부 URL 캐시 전략
-- 위스키/칵테일 필터
-- 커스텀 오더 보조 화면
-- 관리자용 데이터 편집 화면
-
-3차:
-
+- 위스키 고급 필터
+- 칵테일 고급 필터
+- Custom Cocktail 주문 보조 화면
+- 메뉴 주문 요청 기능
 - QR 웹 메뉴 공개 버전
 - 매장 태블릿 전용 키오스크 모드
 - 메뉴 조회 로그/인기 메뉴 분석
 - 계절 메뉴/이벤트 메뉴 예약 노출
 
+### Future: 주문 요청 플로우
+
+이 기능은 MVP에는 포함하지 않는다. 향후 메뉴판 앱이 단순 열람을 넘어, 손님이 메뉴를 선택하고 자신의 좌석을 지정해 주문 요청을 보낼 수 있는 구조로 확장한다.
+
+핵심 방향:
+
+- 장바구니형 주문이 아니라 메뉴 상세에서 바로 “주문하기”를 누르는 단일 메뉴 주문 흐름으로 설계한다.
+- 손님이 주문하기를 누르면 좌석 선택 화면을 띄운다.
+- 좌석 선택은 텍스트 목록이 아니라 매장 좌석 배치 이미지 위에서 자신의 좌석 위치를 선택하는 방식으로 제공한다.
+- 좌석 선택 후 주문 요청이 완료된다.
+- 주문 요청은 DB에 저장된다.
+- 주문 요청은 Discord Bot 또는 Discord Webhook을 통해 직원 채널로 전달된다.
+
+예상 흐름:
+
+```text
+메뉴 상세 보기
+  → 주문하기
+  → 좌석 배치 이미지 표시
+  → 좌석 위치 선택
+  → 주문 확인
+  → DB 저장
+  → Discord 알림 전송
+```
+
+주문 데이터 초안:
+
+```ts
+type OrderRequest = {
+  id: string;
+  menuItemId: string;
+  menuNameSnapshot: LocalizedText;
+  priceSnapshot?: number;
+  seatId: string;
+  seatLabel?: string;
+  status: "requested" | "accepted" | "rejected" | "served" | "cancelled";
+  requestedAt: string;
+  source: "tablet";
+  notes?: string;
+};
+```
+
+좌석 데이터 초안:
+
+```ts
+type SeatMap = {
+  id: string;
+  imageUrl: string;
+  seats: Array<{
+    id: string;
+    label: string;
+    x: number;
+    y: number;
+    radius?: number;
+    enabled: boolean;
+  }>;
+};
+```
+
+고려사항:
+
+- 좌석 이미지 비율과 좌표계는 고정되어야 한다.
+- 태블릿 가로/세로에서 좌석 선택 영역이 정확히 맞아야 한다.
+- 중복 주문 방지를 위해 주문 완료 후 짧은 확인/잠금 상태가 필요하다.
+- 직원이 주문을 확인할 수 있도록 Discord 메시지에는 메뉴명, 가격, 좌석명, 요청 시간이 포함되어야 한다.
+- Discord Bot/Webhook 토큰은 클라이언트 앱에 포함하지 않는다.
+- 주문 전송은 클라이언트에서 Discord로 직접 보내지 않고, 서버/API/Cloud Function을 통해 처리한다.
+- 이 기능을 시작하기 전, 직원 운영 흐름과 주문 취소/품절 대응 정책을 먼저 정해야 한다.
+
 ## 11. 화면 요구사항
+
+### 운영 모드
+
+매장 태블릿은 손님용 메뉴판 전용 기기로 운영한다.
+
+원칙:
+
+- 앱은 전체화면으로 실행한다.
+- 화면 꺼짐 방지가 되어야 한다.
+- 손님이 뒤로가기, 새로고침, 브라우저 주소창 조작을 할 수 없어야 한다.
+- 전원 버튼 등으로 화면이 강제로 꺼졌다가 다시 켜진 경우에는 초기 Portal 화면으로 돌아간다.
+- 앱 재시작 시에도 초기 Portal 화면에서 데이터 업데이트 확인 후 메뉴판으로 진입한다.
+- 운영 중 데이터 동기화는 메뉴 화면에서 실시간으로 강제 반영하지 않는다.
+
+초기화/동기화 흐름:
+
+```text
+앱 실행 또는 화면 강제 복귀
+  → Portal 초기 화면
+  → 로컬 데이터 즉시 준비
+  → Firebase/원격 데이터 변경 확인
+  → 변경분이 있으면 로컬 캐시 업데이트
+  → 메뉴판 진입
+```
+
+뒤로가기/새로고침 정책:
+
+- Android 뒤로가기 버튼은 메뉴판 내 탐색에 사용하지 않는다.
+- 뒤로가기 입력이 들어오면 현재 모달이 열려 있을 때만 모달 닫기로 처리한다.
+- 모달이 없으면 뒤로가기 입력은 무시하거나 Portal로 돌아가지 않게 막는다.
+- 새로고침은 사용자 조작으로 노출하지 않는다.
+- 개발/운영자용 강제 새로고침은 숨겨진 운영 액션으로만 제공할 수 있다.
+
+화면 꺼짐 방지:
+
+- PWA/WebView/Android 래퍼 단계에서 Wake Lock 또는 Android keep screen on 옵션을 적용한다.
+- 브라우저/PWA 환경에서 Wake Lock API를 사용할 수 없으면 Android WebView 래퍼에서 처리한다.
 
 ### 메뉴판 메인
 
@@ -683,7 +1004,64 @@ type LocalizedText = {
 - Cocktail 하위 탭은 Tarot Signature Cocktail과 Custom Cocktail만 사용
 - Custom Cocktail은 어드민 설정값이 OFF이면 버튼 자체를 숨김
 - Wine & Other Spirits는 하위 탭 대신 필터칩과 섹션 헤더를 표시
+- 세부탭/필터칩 아래에는 해당 영역의 안내문 티커를 표시
 - 리스트는 빠르게 스캔 가능해야 함
+
+### 안내문 티커
+
+각 메뉴 카테고리 또는 세부탭 화면의 스크롤 상단 근처에 한줄 안내문을 표시한다. 안내문은 DB에서 리스트 형태로 받아오며, 여러 문구가 있을 경우 천천히 바뀌거나 흐르는 방식으로 노출한다.
+
+역할:
+
+- 메뉴 선택 전에 알아야 할 짧은 안내를 제공한다.
+- 카테고리별 주문 팁, 가격 안내, 품절/추천 안내, 외부 음식 안내 등을 전달한다.
+- 긴 공지사항이 아니라 한 줄로 읽히는 짧은 문구를 우선한다.
+
+표시 위치:
+
+- Landscape: 우측 Grimoire Scroll 상단, 하위 탭 바로 아래.
+- Portrait: 중앙 Grimoire Scroll 상단, 하위 탭 또는 필터칩 바로 아래.
+- Guide 카드 화면에서는 필요 시 카드 목록 상단에 표시한다.
+
+동작:
+
+- 안내문이 1개이면 고정 텍스트로 표시한다.
+- 안내문이 2개 이상이면 일정 시간마다 부드럽게 교체한다.
+- 문구가 길 경우 천천히 흐르는 marquee 형태를 사용할 수 있다.
+- 손님이 메뉴를 읽는 데 방해되지 않도록 속도는 느리게 유지한다.
+- 안내문 영역은 메뉴 리스트 레이아웃을 밀어내되, 메뉴 위를 덮지 않는다.
+- 사용자가 카테고리/세부탭을 바꾸면 해당 영역의 안내문으로 전환한다.
+- 안내문이 없으면 영역을 숨긴다.
+
+안내문 데이터 초안:
+
+```ts
+type MenuNotice = {
+  id: string;
+  scope: {
+    category?: "guide" | "whisky" | "cocktail" | "wine_other_spirits";
+    subcategory?: string;
+  };
+  messages: LocalizedText[];
+  displayMode: "static" | "fade" | "marquee";
+  intervalMs?: number;
+  enabled: boolean;
+  order: number;
+};
+```
+
+예시:
+
+```text
+Whisky / Scotch:
+각 메뉴명을 터치하면 상세 정보를 확인할 수 있습니다.
+
+Cocktail / Tarot Signature:
+타로 카드 이미지를 좌우로 넘겨 원하는 칵테일을 선택해보세요.
+
+Wine & Other Spirits:
+와인 코르키지는 병당 30,000원입니다.
+```
 
 ### Tarot Card Selector
 
@@ -722,12 +1100,35 @@ Tarot Signature Cocktail 전용 화면이다.
 - 가격
 - 품절 상태
 
+품절 표시:
+
+- 품절 메뉴는 숨기지 않고 표시한다.
+- 메뉴명에는 붉은색 취소선 2줄을 길게 그어 품절 상태를 강하게 표시한다.
+- 메뉴 카드에는 `SOLD OUT` 텍스트 또는 품절 이미지를 함께 표시한다.
+- 품절 메뉴는 상세 모달을 열 수는 있지만 주문/추천 액션은 비활성화한다.
+- 품절 표시 색상은 어두운 매장 환경에서도 식별 가능한 붉은색 계열을 사용한다.
+
 선택 표시:
 
 - 추천 배지
 - 도수
 - 맛 태그
 - 이미지/잔 아이콘
+
+가격 표시:
+
+- 가격 데이터는 원 단위 숫자로 저장한다.
+- 메뉴판 표시에서는 천 원 단위로 축약한다.
+- `16,000원`은 `16`으로 표시한다.
+- `120,000원`은 `120`으로 표시한다.
+- 단, 상세 모달이나 주문 확인 화면에서는 필요 시 `16,000원`처럼 전체 금액을 표시할 수 있다.
+- 가격이 없거나 0인 안내/타이틀 항목은 가격 영역을 숨긴다.
+
+정렬 기준:
+
+- 메뉴 정렬은 `sort_code` 오름차순을 기본으로 한다.
+- `sort_code`가 없는 항목은 해당 카테고리의 마지막에 배치한다.
+- 같은 `sort_code`가 중복되면 `name.ko` 또는 `id` 기준으로 안정 정렬한다.
 
 ### 상세 모달
 
@@ -761,6 +1162,73 @@ All / Wine / Spirits / Liqueur / Other
 ```
 
 Guide에서는 메뉴 필터를 사용하지 않는다.
+
+### 이미지 로딩과 fallback
+
+외부 이미지 링크는 만료되거나 깨질 수 있으므로 모든 이미지 영역은 fallback을 가져야 한다.
+
+정책:
+
+- 메뉴 이미지, 타로 카드 이미지, 좌석 배치 이미지는 각각 별도 fallback을 준비한다.
+- 이미지 로딩 전에는 skeleton 또는 어두운 placeholder를 표시한다.
+- 이미지 로딩 실패 시 레이아웃 크기는 유지하고 fallback 이미지만 대체한다.
+- 타로 카드 fallback은 반드시 7:12 비율을 유지한다.
+- 메뉴 이미지 fallback은 메뉴 타입에 맞는 기본 이미지를 사용한다.
+- 외부 URL이 만료되어도 앱 전체가 깨지지 않아야 한다.
+
+필요한 fallback 자산:
+
+- `fallback-menu.png`
+- `fallback-tarot-card.png`
+- `fallback-seat-map.png`
+- `fallback-guide.png`
+
+기존 프로젝트 재사용 후보:
+
+- `iv_loading.png`: 512 x 512. 로딩/placeholder 후보.
+- `noimage.png`: 640 x 400. 일반 메뉴 이미지 fallback 후보.
+- `special001.png`: 512 x 512. 이벤트/특수 항목 placeholder 후보.
+- `iv_popup_background.png`: 180 x 280. 상세 모달 배경 질감 후보.
+- `iv_mainbg.jpg`: 167 x 267. Portal/배경 질감 후보.
+- `iv_scroll_1920h_03.png`: 1200 x 1920. Grimoire Scroll 배경 후보.
+- `iv_scroll.png`: 3500 x 5250. 고해상도 스크롤 원본 후보.
+
+자산 마이그레이션 정책:
+
+- 기존 Android `res/drawable*` 자산은 새 앱의 `public/assets/legacy/` 또는 `src/assets/legacy/`로 복사해 검토한다.
+- 고해상도 스크롤 원본은 용량이 크므로 웹용으로 최적화한 버전을 별도로 만든다.
+- 타로 카드 fallback은 기존 `noimage.png`를 그대로 쓰지 않고, 7:12 비율에 맞춘 새 이미지를 만든다.
+- 기존 자산을 그대로 쓰는 경우에도 파일명은 새 앱 의미에 맞춰 정리한다.
+
+### 네트워크/데이터 동기화 정책
+
+앱은 Firebase 연결 실패를 항상 정상적인 가능성으로 간주한다. 메뉴판은 원격 연결이 실패해도 로컬 데이터로 동작해야 한다.
+
+원칙:
+
+- 앱의 기본 실행 데이터는 로컬 데이터 또는 마지막 성공 캐시다.
+- Firebase는 앱 실행/Portal 단계에서만 변경 여부를 확인한다.
+- 메뉴판 사용 중에는 Firestore 변경을 실시간으로 반영하지 않는다.
+- 원격 데이터가 바뀐 경우 Portal 단계에서 변경분을 받아 로컬 캐시를 업데이트한 뒤 메뉴판으로 진입한다.
+- Firebase 연결 실패 시 에러 화면으로 막지 않고 로컬 데이터로 계속 진행한다.
+- 원격 연결 실패 여부는 운영자 확인용 로그/상태로 남기되 손님에게 과하게 노출하지 않는다.
+
+권장 흐름:
+
+```text
+Portal 진입
+  → 로컬 데이터 로드
+  → Firebase 버전/updated_at 확인
+  → 변경 없음: 바로 메뉴판 진입
+  → 변경 있음: 변경 데이터 다운로드 후 캐시 갱신
+  → Firebase 실패: 로컬 데이터로 메뉴판 진입
+```
+
+데이터 버전 기준:
+
+- 전체 메뉴 데이터 또는 카테고리별 데이터에 `version`, `updated_at` 값을 둔다.
+- 클라이언트는 마지막 성공 동기화 시점과 원격 버전을 비교한다.
+- 데이터 업데이트 중 실패하면 기존 로컬 데이터를 유지한다.
 
 ### 다국어 정책
 
@@ -802,6 +1270,7 @@ src/
     menu-items.ts
     categories.ts
     tags.ts
+    notices.ts
     repositories/
       MenuRepository.ts
       LocalMenuRepository.ts
@@ -829,13 +1298,27 @@ src/
 - 타로맨스 특유의 분위기
 - 커스텀 오더/취향 필터 개념
 
-### 2단계: 데이터 정제
+산출물:
+
+- 레거시 기능 목록
+- 신규 앱에 유지할 기능 목록
+- 버릴 기능/후순위 기능 목록
+
+### 2단계: 데이터 계약 정리
 
 - 깨진 문자열 복구
 - 한국어/영어/일본어/중국어 필수 번역 확정
 - 쓰지 않는 필드 제거
 - 가격/재고/노출 상태 표준화
 - 태그 체계 정리
+- 어드민 프로젝트와 공유할 데이터 필드명 정리
+- `draft`와 `live` 데이터의 사용 기준 정리
+
+산출물:
+
+- 로컬 샘플 데이터
+- 필드 매핑표
+- 필수/선택 필드 정의
 
 ### 3단계: 로컬 데이터 MVP 구축
 
@@ -847,14 +1330,43 @@ src/
 - 가로/세로 카테고리 위치 전환 검증
 - 태블릿 화면 검증
 
-### 4단계: 원격 데이터 연동
+산출물:
 
-- Firestore, Supabase, API 서버 중 선택
+- MVP-0부터 MVP-4까지 동작하는 로컬 앱
+- 시연 가능한 태블릿 메뉴판
+- Firebase 없이도 동작하는 fallback 구조
+
+### 4단계: 원격 읽기 연동
+
+- Firestore를 1차 원격 데이터 후보로 사용
 - 메뉴 데이터 fetch/cache 구조 구현
 - 어드민 설정값 기반 feature flag 연동
 - 외부 이미지 URL/CDN 경로 정리
 - 오프라인 fallback 적용
 - 외부 어드민 프로젝트와 데이터 계약 검증
+
+산출물:
+
+- `FirebaseMenuRepository`
+- `.env.local.example`
+- Firestore 컬렉션 매핑 문서
+- 원격 실패 시 로컬 데이터 fallback
+
+### 5단계: 운영 검증
+
+- 실제 태블릿 가로/세로 화면 검증
+- Lenovo Xiaoxin Pad 2024 12.7인치 기준 실기기 검증
+- 시작 화면에서 메뉴판 진입 흐름 검증
+- 이미지 로딩 실패/느린 네트워크 검증
+- 4개국어 전환 검증
+- 품절/숨김/추천 상태 검증
+- Custom Cocktail ON/OFF 검증
+
+산출물:
+
+- 태블릿 검증 체크리스트
+- 알려진 이슈 목록
+- 다음 개발 우선순위
 
 ## 14. 결정이 필요한 항목
 
@@ -872,3 +1384,147 @@ src/
 리뉴얼은 `React + Vite + TypeScript` 기반의 태블릿 우선 웹 앱으로 새로 시작하는 것을 추천한다. 기존 Android 앱은 메뉴 구조와 데이터 필드의 참고 자료로만 사용하고, 코드는 이식하지 않는 편이 좋다.
 
 첫 구현 목표는 “데이터와 이미지 소스가 분리된 깔끔한 메뉴판 MVP”다. 기능을 욕심내기보다 메뉴 탐색, 상세 보기, 언어 전환, 품절/추천 상태, 외부 이미지 URL 로딩을 안정적으로 만든 뒤 필터와 관리자 기능을 확장하는 순서가 가장 안전하다.
+
+## 16. 구현 시작 체크리스트
+
+MVP-0 시작 전:
+
+- [ ] 로컬 작업 폴더를 `taromance-menu-app` 저장소 기준으로 정리한다.
+- [ ] React + Vite + TypeScript 프로젝트를 생성한다.
+- [ ] 앱 패키지 이름, 문서 제목, 기본 메타 정보를 `Taromance Menu App` 기준으로 정리한다.
+- [ ] `.env.local`, `.env.local.example`, `.gitignore` 정책을 정리한다.
+- [ ] Firebase 설정값은 `.env.local`에만 둔다.
+- [ ] Firebase 설정값이 Git에 커밋되지 않는지 확인한다.
+- [ ] 기본 폴더 구조를 만든다.
+- [ ] `MenuRepository`, `LocalMenuRepository` 인터페이스 초안을 만든다.
+- [ ] `MenuItem`, `SpiritDetail`, `CocktailDetail`, `AppSettings`, `MenuNotice` 타입을 만든다.
+- [ ] 로컬 샘플 데이터 파일을 만든다.
+- [ ] 로컬 샘플 안내문 파일을 만든다.
+- [ ] legacy asset 복사 위치를 정한다.
+
+MVP-1 시작 전:
+
+- [ ] Lenovo Xiaoxin Pad 2024 12.7인치 기준 viewport를 확인한다.
+- [ ] Landscape/Portrait breakpoint 기준을 정한다.
+- [ ] Portal 화면의 최소 연출 방향을 정한다.
+- [ ] Category Rail/Dock의 버튼 크기와 배치를 정한다.
+- [ ] Grimoire Scroll 영역의 기본 비율과 여백을 정한다.
+- [ ] 화면 꺼짐 방지/전체화면 처리를 앱 패키징 단계에서 어떻게 할지 정한다.
+
+MVP-2 시작 전:
+
+- [ ] Guide, Whisky, Cocktail, Wine & Other Spirits 샘플 데이터를 준비한다.
+- [ ] `sort_code` 기준 정렬 함수를 만든다.
+- [ ] `16000 -> 16` 가격 축약 표시 함수를 만든다.
+- [ ] 품절/숨김/추천 상태 표시 규칙을 컴포넌트에 반영한다.
+- [ ] 안내문 티커의 `static`, `fade`, `marquee` 표시 방식을 정한다.
+
+MVP-3 시작 전:
+
+- [ ] Tarot Signature Cocktail 10종 샘플 데이터를 준비한다.
+- [ ] 7:12 타로 카드 이미지 규격을 확정한다.
+- [ ] 카드 fallback 이미지를 준비한다.
+- [ ] 좌우 버튼과 스와이프 제스처 구현 방식을 정한다.
+- [ ] 카드 상세 모달에 들어갈 필수 필드를 정한다.
+
+MVP-4 시작 전:
+
+- [ ] 4개국어 필수 UI 문구 목록을 만든다.
+- [ ] 메뉴 데이터의 `ko`, `en`, `ja`, `zh` 필드 누락 정책을 확인한다.
+- [ ] 이미지 로딩 실패 fallback을 실제 화면에서 확인한다.
+- [ ] 상세 모달의 긴 텍스트 스크롤 방식을 정한다.
+
+MVP-5 시작 전:
+
+- [ ] Firebase `.env.local` 연결값을 준비한다.
+- [ ] Firestore 컬렉션과 앱 모델 매핑표를 만든다.
+- [ ] Portal 단계의 원격 버전 확인 기준을 정한다.
+- [ ] 로컬 데이터 fallback 우선순위를 정한다.
+- [ ] Firebase 실패 로그를 어디에 남길지 정한다.
+
+커밋 기준:
+
+- [ ] MVP 단계 단위로 커밋한다.
+- [ ] 데이터 모델 변경은 별도 커밋으로 남긴다.
+- [ ] 디자인 자산 추가는 별도 커밋으로 남긴다.
+- [ ] Firebase/환경변수 파일은 커밋하지 않는다.
+
+## 17. 디자인/이미지 자산 목록
+
+앱 번들에 포함될 가능성이 높은 자산:
+
+- 초기화면 전체 이미지 또는 영상
+- 카테고리 버튼용 이미지
+- 스크롤 배경 이미지
+- 스크롤 화살표 이미지
+- 타로카드 이미지
+- 타로카드 fallback 이미지
+- 칵테일 잔모양 표시 이미지
+- 로딩 표시 이미지
+- 일반 메뉴 fallback 이미지
+- 품절/SOLD OUT 표시 이미지
+- 안내/가이드 fallback 이미지
+
+외부 URL로 불러올 자산:
+
+- 칵테일 개별 메뉴 이미지
+- 위스키 개별 메뉴 이미지
+- 와인/기타 주류 개별 메뉴 이미지
+- 향후 좌석 배치 이미지
+
+초기화면 자산:
+
+- Portal에서 전체 화면으로 표시한다.
+- 이미지 또는 영상 모두 가능하다.
+- 데이터 업데이트 확인 중에도 분위기를 해치지 않아야 한다.
+- 영상 사용 시 로딩 지연에 대비해 정지 이미지 fallback을 둔다.
+
+카테고리 버튼 자산:
+
+- Guide
+- Whisky
+- Cocktail
+- Wine & Other Spirits
+- 선택됨/기본 상태를 구분할 수 있어야 한다.
+- Landscape Category Rail과 Portrait Category Dock 양쪽에서 읽혀야 한다.
+
+스크롤 자산:
+
+- Grimoire Scroll 배경 이미지
+- 스크롤 상단/하단 또는 좌우 장식
+- 스크롤 화살표 이미지
+- 큰 원본은 웹용 최적화 버전으로 변환한다.
+
+타로카드 자산:
+
+- Tarot Signature Cocktail 10종 카드 이미지
+- 카드 비율은 7:12
+- 카드 fallback도 7:12
+- 카드 이미지와 앱 UI의 이름/가격/태그 정보가 서로 충돌하지 않아야 한다.
+
+칵테일 잔모양 자산:
+
+- Martini glass
+- Highball glass
+- On the rock glass
+- Champagne glass
+- Shot glass
+- Brandy glass
+- 기타 필요한 잔 타입
+
+레거시 자산 후보:
+
+- `iv_loading.png`: 로딩/placeholder 후보
+- `noimage.png`: 일반 메뉴 fallback 후보
+- `iv_scroll_1920h_03.png`: Grimoire Scroll 배경 후보
+- `iv_scroll.png`: 고해상도 스크롤 원본 후보
+- `arrow.png`: 스크롤 화살표 후보
+- 기존 glass 이미지들: 칵테일 잔모양 후보
+
+자산 관리 원칙:
+
+- 앱 UI를 구성하는 공통 자산은 저장소에 포함한다.
+- 개별 메뉴 이미지는 저장소에 포함하지 않고 데이터의 URL로 불러온다.
+- 외부 URL 이미지가 깨졌을 때는 앱 번들 fallback 자산으로 대체한다.
+- 고용량 이미지는 웹용으로 압축/리사이즈한 버전을 사용한다.
+- 파일명은 역할이 드러나도록 정리한다.
