@@ -31,6 +31,11 @@
   cursor: pointer;
 }
 
+.portal-gate:disabled {
+  cursor: wait;
+  opacity: 0.78;
+}
+
 .portal-gate img {
   width: 186px;
   height: 186px;
@@ -50,6 +55,13 @@
   min-height: 44px;
   color: var(--color-gold);
   font-weight: 800;
+}
+
+.portal-gate__status {
+  min-height: 24px;
+  color: rgb(255 244 209 / 74%);
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .language-toggle {

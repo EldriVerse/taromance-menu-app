@@ -66,3 +66,19 @@ export interface MenuItem {
     imageUrl?: string
   }
 }
+
+export interface MenuDataBundle {
+  settings: AppSettings
+  categories: MenuCategory[]
+  items: MenuItem[]
+  notices: MenuNotice[]
+  loadedAt: string
+  source: 'local' | 'cache' | 'remote'
+}
+
+export interface DataSourceState {
+  bundle: MenuDataBundle
+  status: 'idle' | 'checking' | 'ready' | 'fallback'
+  message: string
+  lastCheckedAt?: string
+}

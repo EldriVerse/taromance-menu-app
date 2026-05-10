@@ -9,19 +9,27 @@ import { SubcategoryTabs } from './components/SubcategoryTabs'
 import { TarotCardSelector } from './components/TarotCardSelector'
 import type { CategoryId, LanguageCode, MenuItem } from './domain/menu'
 import { getAvailableCategories, getMenuItems, getNotices } from './repositories/LocalMenuRepository'
+import { useMenuDataSource } from './hooks/useMenuDataSource'
 
 function App() {
   const [entered, setEntered] = useState(false)
   const [language, setLanguage] = useState<LanguageCode>('ko')
-  const categories = useMemo(() => getAvailableCategories(), [])
+  const dataSource = useMenuDataSource()
+  const categories = useMemo(() => getAvailableCategories(dataSource.bundle), [dataSource.bundle])
   const [activeCategoryId, setActiveCategoryId] = useState<CategoryId>('guide')
   const activeCategory = categories.find((category) => category.id === activeCategoryId) ?? categories[0]
   const [activeTabId, setActiveTabId] = useState<string | undefined>(activeCategory.tabs[0]?.id)
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
 
   const activeTab = activeCategory.tabs.find((tab) => tab.id === activeTabId) ?? activeCategory.tabs[0]
-  const items = useMemo(() => getMenuItems(activeCategory.id, activeTab?.id), [activeCategory.id, activeTab?.id])
-  const notices = useMemo(() => getNotices(activeCategory.id, activeTab?.id), [activeCategory.id, activeTab?.id])
+  const items = useMemo(
+    () => getMenuItems(dataSource.bundle, activeCategory.id, activeTab?.id),
+    [activeCategory.id, activeTab?.id, dataSource.bundle],
+  )
+  const notices = useMemo(
+    () => getNotices(dataSource.bundle, activeCategory.id, activeTab?.id),
+    [activeCategory.id, activeTab?.id, dataSource.bundle],
+  )
 
   function handleCategorySelect(categoryId: CategoryId) {
     const nextCategory = categories.find((category) => category.id === categoryId)
@@ -30,7 +38,18 @@ function App() {
   }
 
   if (!entered) {
-    return <PortalScreen language={language} onLanguageChange={setLanguage} onEnter={() => setEntered(true)} />
+    return (
+      <PortalScreen
+        language={language}
+        onLanguageChange={setLanguage}
+        onEnter={async () => {
+          await dataSource.checkForUpdates()
+          setEntered(true)
+        }}
+        dataStatus={dataSource.status}
+        dataMessage={dataSource.message}
+      />
+    )
   }
 
   return (
