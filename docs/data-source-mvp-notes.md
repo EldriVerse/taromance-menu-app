@@ -37,8 +37,7 @@
 
 ## 다음 작업
 
-- Firebase SDK 연결
-- Firestore 컬렉션과 `MenuDataBundle` 매핑
+- 실제 Firestore 문서 구조에 맞춘 필드명 확정
 - 원격 `contentVersion` 비교
 - 최신 원격 데이터가 있을 때 캐시 갱신
 - 원격 이미지 fallback 정책 구현
