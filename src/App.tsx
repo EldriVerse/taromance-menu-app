@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { RotateCcw } from 'lucide-react'
 import { CategoryNav } from './components/CategoryNav'
 import { LanguageToggle } from './components/LanguageToggle'
 import { MenuDetailDialog } from './components/MenuDetailDialog'
@@ -46,9 +45,6 @@ function App() {
         <header className="grimoire-header">
           <div className="header-actions">
             <LanguageToggle language={language} onChange={setLanguage} />
-            <button className="icon-button" type="button" aria-label="Back to portal" onClick={() => setEntered(false)}>
-              <RotateCcw aria-hidden="true" />
-            </button>
           </div>
         </header>
         <SubcategoryTabs
