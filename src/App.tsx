@@ -8,7 +8,6 @@ import { NoticeTicker } from './components/NoticeTicker'
 import { PortalScreen } from './components/PortalScreen'
 import { SubcategoryTabs } from './components/SubcategoryTabs'
 import { TarotCardSelector } from './components/TarotCardSelector'
-import { text } from './domain/formatting'
 import type { CategoryId, LanguageCode, MenuItem } from './domain/menu'
 import { getAvailableCategories, getMenuItems, getNotices } from './repositories/LocalMenuRepository'
 
@@ -45,10 +44,6 @@ function App() {
       />
       <section className="grimoire-panel">
         <header className="grimoire-header">
-          <div>
-            <p>{text(activeCategory.subtitle, language)}</p>
-            <h1>{text(activeCategory.label, language)}</h1>
-          </div>
           <div className="header-actions">
             <LanguageToggle language={language} onChange={setLanguage} />
             <button className="icon-button" type="button" aria-label="Back to portal" onClick={() => setEntered(false)}>
