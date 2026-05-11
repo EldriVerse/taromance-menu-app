@@ -74,7 +74,12 @@ function App() {
         {activeCategory.id === 'cocktail' && activeTab?.id === 'tarot-signature' ? (
           <TarotCardSelector items={items} language={language} onSelect={setSelectedItem} />
         ) : (
-          <MenuList items={items} language={language} onSelect={setSelectedItem} />
+          <MenuList
+            key={`${activeCategory.id}-${activeTab?.id ?? 'all'}-${dataSource.bundle.loadedAt}`}
+            items={items}
+            language={language}
+            onSelect={setSelectedItem}
+          />
         )}
       </section>
       <MenuDetailDialog item={selectedItem} language={language} onClose={() => setSelectedItem(null)} />

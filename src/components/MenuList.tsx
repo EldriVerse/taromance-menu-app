@@ -1,4 +1,5 @@
 import { ImageOff } from 'lucide-react'
+import type { CSSProperties } from 'react'
 import type { LanguageCode, MenuItem } from '../domain/menu'
 import { formatPriceShort, text } from '../domain/formatting'
 
@@ -11,10 +12,11 @@ interface MenuListProps {
 export function MenuList({ items, language, onSelect }: MenuListProps) {
   return (
     <div className="menu-list">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <button
           key={item.id}
           className={item.soldOut ? 'menu-item is-sold-out' : 'menu-item'}
+          style={{ '--menu-item-index': index } as CSSProperties}
           type="button"
           onClick={() => onSelect(item)}
         >

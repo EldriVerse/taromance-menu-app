@@ -24,6 +24,42 @@ function asBoolean(value: unknown) {
   return typeof value === 'boolean' ? value : undefined
 }
 
+function firstNumber(...values: unknown[]) {
+  for (const value of values) {
+    const parsed = asNumber(value)
+
+    if (parsed !== undefined) {
+      return parsed
+    }
+  }
+
+  return undefined
+}
+
+function firstString(...values: unknown[]) {
+  for (const value of values) {
+    const parsed = asString(value)
+
+    if (parsed) {
+      return parsed
+    }
+  }
+
+  return undefined
+}
+
+function firstBoolean(...values: unknown[]) {
+  for (const value of values) {
+    const parsed = asBoolean(value)
+
+    if (parsed !== undefined) {
+      return parsed
+    }
+  }
+
+  return undefined
+}
+
 function localize(value: unknown, fallback: string): LocalizedText {
   if (isRecord(value)) {
     return {
@@ -101,7 +137,12 @@ function getCategoryId(record: FirestoreRecord, collectionName: string): Categor
 }
 
 function getKind(record: FirestoreRecord, collectionName: string, categoryId: CategoryId): MenuKind {
-  const raw = asString(record.kind) ?? asString(record.menuKind) ?? asString(record.type)
+  const raw =
+    asString(record.kind) ??
+    asString(record.menuKind) ??
+    asString(record.menu_kind) ??
+    asString(record.type) ??
+    asString(record.category)
 
   if (raw && menuKinds.includes(raw as MenuKind)) {
     return raw as MenuKind
@@ -112,6 +153,10 @@ function getKind(record: FirestoreRecord, collectionName: string, categoryId: Ca
   }
 
   if (categoryId === 'cocktail') {
+    if (raw === 'custom' || raw === 'custom-cocktail') {
+      return 'custom-cocktail'
+    }
+
     return collectionName.includes('custom') ? 'custom-cocktail' : 'tarot-signature'
   }
 
@@ -123,9 +168,22 @@ function getKind(record: FirestoreRecord, collectionName: string, categoryId: Ca
 }
 
 function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKind) {
-  const raw = asString(record.tabId) ?? asString(record.tab_id) ?? asString(record.sectionId)
+  const raw =
+    asString(record.tabId) ??
+    asString(record.tab_id) ??
+    asString(record.sectionId) ??
+    asString(record.section_id) ??
+    asString(record.category)
 
   if (raw) {
+    if (raw === 'signature') {
+      return 'tarot-signature'
+    }
+
+    if (raw === 'custom') {
+      return 'custom-cocktail'
+    }
+
     return raw
   }
 
@@ -157,6 +215,12 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
 }
 
 export function mapFirestoreMenuItem(collectionName: string, id: string, data: FirestoreRecord): MenuItem | null {
+  const active = firstBoolean(data.active, data.is_active, data.isActive, data.enabled) ?? true
+
+  if (!active) {
+    return null
+  }
+
   const categoryId = getCategoryId(data, collectionName)
 
   if (!categoryId) {
@@ -174,24 +238,24 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
     name: getLocalizedField(data, 'name', fallbackName),
     summary: getLocalizedField(data, 'summary', asString(data.subtitle) ?? ''),
     description: getLocalizedField(data, 'description', asString(data.detail) ?? ''),
-    priceWon: asNumber(data.priceWon) ?? asNumber(data.price_won) ?? asNumber(data.price),
-    imageUrl: asString(data.imageUrl) ?? asString(data.image_url) ?? asString(data.thumbnailUrl),
-    assetUrl: asString(data.assetUrl),
-    glassImageUrl: asString(data.glassImageUrl) ?? asString(data.glass_image_url),
-    sort_code: asNumber(data.sort_code) ?? asNumber(data.sortCode) ?? Number.MAX_SAFE_INTEGER,
-    soldOut: asBoolean(data.soldOut) ?? asBoolean(data.sold_out) ?? asBoolean(data.isSoldOut),
+    priceWon: firstNumber(data.priceWon, data.price_won, data.price),
+    imageUrl: firstString(data.imageUrl, data.image_url, data.thumbnailUrl, data.thumbnail_url, data.photoUrl),
+    assetUrl: firstString(data.assetUrl, data.asset_url),
+    glassImageUrl: firstString(data.glassImageUrl, data.glass_image_url, data.glassUrl, data.glass_url),
+    sort_code: firstNumber(data.sort_code, data.sortCode, data.display_order, data.displayOrder, data.order) ?? Number.MAX_SAFE_INTEGER,
+    soldOut: firstBoolean(data.soldOut, data.sold_out, data.isSoldOut, data.is_soldout, data.is_sold_out),
     tarotCard:
       kind === 'tarot-signature'
         ? {
-            number: asNumber(data.cardNumber) ?? asNumber(data.card_number) ?? asNumber(data.tarotNumber) ?? 0,
-            imageUrl: asString(data.cardImageUrl) ?? asString(data.card_image_url),
+            number: firstNumber(data.cardNumber, data.card_number, data.tarotNumber, data.tarot_number) ?? 0,
+            imageUrl: firstString(data.cardImageUrl, data.card_image_url, data.tarotCardImageUrl, data.tarot_card_image_url),
           }
         : undefined,
   }
 }
 
 export function mapFirestoreNotice(id: string, data: FirestoreRecord): MenuNotice | null {
-  const active = asBoolean(data.active) ?? true
+  const active = firstBoolean(data.active, data.is_active, data.isActive, data.enabled) ?? true
 
   if (!active) {
     return null
@@ -204,7 +268,7 @@ export function mapFirestoreNotice(id: string, data: FirestoreRecord): MenuNotic
     categoryId: categoryIds.includes(categoryId as CategoryId) ? (categoryId as CategoryId) : undefined,
     tabId: asString(data.tabId) ?? asString(data.tab_id),
     text: getLocalizedField(data, 'text', asString(data.message) ?? ''),
-    sort_code: asNumber(data.sort_code) ?? asNumber(data.sortCode) ?? Number.MAX_SAFE_INTEGER,
+    sort_code: firstNumber(data.sort_code, data.sortCode, data.display_order, data.displayOrder, data.order) ?? Number.MAX_SAFE_INTEGER,
     active,
   }
 }
