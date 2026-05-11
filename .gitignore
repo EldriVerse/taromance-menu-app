@@ -30,3 +30,4 @@ _scaffold/
 .idea/
 .vscode/
 
+.vercel
