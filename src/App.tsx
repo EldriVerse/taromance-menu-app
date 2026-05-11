@@ -40,8 +40,6 @@ function App() {
   if (!entered) {
     return (
       <PortalScreen
-        language={language}
-        onLanguageChange={setLanguage}
         onEnter={async () => {
           await dataSource.checkForUpdates()
           setEntered(true)
