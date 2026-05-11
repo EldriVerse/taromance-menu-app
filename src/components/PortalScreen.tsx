@@ -10,7 +10,6 @@ export function PortalScreen({ onEnter, dataStatus, dataMessage }: PortalScreenP
   return (
     <main className="portal-screen">
       <button className="portal-gate" type="button" onClick={onEnter} disabled={dataStatus === 'checking'}>
-        <img src="/assets/legacy/iv_loading.png" alt="" />
         <span className="portal-gate__title">TAROMANCE</span>
         <span className="portal-gate__caption">
           <Sparkles aria-hidden="true" size={20} />
