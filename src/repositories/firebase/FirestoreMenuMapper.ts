@@ -17,7 +17,17 @@ function asString(value: unknown) {
 }
 
 function asNumber(value: unknown) {
-  return typeof value === 'number' && Number.isFinite(value) ? value : undefined
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+
+  if (typeof value === 'string') {
+    const parsed = Number(value)
+
+    return Number.isFinite(parsed) ? parsed : undefined
+  }
+
+  return undefined
 }
 
 function asBoolean(value: unknown) {
@@ -96,7 +106,7 @@ function localize(value: unknown, fallback: string): LocalizedText {
 }
 
 function getLocalizedField(record: FirestoreRecord, field: string, fallback: string) {
-  const localized = record[field]
+  const localized = record[field] ?? record[`${field}_i18n`] ?? record[`${field}I18n`]
 
   if (localized) {
     return localize(localized, fallback)
@@ -111,10 +121,24 @@ function getLocalizedField(record: FirestoreRecord, field: string, fallback: str
 }
 
 function getCategoryId(record: FirestoreRecord, collectionName: string): CategoryId | null {
-  const raw = asString(record.categoryId) ?? asString(record.category_id) ?? asString(record.category)
+  const raw =
+    asString(record.categoryId) ??
+    asString(record.category_id) ??
+    asString(record.main_code) ??
+    asString(record.mainCode) ??
+    asString(record.category)
+  const normalizedRaw = raw?.toLowerCase()
 
   if (raw && categoryIds.includes(raw as CategoryId)) {
     return raw as CategoryId
+  }
+
+  if (normalizedRaw?.includes('whisky') || normalizedRaw?.includes('whiskey')) {
+    return 'whisky'
+  }
+
+  if (normalizedRaw?.includes('wine')) {
+    return 'wine-spirits'
   }
 
   if (collectionName.includes('guide')) {
@@ -164,6 +188,14 @@ function getKind(record: FirestoreRecord, collectionName: string, categoryId: Ca
     return 'whisky'
   }
 
+  if (raw?.toLowerCase().includes('liqueur')) {
+    return 'liqueur'
+  }
+
+  if (raw?.toLowerCase().includes('wine')) {
+    return 'wine'
+  }
+
   return collectionName.includes('wine') ? 'wine' : 'spirit'
 }
 
@@ -176,7 +208,7 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
     asString(record.category)
 
   if (raw) {
-    if (raw === 'signature') {
+    if (kind === 'tarot-signature' && ['classic', 'signature', 'tarot-signature'].includes(raw)) {
       return 'tarot-signature'
     }
 
@@ -184,7 +216,28 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
       return 'custom-cocktail'
     }
 
+    const normalizedRaw = raw.toLowerCase()
+
+    if (kind === 'whisky' && (normalizedRaw.includes('singlemalt') || normalizedRaw.includes('scotch'))) {
+      return 'scotch'
+    }
+
+    if (kind === 'whisky' && normalizedRaw.includes('american')) {
+      return 'american'
+    }
+
     return raw
+  }
+
+  const category = asString(record.category)?.toLowerCase()
+  const originCountry = asString(record.origin_country)?.toLowerCase() ?? asString(record.originCountry)?.toLowerCase()
+
+  if (kind === 'whisky' && (category?.includes('singlemalt') || originCountry === 'scotch')) {
+    return 'scotch'
+  }
+
+  if (kind === 'whisky' && (category?.includes('american') || originCountry === 'american')) {
+    return 'american'
   }
 
   if (kind === 'tarot-signature') {
@@ -221,6 +274,10 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
     return null
   }
 
+  if (asString(data.item_type) === 'spacer') {
+    return null
+  }
+
   const categoryId = getCategoryId(data, collectionName)
 
   if (!categoryId) {
@@ -228,16 +285,18 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
   }
 
   const kind = getKind(data, collectionName, categoryId)
-  const fallbackName = asString(data.title) ?? asString(data.name) ?? id
+  const fallbackName = firstString(data.title, data.name, data.notes, data.ref_id) ?? id
+  const nameField = data.name || data.name_i18n || data.nameI18n ? 'name' : 'title'
+  const descriptionField = data.description || data.description_i18n || data.descriptionI18n ? 'description' : 'body'
 
   return {
     id,
     categoryId,
     tabId: getTabId(data, collectionName, kind),
     kind,
-    name: getLocalizedField(data, 'name', fallbackName),
-    summary: getLocalizedField(data, 'summary', asString(data.subtitle) ?? ''),
-    description: getLocalizedField(data, 'description', asString(data.detail) ?? ''),
+    name: getLocalizedField(data, nameField, fallbackName),
+    summary: getLocalizedField(data, 'summary', asString(data.subtitle) ?? asString(data.notes) ?? ''),
+    description: getLocalizedField(data, descriptionField, asString(data.detail) ?? asString(data.body) ?? ''),
     priceWon: firstNumber(data.priceWon, data.price_won, data.price),
     imageUrl: firstString(data.imageUrl, data.image_url, data.thumbnailUrl, data.thumbnail_url, data.photoUrl),
     assetUrl: firstString(data.assetUrl, data.asset_url),

@@ -33,8 +33,12 @@ function App() {
 
   function handleCategorySelect(categoryId: CategoryId) {
     const nextCategory = categories.find((category) => category.id === categoryId)
+    const firstTabWithItems = nextCategory?.tabs.find(
+      (tab) => getMenuItems(dataSource.bundle, categoryId, tab.id).length > 0,
+    )
+
     setActiveCategoryId(categoryId)
-    setActiveTabId(nextCategory?.tabs[0]?.id)
+    setActiveTabId(firstTabWithItems?.id ?? nextCategory?.tabs[0]?.id)
   }
 
   if (!entered) {
