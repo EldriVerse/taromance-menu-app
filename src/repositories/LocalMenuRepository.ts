@@ -2,6 +2,9 @@ import type { CategoryId, MenuDataBundle, MenuItem } from '../domain/menu'
 import { sortBySortCode } from '../domain/formatting'
 
 export function getAvailableCategories(bundle: MenuDataBundle) {
+  const customCocktailEnabled = bundle.settings.features.customCocktail?.enabled ?? true
+  const storyCocktailEnabled = bundle.settings.features.storyCocktail?.enabled ?? true
+
   return bundle.categories.map((category) => {
     if (category.id !== 'cocktail') {
       return category
@@ -10,7 +13,9 @@ export function getAvailableCategories(bundle: MenuDataBundle) {
     return {
       ...category,
       tabs: category.tabs.filter(
-        (tab) => tab.id !== 'custom-cocktail' || bundle.settings.features.customCocktail.enabled,
+        (tab) =>
+          (tab.id !== 'custom-cocktail' || customCocktailEnabled) &&
+          (tab.id !== 'story-cocktail' || storyCocktailEnabled),
       ),
     }
   })

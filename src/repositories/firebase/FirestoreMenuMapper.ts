@@ -6,7 +6,17 @@ type FirestoreRecord = Record<string, unknown>
 const localBundle = createLocalDataBundle()
 const languageKeys = ['ko', 'en', 'ja', 'zh'] as const
 const categoryIds: CategoryId[] = ['guide', 'cocktail', 'whisky', 'wine-spirits']
-const menuKinds: MenuKind[] = ['guide', 'tarot-signature', 'custom-cocktail', 'whisky', 'wine', 'spirit', 'liqueur', 'other']
+const menuKinds: MenuKind[] = [
+  'guide',
+  'tarot-signature',
+  'custom-cocktail',
+  'story-cocktail',
+  'whisky',
+  'wine',
+  'spirit',
+  'liqueur',
+  'other',
+]
 
 function isRecord(value: unknown): value is FirestoreRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -181,6 +191,10 @@ function getKind(record: FirestoreRecord, collectionName: string, categoryId: Ca
       return 'custom-cocktail'
     }
 
+    if (raw === 'story' || raw === 'story-cocktail') {
+      return 'story-cocktail'
+    }
+
     return collectionName.includes('custom') ? 'custom-cocktail' : 'tarot-signature'
   }
 
@@ -216,6 +230,10 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
       return 'custom-cocktail'
     }
 
+    if (raw === 'story') {
+      return 'story-cocktail'
+    }
+
     const normalizedRaw = raw.toLowerCase()
 
     if (kind === 'whisky' && (normalizedRaw.includes('singlemalt') || normalizedRaw.includes('scotch'))) {
@@ -246,6 +264,10 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
 
   if (kind === 'custom-cocktail') {
     return 'custom-cocktail'
+  }
+
+  if (kind === 'story-cocktail') {
+    return 'story-cocktail'
   }
 
   if (collectionName.includes('scotch')) {
@@ -339,6 +361,7 @@ export function mapFirestoreSettings(data: FirestoreRecord | null): AppSettings 
 
   const features = isRecord(data.features) ? data.features : {}
   const customCocktail = isRecord(features.customCocktail) ? features.customCocktail : {}
+  const storyCocktail = isRecord(features.storyCocktail) ? features.storyCocktail : {}
 
   return {
     contentVersion: asString(data.contentVersion) ?? asString(data.content_version) ?? localBundle.settings.contentVersion,
@@ -348,6 +371,12 @@ export function mapFirestoreSettings(data: FirestoreRecord | null): AppSettings 
           asBoolean(customCocktail.enabled) ??
           asBoolean(data.customCocktailEnabled) ??
           localBundle.settings.features.customCocktail.enabled,
+      },
+      storyCocktail: {
+        enabled:
+          asBoolean(storyCocktail.enabled) ??
+          asBoolean(data.storyCocktailEnabled) ??
+          localBundle.settings.features.storyCocktail.enabled,
       },
     },
   }

@@ -8,8 +8,8 @@ export const categories: MenuCategory[] = [
     subtitle: {
       ko: '이용 안내와 공지',
       en: 'House guide and notices',
-      ja: '利用案内とお知らせ',
-      zh: '使用指南与公告',
+      ja: 'ご利用案内とお知らせ',
+      zh: '使用指南和公告',
     },
     tabs: [],
   },
@@ -21,7 +21,7 @@ export const categories: MenuCategory[] = [
       ko: '타로 시그니처와 커스텀',
       en: 'Tarot signatures and custom drinks',
       ja: 'タロットシグネチャーとカスタム',
-      zh: '塔罗招牌与自定义酒款',
+      zh: '塔罗招牌与定制饮品',
     },
     tabs: [
       {
@@ -40,9 +40,19 @@ export const categories: MenuCategory[] = [
           ko: '커스텀 칵테일',
           en: 'Custom Cocktail',
           ja: 'カスタムカクテル',
-          zh: '自定义鸡尾酒',
+          zh: '定制鸡尾酒',
         },
         kinds: ['custom-cocktail'],
+      },
+      {
+        id: 'story-cocktail',
+        label: {
+          ko: '스토리 칵테일',
+          en: 'Story Cocktail',
+          ja: 'ストーリーカクテル',
+          zh: '故事鸡尾酒',
+        },
+        kinds: ['story-cocktail'],
       },
     ],
   },
@@ -92,7 +102,7 @@ export const categories: MenuCategory[] = [
       ko: '와인, 스피릿, 리큐르',
       en: 'Wine, spirits and liqueurs',
       ja: 'ワイン、スピリッツ、リキュール',
-      zh: '葡萄酒、烈酒与利口酒',
+      zh: '葡萄酒、烈酒、利口酒',
     },
     tabs: [
       {

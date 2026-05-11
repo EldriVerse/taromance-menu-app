@@ -8,6 +8,7 @@ export type MenuKind =
   | 'guide'
   | 'tarot-signature'
   | 'custom-cocktail'
+  | 'story-cocktail'
   | 'whisky'
   | 'wine'
   | 'spirit'
@@ -17,6 +18,9 @@ export type MenuKind =
 export interface AppSettings {
   features: {
     customCocktail: {
+      enabled: boolean
+    }
+    storyCocktail: {
       enabled: boolean
     }
   }

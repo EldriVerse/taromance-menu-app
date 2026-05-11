@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react'
 import { CategoryNav } from './components/CategoryNav'
+import { CustomCocktailBuilder } from './components/CustomCocktailBuilder'
 import { LanguageToggle } from './components/LanguageToggle'
 import { MenuDetailDialog } from './components/MenuDetailDialog'
 import { MenuList } from './components/MenuList'
 import { NoticeTicker } from './components/NoticeTicker'
 import { PortalScreen } from './components/PortalScreen'
 import { SubcategoryTabs } from './components/SubcategoryTabs'
+import { StoryCocktailBuilder } from './components/StoryCocktailBuilder'
 import { TarotCardSelector } from './components/TarotCardSelector'
 import type { CategoryId, LanguageCode, MenuItem } from './domain/menu'
 import { getAvailableCategories, getMenuItems, getNotices } from './repositories/LocalMenuRepository'
@@ -77,6 +79,10 @@ function App() {
         <NoticeTicker notices={notices} language={language} />
         {activeCategory.id === 'cocktail' && activeTab?.id === 'tarot-signature' ? (
           <TarotCardSelector items={items} language={language} onSelect={setSelectedItem} />
+        ) : activeCategory.id === 'cocktail' && activeTab?.id === 'custom-cocktail' ? (
+          <CustomCocktailBuilder language={language} />
+        ) : activeCategory.id === 'cocktail' && activeTab?.id === 'story-cocktail' ? (
+          <StoryCocktailBuilder language={language} />
         ) : (
           <MenuList
             key={`${activeCategory.id}-${activeTab?.id ?? 'all'}-${dataSource.bundle.loadedAt}`}

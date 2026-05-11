@@ -4,7 +4,10 @@ export const appSettings: AppSettings = {
   contentVersion: 'local-mvp-2026-05-10',
   features: {
     customCocktail: {
-      enabled: false,
+      enabled: true,
+    },
+    storyCocktail: {
+      enabled: true,
     },
   },
 }
