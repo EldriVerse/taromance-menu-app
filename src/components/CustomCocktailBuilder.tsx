@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import type { LanguageCode, LocalizedText } from '../domain/menu'
 import { text } from '../domain/formatting'
 
@@ -21,8 +21,6 @@ const labels: Record<string, LocalizedText> = {
   sparkling: { ko: '탄산', en: 'Sparkling', ja: '炭酸', zh: '气泡' },
   cream: { ko: '크림', en: 'Cream', ja: 'クリーム', zh: '奶油' },
   flavor: { ko: '선호하는 맛 / 향 (3개 이하)', en: 'Preferred flavor / aroma (up to 3)', ja: '好みの味 / 香り (3個まで)', zh: '偏好的味道 / 香气 (最多3个)' },
-  summary: { ko: '선택 요약', en: 'Selection Summary', ja: '選択内容', zh: '选择摘要' },
-  reset: { ko: '초기화', en: 'Reset', ja: 'リセット', zh: '重置' },
 }
 
 const fields: Array<{ id: CustomFieldId; options: string[] }> = [
@@ -59,10 +57,6 @@ const defaultSelection: CustomSelection = {
 export function CustomCocktailBuilder({ language }: CustomCocktailBuilderProps) {
   const [selection, setSelection] = useState<CustomSelection>(defaultSelection)
   const [flavors, setFlavors] = useState<string[]>([])
-  const selectedFlavorLabels = useMemo(
-    () => flavorOptions.filter((option) => flavors.includes(option.id)).map((option) => text(option.label, language)),
-    [flavors, language],
-  )
 
   function toggleFlavor(id: string) {
     setFlavors((current) => {
@@ -112,31 +106,6 @@ export function CustomCocktailBuilder({ language }: CustomCocktailBuilderProps) 
           </div>
         </fieldset>
       </div>
-      <aside className="custom-summary">
-        <strong>{text(labels.summary, language)}</strong>
-        <dl>
-          {fields.map((field) => (
-            <div key={field.id}>
-              <dt>{text(labels[field.id], language)}</dt>
-              <dd>{text(labels[selection[field.id]], language)}</dd>
-            </div>
-          ))}
-          <div>
-            <dt>{text(labels.flavor, language)}</dt>
-            <dd>{selectedFlavorLabels.length ? selectedFlavorLabels.join(' / ') : '-'}</dd>
-          </div>
-        </dl>
-        <button
-          className="custom-reset"
-          type="button"
-          onClick={() => {
-            setSelection(defaultSelection)
-            setFlavors([])
-          }}
-        >
-          {text(labels.reset, language)}
-        </button>
-      </aside>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { useMemo, useState, type ChangeEvent } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import type { LanguageCode, LocalizedText } from '../domain/menu'
 import { text } from '../domain/formatting'
 
@@ -27,10 +27,6 @@ const copy: Record<string, LocalizedText> = {
   abv: { ko: '알콜도수 (필수)', en: 'ABV (required)', ja: 'アルコール度数 (必須)', zh: '酒精度 (必选)' },
   keyword: { ko: '요청사항 (선택)', en: 'Request Notes (optional)', ja: 'リクエスト (任意)', zh: '请求事项 (可选)' },
   image: { ko: '참고 이미지 (선택)', en: 'Reference Image (optional)', ja: '参考画像 (任意)', zh: '参考图片 (可选)' },
-  summary: { ko: '주문 요약', en: 'Order Summary', ja: '注文内容', zh: '订单摘要' },
-  showToStaff: { ko: '바텐더에게 이 화면을 보여주세요.', en: 'Please show this screen to the bartender.', ja: 'この画面をバーテンダーに見せてください。', zh: '请把这个画面给调酒师看。' },
-  noKeyword: { ko: '(없음)', en: '(None)', ja: '(なし)', zh: '(无)' },
-  noImage: { ko: '(없음)', en: '(None)', ja: '(なし)', zh: '(无)' },
 }
 
 const colors = [
@@ -75,14 +71,6 @@ export function StoryCocktailBuilder({ language }: StoryCocktailBuilderProps) {
   const [abv, setAbv] = useState('medium')
   const [keyword, setKeyword] = useState('')
   const [imageName, setImageName] = useState('')
-  const selectedColorLabels = useMemo(
-    () => colors.filter((option) => selectedColors.includes(option.id)).map((option) => text(option.label, language)),
-    [selectedColors, language],
-  )
-  const selectedMoodLabels = useMemo(
-    () => moods.filter((option) => selectedMoods.includes(option.id)).map((option) => text(option.label, language)),
-    [selectedMoods, language],
-  )
 
   function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
     setImageName(event.target.files?.[0]?.name ?? '')
@@ -149,34 +137,9 @@ export function StoryCocktailBuilder({ language }: StoryCocktailBuilderProps) {
         <label className="story-input">
           <span>{text(copy.image, language)}</span>
           <input type="file" accept="image/*" onChange={handleImageChange} />
+          {imageName ? <em>{imageName}</em> : null}
         </label>
       </section>
-      <aside className="story-summary">
-        <strong>{text(copy.summary, language)}</strong>
-        <dl>
-          <div>
-            <dt>{text(copy.color, language)}</dt>
-            <dd>{selectedColorLabels.length ? selectedColorLabels.join(' / ') : '-'}</dd>
-          </div>
-          <div>
-            <dt>{text(copy.mood, language)}</dt>
-            <dd>{selectedMoodLabels.length ? selectedMoodLabels.join(' / ') : '-'}</dd>
-          </div>
-          <div>
-            <dt>{text(copy.abv, language)}</dt>
-            <dd>{text(abvOptions.find((option) => option.id === abv)?.label ?? abvOptions[1].label, language)}</dd>
-          </div>
-          <div>
-            <dt>{text(copy.keyword, language)}</dt>
-            <dd>{keyword || text(copy.noKeyword, language)}</dd>
-          </div>
-          <div>
-            <dt>{text(copy.image, language)}</dt>
-            <dd>{imageName || text(copy.noImage, language)}</dd>
-          </div>
-        </dl>
-        <p>{text(copy.showToStaff, language)}</p>
-      </aside>
     </div>
   )
 }
