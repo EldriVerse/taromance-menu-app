@@ -94,12 +94,14 @@
   gap: 10px;
   min-height: 44px;
   color: var(--color-gold-bright);
+  font-family: var(--font-stamp);
   font-weight: 800;
 }
 
 .portal-gate__status {
   min-height: 24px;
   color: rgb(255 244 209 / 62%);
+  font-family: var(--font-stamp);
   font-size: 14px;
   font-weight: 700;
 }
@@ -113,6 +115,7 @@
   min-height: 38px;
   border: 0;
   cursor: pointer;
+  font-family: var(--font-stamp);
 }
 
 .language-toggle__trigger {
@@ -221,6 +224,7 @@
 
 .category-nav span {
   overflow-wrap: anywhere;
+  font-family: var(--font-accent);
   text-align: left;
   font-size: 19px;
   font-weight: 900;
@@ -300,6 +304,7 @@
   border-radius: 999px;
   color: #6a4429;
   background: rgb(255 244 209 / 36%);
+  font-family: var(--font-stamp);
   cursor: pointer;
 }
 
@@ -317,6 +322,7 @@
   border-block: 1px solid rgb(88 58 32 / 18%);
   color: #743725;
   background: linear-gradient(90deg, transparent, rgb(255 244 209 / 24%), transparent);
+  font-family: var(--font-stamp);
   font-weight: 800;
   overflow: hidden;
 }
@@ -398,6 +404,7 @@
   width: fit-content;
   max-width: 100%;
   overflow-wrap: anywhere;
+  font-family: var(--font-accent);
   font-size: 23px;
   line-height: 1.1;
 }
@@ -420,6 +427,7 @@
 .tarot-card b,
 .menu-dialog__body strong {
   color: #512a19;
+  font-family: var(--font-stamp);
   font-size: 30px;
 }
 

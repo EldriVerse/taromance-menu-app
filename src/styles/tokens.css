@@ -1,3 +1,43 @@
+@font-face {
+  font-family: 'HeirofLight';
+  src: url('/assets/fonts/HeirofLightOTFRegular.otf') format('opentype');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'HeirofLight';
+  src: url('/assets/fonts/HeirofLightOTFBold.otf') format('opentype');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'BMEuljiro';
+  src: url('/assets/fonts/BMEULJIRO.otf') format('opentype');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'BMEuljiro10Years';
+  src: url('/assets/fonts/BMEuljiro10yearslaterOTF.otf') format('opentype');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'BMEuljiroOrae';
+  src: url('/assets/fonts/BMEuljirooraeoraeOTF.otf') format('opentype');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
 :root {
   --color-void: #12100d;
   --color-ink: #1b1712;
@@ -13,8 +53,10 @@
   --shadow-panel: 0 22px 50px rgb(0 0 0 / 46%);
   --shadow-raised: 0 16px 34px rgb(0 0 0 / 32%);
   --radius-card: 8px;
-  --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body: 'HeirofLight', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'BMEuljiro10Years', 'BMEuljiro', Georgia, 'Times New Roman', serif;
+  --font-accent: 'BMEuljiroOrae', 'BMEuljiro', var(--font-body);
+  --font-stamp: 'BMEuljiro', var(--font-body);
 
   color: var(--color-cream);
   background: var(--color-void);
