@@ -21,7 +21,11 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
           onClick={() => onSelect(item)}
         >
           <span className="menu-item__media">
-            {item.glassImageUrl ? <img src={item.glassImageUrl} alt="" /> : <ImageOff aria-hidden="true" />}
+            {item.glassImageUrl ? (
+              <img src={item.glassImageUrl} alt="" decoding="async" draggable="false" />
+            ) : (
+              <ImageOff aria-hidden="true" />
+            )}
           </span>
           <span className="menu-item__body">
             <strong>{text(item.name, language)}</strong>

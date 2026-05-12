@@ -20,8 +20,15 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
           <X aria-hidden="true" />
         </button>
         <div className="menu-dialog__visual">
-          <img src={item.imageUrl || item.assetUrl || '/assets/legacy/noimage.png'} alt="" />
-          {item.glassImageUrl ? <img className="menu-dialog__glass" src={item.glassImageUrl} alt="" /> : null}
+          <img
+            src={item.imageUrl || item.assetUrl || '/assets/legacy/noimage.png'}
+            alt=""
+            decoding="async"
+            draggable="false"
+          />
+          {item.glassImageUrl ? (
+            <img className="menu-dialog__glass" src={item.glassImageUrl} alt="" decoding="async" draggable="false" />
+          ) : null}
         </div>
         <div className="menu-dialog__body">
           <p>{item.kind.replaceAll('-', ' ').toUpperCase()}</p>
