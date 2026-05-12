@@ -483,6 +483,14 @@ button:focus-visible {
   object-fit: contain;
 }
 
+.menu-item--no-media {
+  grid-template-columns: minmax(0, 1fr) minmax(70px, auto);
+}
+
+.menu-item--no-media .menu-item__media {
+  display: none;
+}
+
 .menu-item__body {
   display: grid;
   gap: 6px;
@@ -554,6 +562,118 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .menu-item {
     animation: none;
+  }
+}
+
+@media (orientation: landscape) {
+  .app-shell {
+    grid-template-columns: clamp(214px, 15.5vw, 236px) minmax(0, 1fr);
+    gap: 26px;
+    padding: 22px 34px;
+  }
+
+  .category-nav {
+    gap: 16px;
+  }
+
+  .grimoire-panel {
+    grid-template-rows: 38px 56px 36px minmax(0, 1fr);
+    gap: 10px;
+    padding:
+      clamp(38px, 5.1vh, 54px)
+      clamp(58px, 5.5vw, 88px)
+      clamp(42px, 5.1vh, 70px)
+      clamp(94px, 7.4vw, 124px);
+  }
+
+  .grimoire-header {
+    align-items: center;
+    min-height: 38px;
+  }
+
+  .language-toggle__trigger {
+    min-height: 34px;
+    padding: 0 14px;
+  }
+
+  .subcategory-tabs {
+    align-items: center;
+    min-height: 56px;
+  }
+
+  .subcategory-tabs button {
+    min-width: 144px;
+    min-height: 50px;
+    padding: 0 20px;
+  }
+
+  .notice-ticker {
+    min-height: 36px;
+    padding: 0 16px;
+    border-color: rgb(88 58 32 / 12%);
+    background:
+      linear-gradient(90deg, rgb(212 167 77 / 12%), rgb(255 244 209 / 22%), rgb(212 167 77 / 8%)),
+      rgb(255 244 209 / 14%);
+  }
+
+  .menu-list {
+    gap: 8px;
+    padding-right: 0;
+    scrollbar-width: none;
+  }
+
+  .menu-list::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .menu-item {
+    grid-template-columns: 54px minmax(0, 1fr) minmax(58px, auto);
+    gap: 14px;
+    min-height: 82px;
+    padding: 10px 14px;
+    border-color: rgb(88 58 32 / 12%);
+    background:
+      linear-gradient(90deg, rgb(212 167 77 / 10%), transparent 22%),
+      rgb(255 244 209 / 25%);
+    box-shadow: none;
+  }
+
+  .menu-item::before {
+    content: none;
+  }
+
+  .menu-item--no-media {
+    grid-template-columns: minmax(0, 1fr) minmax(58px, auto);
+  }
+
+  .menu-item__media {
+    width: 48px;
+    height: 48px;
+    background: rgb(255 244 209 / 20%);
+    box-shadow: inset 0 0 0 1px rgb(88 58 32 / 8%);
+  }
+
+  .menu-item__media img {
+    max-width: 46px;
+    max-height: 46px;
+  }
+
+  .menu-item__body {
+    gap: 4px;
+  }
+
+  .menu-item__body strong {
+    font-size: 21px;
+  }
+
+  .menu-item__body small {
+    font-size: 13px;
+    line-height: 1.25;
+  }
+
+  .menu-item__meta b {
+    font-size: 24px;
   }
 }
 
@@ -819,6 +939,29 @@ button:focus-visible {
 
 .tarot-card-summary {
   display: none;
+}
+
+@media (orientation: landscape) {
+  .tarot-selector {
+    grid-template-columns: 64px minmax(0, 1fr) 64px;
+  }
+
+  .tarot-stage {
+    min-height: min(468px, calc(100svh - 244px));
+  }
+
+  .tarot-card {
+    width: min(27vw, 260px);
+    padding: 22px 20px;
+  }
+
+  .tarot-card__number {
+    font-size: 42px;
+  }
+
+  .tarot-card__name {
+    font-size: 28px;
+  }
 }
 
 .dialog-backdrop {

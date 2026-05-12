@@ -15,7 +15,13 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
       {items.map((item, index) => (
         <button
           key={item.id}
-          className={item.soldOut ? 'menu-item is-sold-out' : 'menu-item'}
+          className={[
+            'menu-item',
+            item.soldOut ? 'is-sold-out' : '',
+            item.glassImageUrl ? '' : 'menu-item--no-media',
+          ]
+            .filter(Boolean)
+            .join(' ')}
           style={{ '--menu-item-index': index } as CSSProperties}
           type="button"
           onClick={() => onSelect(item)}
