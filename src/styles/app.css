@@ -150,12 +150,12 @@
 
 @media (orientation: landscape) {
   .portal-gate__title {
-    top: clamp(44px, 8svh, 86px);
+    top: clamp(112px, 18svh, 168px);
     left: 50%;
     transform: translateX(-50%);
     writing-mode: horizontal-tb;
     text-orientation: mixed;
-    font-size: clamp(44px, 5vw, 76px);
+    font-size: clamp(64px, 6.4vw, 104px);
     white-space: nowrap;
   }
 
