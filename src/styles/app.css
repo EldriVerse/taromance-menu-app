@@ -821,7 +821,7 @@
 @media (orientation: portrait) {
   .app-shell {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) 112px;
+    grid-template-rows: minmax(0, 1fr) 148px;
   }
 
   .category-nav {
@@ -836,18 +836,18 @@
   .category-nav button {
     grid-template-columns: 1fr;
     justify-items: center;
-    min-height: 96px;
-    padding: 10px 8px;
+    min-height: 128px;
+    padding: 16px 10px;
   }
 
   .category-nav span {
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .category-nav svg {
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
   }
 
   .grimoire-panel {
