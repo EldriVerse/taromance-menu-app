@@ -9,6 +9,7 @@
     linear-gradient(180deg, rgb(18 16 13 / 34%), rgb(18 16 13 / 86%)),
     url('/assets/legacy/iv_mainbg.jpg') center / cover no-repeat,
     var(--color-void);
+  cursor: pointer;
 }
 
 .portal-screen::before,
@@ -50,35 +51,26 @@
 }
 
 .portal-gate {
-  position: relative;
+  position: absolute;
+  inset: 0;
   isolation: isolate;
   display: grid;
-  width: min(62vw, 600px);
-  min-width: 320px;
-  min-height: 420px;
+  grid-template-rows: 1fr auto auto auto 1fr;
+  gap: 22px;
   place-items: center;
-  padding: 46px 36px;
-  border: 1px solid rgb(241 212 135 / 58%);
-  border-radius: var(--radius-card);
+  width: 100%;
+  padding: clamp(32px, 6vw, 82px);
+  border: 0;
+  border-radius: 0;
   color: var(--color-cream);
-  background:
-    linear-gradient(180deg, rgb(241 212 135 / 10%), transparent 26%),
-    linear-gradient(135deg, rgb(18 16 13 / 88%), rgb(40 30 21 / 82%));
-  box-shadow:
-    0 0 0 8px rgb(18 16 13 / 24%),
-    0 28px 70px rgb(0 0 0 / 62%),
-    inset 0 0 58px rgb(212 167 77 / 8%);
+  background: transparent;
+  box-shadow: none;
   cursor: pointer;
 }
 
 .portal-gate::before,
 .portal-gate::after {
-  position: absolute;
-  inset: 14px;
-  z-index: -1;
-  border: 1px solid rgb(212 167 77 / 24%);
-  border-radius: 6px;
-  content: '';
+  content: none;
 }
 
 .portal-gate::after {
@@ -92,15 +84,19 @@
 }
 
 .portal-gate__title {
+  grid-row: 2;
   font-family: var(--font-display);
   max-width: 100%;
-  font-size: clamp(44px, 6vw, 78px);
+  font-size: clamp(64px, 8vw, 118px);
   line-height: 1;
   overflow-wrap: anywhere;
-  text-shadow: 0 8px 24px rgb(0 0 0 / 72%);
+  text-shadow:
+    0 8px 24px rgb(0 0 0 / 72%),
+    0 0 28px rgb(212 167 77 / 26%);
 }
 
 .portal-gate__caption {
+  grid-row: 3;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -111,6 +107,7 @@
 }
 
 .portal-gate__status {
+  grid-row: 4;
   min-height: 24px;
   color: rgb(255 244 209 / 62%);
   font-family: var(--font-stamp);

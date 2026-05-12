@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'BMEuljiro10Years';
   src: url('/assets/fonts/BMEuljiro10yearslaterOTF.otf') format('opentype');
-  font-display: swap;
+  font-display: block;
   font-style: normal;
   font-weight: 400;
 }
