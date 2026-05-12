@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { App as CapacitorApp } from '@capacitor/app'
 import { CategoryNav } from './components/CategoryNav'
 import { CustomCocktailBuilder } from './components/CustomCocktailBuilder'
 import { LanguageToggle } from './components/LanguageToggle'
@@ -16,6 +17,7 @@ import { useMenuDataSource } from './hooks/useMenuDataSource'
 function App() {
   const [entered, setEntered] = useState(false)
   const [language, setLanguage] = useState<LanguageCode>('ko')
+  const wasInactiveRef = useRef(false)
   const dataSource = useMenuDataSource()
   const categories = useMemo(() => getAvailableCategories(dataSource.bundle), [dataSource.bundle])
   const [activeCategoryId, setActiveCategoryId] = useState<CategoryId>('guide')
@@ -32,6 +34,40 @@ function App() {
     () => getNotices(dataSource.bundle, activeCategory.id, activeTab?.id),
     [activeCategory.id, activeTab?.id, dataSource.bundle],
   )
+
+  const resetToPortal = useCallback(() => {
+    const guideCategory = categories.find((category) => category.id === 'guide') ?? categories[0]
+
+    setEntered(false)
+    setLanguage('ko')
+    setActiveCategoryId(guideCategory.id)
+    setActiveTabId(guideCategory.tabs[0]?.id)
+    setSelectedItem(null)
+  }, [categories])
+
+  useEffect(() => {
+    let removeListener: (() => void) | undefined
+
+    CapacitorApp.addListener('appStateChange', ({ isActive }) => {
+      if (!isActive) {
+        wasInactiveRef.current = true
+        return
+      }
+
+      if (wasInactiveRef.current) {
+        wasInactiveRef.current = false
+        resetToPortal()
+      }
+    }).then((listener) => {
+      removeListener = () => {
+        void listener.remove()
+      }
+    })
+
+    return () => {
+      removeListener?.()
+    }
+  }, [resetToPortal])
 
   function handleCategorySelect(categoryId: CategoryId) {
     const nextCategory = categories.find((category) => category.id === categoryId)
