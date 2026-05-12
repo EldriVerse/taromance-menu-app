@@ -1,4 +1,3 @@
-import { BookOpen, GlassWater, ScrollText, Wine } from 'lucide-react'
 import type { CategoryId, LanguageCode, MenuCategory } from '../domain/menu'
 import { text } from '../domain/formatting'
 
@@ -9,18 +8,22 @@ interface CategoryNavProps {
   onSelect: (categoryId: CategoryId) => void
 }
 
-const icons = {
-  guide: ScrollText,
-  cocktail: GlassWater,
-  whisky: BookOpen,
-  'wine-spirits': Wine,
-} satisfies Record<CategoryId, typeof ScrollText>
+const buttonImageNames = {
+  guide: 'guide',
+  cocktail: 'cocktail',
+  whisky: 'whisky',
+  'wine-spirits': 'wineandspirits',
+} satisfies Record<CategoryId, string>
 
 export function CategoryNav({ categories, activeId, language, onSelect }: CategoryNavProps) {
+  const languageSuffix = language === 'ko' ? 'k' : 'e'
+
   return (
     <nav className="category-nav" aria-label="Menu categories">
       {categories.map((category) => {
-        const Icon = icons[category.id]
+        const stateSuffix = category.id === activeId ? '01' : '00'
+        const imageName = buttonImageNames[category.id]
+        const imageUrl = `/assets/legacy/category-buttons/iv_btn_menu_main_${imageName}_${languageSuffix}_${stateSuffix}.png`
 
         return (
           <button
@@ -28,8 +31,9 @@ export function CategoryNav({ categories, activeId, language, onSelect }: Catego
             className={category.id === activeId ? 'is-active' : ''}
             type="button"
             onClick={() => onSelect(category.id)}
+            aria-label={text(category.label, language)}
           >
-            <Icon aria-hidden="true" size={26} />
+            <img src={imageUrl} alt="" aria-hidden="true" />
             <span>{text(category.label, language)}</span>
           </button>
         )

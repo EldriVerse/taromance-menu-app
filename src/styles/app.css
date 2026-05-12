@@ -186,56 +186,43 @@
 .category-nav button {
   position: relative;
   isolation: isolate;
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
-  align-items: center;
-  gap: 16px;
+  display: block;
   min-height: 0;
-  padding: 18px 16px;
-  border: 1px solid rgb(212 167 77 / 30%);
+  padding: 0;
+  border: 0;
   border-radius: var(--radius-card);
-  color: rgb(255 244 209 / 82%);
-  background:
-    linear-gradient(90deg, rgb(212 167 77 / 10%), transparent 34%),
-    linear-gradient(180deg, rgb(52 44 36 / 84%), rgb(20 17 13 / 88%));
-  box-shadow: var(--shadow-raised);
+  color: transparent;
+  background: transparent;
+  box-shadow: none;
   cursor: pointer;
   overflow: hidden;
 }
 
 .category-nav button::after {
-  position: absolute;
-  inset: 8px;
-  z-index: -1;
-  border: 1px solid rgb(255 244 209 / 7%);
-  border-radius: 5px;
-  content: '';
+  content: none;
 }
 
 .category-nav button.is-active {
-  color: #23170e;
-  border-color: rgb(212 167 77 / 72%);
-  background:
-    linear-gradient(135deg, var(--color-gold), #f4daa0 58%, #c88d39);
-  box-shadow:
-    0 16px 34px rgb(0 0 0 / 34%),
-    inset 0 0 22px rgb(255 244 209 / 22%);
+  color: transparent;
+}
+
+.category-nav img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
 }
 
 .category-nav span {
-  overflow-wrap: anywhere;
-  font-family: var(--font-accent);
-  text-align: left;
-  font-size: 19px;
-  font-weight: 900;
-  line-height: 1.16;
-  align-self: center;
-}
-
-.category-nav svg {
-  align-self: center;
-  width: 34px;
-  height: 34px;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .grimoire-panel {
@@ -845,20 +832,7 @@
   }
 
   .category-nav button {
-    grid-template-columns: 1fr;
-    justify-items: center;
     min-height: 128px;
-    padding: 16px 10px;
-  }
-
-  .category-nav span {
-    text-align: center;
-    font-size: 16px;
-  }
-
-  .category-nav svg {
-    width: 34px;
-    height: 34px;
   }
 
   .grimoire-panel {
