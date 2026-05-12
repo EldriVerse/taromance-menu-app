@@ -51,13 +51,16 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
       >
         {visibleItems.map(({ item, offset }) => {
           const isVisible = Math.abs(offset) <= 2
+          const cardImageUrl = item.tarotCard?.imageUrl || item.imageUrl || item.assetUrl || '/assets/legacy/noimage.png'
 
           return (
             <button
               key={item.id}
               className={`tarot-card ${offset === 0 ? 'is-active' : ''} ${item.soldOut ? 'is-sold-out' : ''}`}
               style={{
-                transform: `translateX(${offset * 34}%) scale(${offset === 0 ? 1 : 0.82})`,
+                transform: `translateX(calc(${offset * 34}% + var(--tarot-card-shift-x, 0px))) scale(${
+                  offset === 0 ? 1 : 0.82
+                })`,
                 opacity: isVisible ? 1 : 0,
                 zIndex: 10 - Math.abs(offset),
               }}
@@ -65,9 +68,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
               tabIndex={offset === 0 ? 0 : -1}
               onClick={() => (offset === 0 ? onSelect(item) : setActiveIndex(items.indexOf(item)))}
             >
-              <span className="tarot-card__number">{String(item.tarotCard?.number ?? 0).padStart(2, '0')}</span>
-              <span className="tarot-card__name">{text(item.name, language)}</span>
-              {item.soldOut ? <em>SOLD OUT</em> : <b>{formatPriceShort(item.priceWon)}</b>}
+              <img className="tarot-card__image" src={cardImageUrl} alt="" decoding="async" draggable="false" />
             </button>
           )
         })}
@@ -79,6 +80,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
         <p>{String(activeItem.tarotCard?.number ?? 0).padStart(2, '0')}</p>
         <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
         <span>{text(activeItem.summary, language)}</span>
+        <span>{text(activeItem.description, language)}</span>
         <b>{activeItem.soldOut ? 'SOLD OUT' : activeItem.priceWon ? formatPriceShort(activeItem.priceWon) : ''}</b>
       </aside>
     </section>
