@@ -256,12 +256,11 @@ button:focus-visible {
   overflow: hidden;
   color: var(--color-ink);
   background:
-    linear-gradient(90deg, rgb(118 78 37 / 16%), transparent 12%, transparent 88%, rgb(118 78 37 / 14%)),
-    linear-gradient(rgb(238 219 176 / 91%), rgb(228 205 154 / 91%)),
-    url('/assets/legacy/iv_scroll_1920h_03.png') center / cover no-repeat;
+    linear-gradient(90deg, rgb(118 78 37 / 8%), transparent 14%, transparent 86%, rgb(118 78 37 / 8%)),
+    url('/assets/legacy/scroll/iv_scroll_1920h_03.png') center / 100% 100% no-repeat;
   box-shadow:
     var(--shadow-panel),
-    inset 0 0 44px rgb(93 54 25 / 16%);
+    inset 0 0 30px rgb(93 54 25 / 10%);
 }
 
 .grimoire-header {
