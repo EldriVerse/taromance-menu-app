@@ -75,6 +75,12 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
       <button className="tarot-arrow" type="button" aria-label="Next card" onClick={() => move(1)}>
         <ChevronRight aria-hidden="true" />
       </button>
+      <aside className="tarot-card-summary" aria-live="polite">
+        <p>{String(activeItem.tarotCard?.number ?? 0).padStart(2, '0')}</p>
+        <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
+        <span>{text(activeItem.summary, language)}</span>
+        <b>{activeItem.soldOut ? 'SOLD OUT' : activeItem.priceWon ? formatPriceShort(activeItem.priceWon) : ''}</b>
+      </aside>
     </section>
   )
 }
