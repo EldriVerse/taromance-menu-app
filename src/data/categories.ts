@@ -117,24 +117,14 @@ export const categories: MenuCategory[] = [
     },
     tabs: [
       {
-        id: 'all',
-        label: { ko: '전체', en: 'All', ja: 'すべて', zh: '全部' },
-        kinds: ['wine', 'spirit', 'liqueur', 'other'],
-      },
-      {
         id: 'wine',
         label: { ko: '와인', en: 'Wine', ja: 'ワイン', zh: '葡萄酒' },
         kinds: ['wine'],
       },
       {
-        id: 'spirits',
-        label: { ko: '스피릿', en: 'Spirits', ja: 'スピリッツ', zh: '烈酒' },
-        kinds: ['spirit'],
-      },
-      {
-        id: 'liqueur',
-        label: { ko: '리큐르', en: 'Liqueur', ja: 'リキュール', zh: '利口酒' },
-        kinds: ['liqueur'],
+        id: 'other-spirits',
+        label: { ko: '기타 주류', en: 'Other Spirits', ja: 'その他酒類', zh: '其他酒类' },
+        kinds: ['spirit', 'liqueur', 'other'],
       },
     ],
   },
