@@ -13,10 +13,12 @@ import { TarotCardSelector } from './components/TarotCardSelector'
 import type { CategoryId, LanguageCode, MenuItem } from './domain/menu'
 import { getAvailableCategories, getMenuItems, getNotices } from './repositories/LocalMenuRepository'
 import { useMenuDataSource } from './hooks/useMenuDataSource'
+import { preloadMenuAssets } from './utils/preloadAssets'
 
 function App() {
   const [entered, setEntered] = useState(false)
   const [isPortalExiting, setIsPortalExiting] = useState(false)
+  const [assetProgress, setAssetProgress] = useState<string | null>(null)
   const [language, setLanguage] = useState<LanguageCode>('ko')
   const wasInactiveRef = useRef(false)
   const dataSource = useMenuDataSource()
@@ -41,6 +43,7 @@ function App() {
 
     setEntered(false)
     setIsPortalExiting(false)
+    setAssetProgress(null)
     setLanguage('ko')
     setActiveCategoryId(guideCategory.id)
     setActiveTabId(guideCategory.tabs[0]?.id)
@@ -86,11 +89,15 @@ function App() {
       return
     }
 
-    await dataSource.checkForUpdates()
+    const nextState = await dataSource.checkForUpdates()
+    await preloadMenuAssets(nextState.bundle, language, (loaded, total) => {
+      setAssetProgress(`Loading assets... ${loaded} / ${total}`)
+    })
     setIsPortalExiting(true)
     window.setTimeout(() => {
       setEntered(true)
       setIsPortalExiting(false)
+      setAssetProgress(null)
     }, 620)
   }
 
@@ -99,7 +106,7 @@ function App() {
       <PortalScreen
         onEnter={handlePortalEnter}
         dataStatus={dataSource.status}
-        dataMessage={dataSource.message}
+        dataMessage={assetProgress ?? dataSource.message}
         isExiting={isPortalExiting}
       />
     )
