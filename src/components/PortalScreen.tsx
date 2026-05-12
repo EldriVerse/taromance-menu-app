@@ -1,5 +1,3 @@
-import { Sparkles } from 'lucide-react'
-
 interface PortalScreenProps {
   onEnter: () => void | Promise<void>
   dataStatus: 'idle' | 'checking' | 'ready' | 'fallback'
@@ -16,7 +14,6 @@ export function PortalScreen({ onEnter, dataStatus, dataMessage, isExiting = fal
       <button className="portal-gate" type="button" onClick={onEnter} disabled={dataStatus === 'checking' || isExiting}>
         <span className="portal-gate__title">타로맨스</span>
         <span className="portal-gate__caption">
-          <Sparkles aria-hidden="true" size={20} />
           {isBusy ? 'LOADING' : 'PRESS TO TOUCH'}
         </span>
         {shouldShowStatus ? <span className="portal-gate__status">{dataMessage}</span> : null}

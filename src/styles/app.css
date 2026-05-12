@@ -15,7 +15,7 @@
   .portal-screen {
     background:
       linear-gradient(180deg, rgb(18 16 13 / 6%), rgb(18 16 13 / 38%)),
-      url('/assets/legacy/title/gif_homebg3.gif') center top / cover no-repeat,
+      url('/assets/legacy/title/gif_homebg3.gif') center 18% / cover no-repeat,
       var(--color-void);
   }
 }
@@ -129,11 +129,6 @@
   animation: portal-touch-blink 1.18s ease-in-out infinite;
 }
 
-.portal-gate__caption svg {
-  width: 0.72em;
-  height: 0.72em;
-}
-
 .portal-gate__status {
   position: absolute;
   left: 50%;
@@ -144,6 +139,24 @@
   font-family: var(--font-stamp);
   font-size: 14px;
   font-weight: 700;
+}
+
+@media (orientation: landscape) {
+  .portal-gate__title {
+    top: clamp(44px, 8svh, 86px);
+    left: 50%;
+    transform: translateX(-50%);
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+    font-size: clamp(44px, 5vw, 76px);
+    white-space: nowrap;
+  }
+
+  .portal-gate__caption {
+    top: clamp(58svh, 64svh, 67svh);
+    gap: 0;
+    font-size: clamp(28px, 3.4vw, 46px);
+  }
 }
 
 @keyframes portal-touch-blink {
