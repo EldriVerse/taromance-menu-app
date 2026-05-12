@@ -852,6 +852,7 @@
 
   .grimoire-panel {
     order: 1;
+    padding-top: 46px;
   }
 
   .tarot-stage {
