@@ -95,7 +95,7 @@ export const categories: MenuCategory[] = [
       },
       {
         id: 'others',
-        label: { ko: '기타', en: 'Others', ja: 'その他', zh: '其他' },
+        label: { ko: '기타 국가', en: 'Other Countries', ja: 'その他の国', zh: '其他国家' },
         kinds: ['whisky'],
       },
     ],
