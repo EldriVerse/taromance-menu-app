@@ -61,6 +61,7 @@ export interface MenuItem {
   priceWon?: number
   imageUrl?: string
   assetUrl?: string
+  subImageUrls?: string[]
   glassImageUrl?: string
   sort_code: number
   soldOut?: boolean

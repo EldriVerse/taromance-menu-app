@@ -55,7 +55,7 @@ export async function preloadMenuAssets(
   onProgress?: (loaded: number, total: number) => void,
 ) {
   const itemAssetUrls = bundle.items.flatMap((item) =>
-    [item.assetUrl, item.glassImageUrl, item.tarotCard?.imageUrl].filter(
+    [item.assetUrl, item.glassImageUrl, item.tarotCard?.imageUrl, ...(item.subImageUrls ?? [])].filter(
       (url): url is string => typeof url === 'string' && isLocalAsset(url),
     ),
   )

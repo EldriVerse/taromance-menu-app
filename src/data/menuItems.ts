@@ -14,6 +14,7 @@ const tarotItems: MenuItem[] = Array.from({ length: 10 }, (_, index) => {
     priceWon: 16000 + index * 1000,
     soldOut: number === 7,
     assetUrl: '/assets/legacy/iv_popup_background.png',
+    subImageUrls: ['/assets/legacy/noimage.png', '/assets/legacy/iv_popup_background.png'],
     glassImageUrl: glass(index % 2 === 0 ? 'martiniglass' : 'highballglass'),
     tarotCard: { number },
     name: {

@@ -77,6 +77,13 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
         <ChevronRight aria-hidden="true" />
       </button>
       <aside className="tarot-card-summary" aria-live="polite">
+        {activeItem.subImageUrls?.length ? (
+          <div className="tarot-card-summary__images" aria-label="Cocktail images">
+            {activeItem.subImageUrls.map((imageUrl, index) => (
+              <img key={`${activeItem.id}-sub-${index}`} src={imageUrl} alt="" decoding="async" draggable="false" />
+            ))}
+          </div>
+        ) : null}
         <p>{String(activeItem.tarotCard?.number ?? 0).padStart(2, '0')}</p>
         <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
         <span>{text(activeItem.summary, language)}</span>

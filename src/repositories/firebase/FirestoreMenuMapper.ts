@@ -68,6 +68,43 @@ function firstString(...values: unknown[]) {
   return undefined
 }
 
+function imageUrlFromValue(value: unknown) {
+  if (typeof value === 'string') {
+    return value.trim() || undefined
+  }
+
+  if (isRecord(value)) {
+    return firstString(value.url, value.imageUrl, value.image_url, value.src)
+  }
+
+  return undefined
+}
+
+function stringArray(...values: unknown[]) {
+  for (const value of values) {
+    if (Array.isArray(value)) {
+      const parsed = value.map(imageUrlFromValue).filter((item): item is string => Boolean(item))
+
+      if (parsed.length > 0) {
+        return parsed
+      }
+    }
+
+    if (typeof value === 'string') {
+      const parsed = value
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
+
+      if (parsed.length > 0) {
+        return parsed
+      }
+    }
+  }
+
+  return undefined
+}
+
 function firstBoolean(...values: unknown[]) {
   for (const value of values) {
     const parsed = asBoolean(value)
@@ -322,6 +359,16 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
     priceWon: firstNumber(data.priceWon, data.price_won, data.price),
     imageUrl: firstString(data.imageUrl, data.image_url, data.thumbnailUrl, data.thumbnail_url, data.photoUrl),
     assetUrl: firstString(data.assetUrl, data.asset_url),
+    subImageUrls: stringArray(
+      data.subImageUrls,
+      data.sub_image_urls,
+      data.galleryUrls,
+      data.gallery_urls,
+      data.detailImageUrls,
+      data.detail_image_urls,
+      data.subImages,
+      data.sub_images,
+    ),
     glassImageUrl: firstString(data.glassImageUrl, data.glass_image_url, data.glassUrl, data.glass_url),
     sort_code: firstNumber(data.sort_code, data.sortCode, data.display_order, data.displayOrder, data.order) ?? Number.MAX_SAFE_INTEGER,
     soldOut: firstBoolean(data.soldOut, data.sold_out, data.isSoldOut, data.is_soldout, data.is_sold_out),

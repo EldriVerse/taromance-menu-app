@@ -13,6 +13,13 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
     return null
   }
 
+  const isTarotSignature = item.kind === 'tarot-signature'
+  const detailImageUrls = isTarotSignature
+    ? item.subImageUrls?.length
+      ? item.subImageUrls
+      : ['/assets/legacy/noimage.png']
+    : [item.imageUrl || item.assetUrl || '/assets/legacy/noimage.png']
+
   return (
     <div
       className="dialog-backdrop"
@@ -28,13 +35,16 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
           <X aria-hidden="true" />
         </button>
         <div className="menu-dialog__visual">
-          <img
-            src={item.imageUrl || item.assetUrl || '/assets/legacy/noimage.png'}
-            alt=""
-            decoding="async"
-            draggable="false"
-          />
-          {item.glassImageUrl ? (
+          {detailImageUrls.length > 1 ? (
+            <div className="menu-dialog__gallery" aria-label="Menu images">
+              {detailImageUrls.map((imageUrl, index) => (
+                <img key={`${item.id}-dialog-${index}`} src={imageUrl} alt="" decoding="async" draggable="false" />
+              ))}
+            </div>
+          ) : (
+            <img src={detailImageUrls[0]} alt="" decoding="async" draggable="false" />
+          )}
+          {!isTarotSignature && item.glassImageUrl ? (
             <img className="menu-dialog__glass" src={item.glassImageUrl} alt="" decoding="async" draggable="false" />
           ) : null}
         </div>
