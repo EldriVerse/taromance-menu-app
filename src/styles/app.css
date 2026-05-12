@@ -317,14 +317,25 @@
 .notice-ticker {
   display: flex;
   align-items: center;
+  gap: 14px;
   min-height: 40px;
   padding: 0 18px;
-  border-block: 1px solid rgb(88 58 32 / 18%);
+  border: 1px solid rgb(88 58 32 / 22%);
+  border-radius: var(--radius-card);
   color: #743725;
-  background: linear-gradient(90deg, transparent, rgb(255 244 209 / 24%), transparent);
+  background:
+    linear-gradient(90deg, rgb(212 167 77 / 18%), rgb(255 244 209 / 34%), rgb(212 167 77 / 12%)),
+    rgb(255 244 209 / 24%);
   font-family: var(--font-stamp);
   font-weight: 800;
   overflow: hidden;
+}
+
+.notice-ticker b {
+  flex: 0 0 auto;
+  color: #4b2b18;
+  font-size: 12px;
+  letter-spacing: 0;
 }
 
 .notice-ticker span {

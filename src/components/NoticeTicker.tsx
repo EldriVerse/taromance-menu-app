@@ -22,15 +22,18 @@ export function NoticeTicker({ notices, language }: NoticeTickerProps) {
     return () => window.clearInterval(handle)
   }, [notices.length])
 
-  if (!notices.length) {
-    return null
-  }
-
-  const notice = notices[index % notices.length]
+  const notice = notices[index % Math.max(notices.length, 1)]
+  const fallbackText = {
+    ko: '오늘의 안내를 준비 중입니다.',
+    en: 'Today\'s notice is being prepared.',
+    ja: '本日の案内を準備中です。',
+    zh: '今日公告正在准备中。',
+  } satisfies Record<LanguageCode, string>
 
   return (
     <div className="notice-ticker" aria-live="polite">
-      <span>{text(notice.text, language)}</span>
+      <b>NOTICE</b>
+      <span>{notice ? text(notice.text, language) : fallbackText[language]}</span>
     </div>
   )
 }

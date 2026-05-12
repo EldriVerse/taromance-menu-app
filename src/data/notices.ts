@@ -8,10 +8,10 @@ export const notices: MenuNotice[] = [
     sort_code: 10,
     active: true,
     text: {
-      ko: '타로 시그니처 칵테일은 카드 선택 후 상세 정보를 확인할 수 있습니다.',
+      ko: '타로 시그니처 칵테일은 카드를 선택해 상세 정보를 확인할 수 있습니다.',
       en: 'Choose a tarot signature card to view its details.',
-      ja: 'タロットカードを選ぶと詳細を確認できます。',
-      zh: '选择塔罗招牌卡牌后可查看详情。',
+      ja: 'タロットシグネチャーカクテルは、カードを選ぶと詳細を確認できます。',
+      zh: '塔罗招牌鸡尾酒可选择卡片查看详细信息。',
     },
   },
   {
@@ -22,8 +22,8 @@ export const notices: MenuNotice[] = [
     text: {
       ko: '위스키 가격은 1잔 기준이며 일부 메뉴는 재고 상황에 따라 변경됩니다.',
       en: 'Whisky prices are per glass and may change by stock.',
-      ja: 'ウイスキー価格は一杯基準で在庫により変更されます。',
-      zh: '威士忌价格以单杯为准，可能随库存调整。',
+      ja: 'ウイスキー価格は1杯基準で、一部メニューは在庫状況により変更されます。',
+      zh: '威士忌价格以单杯为准，部分菜单会根据库存情况变更。',
     },
   },
   {
@@ -33,8 +33,8 @@ export const notices: MenuNotice[] = [
     text: {
       ko: '품절 메뉴는 붉은 이중선과 SOLD OUT 표기로 안내됩니다.',
       en: 'Sold out items are marked with a red double line and SOLD OUT.',
-      ja: '品切れメニューは赤い二重線とSOLD OUTで表示されます。',
-      zh: '售罄菜单会显示红色双线与 SOLD OUT 标记。',
+      ja: '品切れメニューは赤い二重線とSOLD OUT表示で案内されます。',
+      zh: '售罄菜单会以红色双线和 SOLD OUT 标识显示。',
     },
   },
 ]
