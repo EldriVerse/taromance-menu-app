@@ -6,12 +6,23 @@ export const categories: MenuCategory[] = [
     imageKey: 'guide',
     label: { ko: '가이드', en: 'Guide', ja: 'ガイド', zh: '指南' },
     subtitle: {
-      ko: '이용 안내와 공지',
-      en: 'House guide and notices',
-      ja: 'ご利用案内とお知らせ',
-      zh: '使用指南和公告',
+      ko: '이용 안내와 추천',
+      en: 'House guide and recommendations',
+      ja: '利用案内とおすすめ',
+      zh: '使用指南与推荐',
     },
-    tabs: [],
+    tabs: [
+      {
+        id: 'house-guide',
+        label: { ko: '이용안내', en: 'Guide', ja: '利用案内', zh: '使用指南' },
+        kinds: ['guide'],
+      },
+      {
+        id: 'delivery-recommend',
+        label: { ko: '배달추천', en: 'Delivery Picks', ja: 'デリバリー推薦', zh: '外卖推荐' },
+        kinds: ['guide'],
+      },
+    ],
   },
   {
     id: 'cocktail',
@@ -95,7 +106,7 @@ export const categories: MenuCategory[] = [
     label: {
       ko: '와인 & 기타 주류',
       en: 'Wine & Spirits',
-      ja: 'ワイン & その他',
+      ja: 'ワイン & その他酒類',
       zh: '葡萄酒 & 其他酒类',
     },
     subtitle: {
