@@ -150,7 +150,7 @@
 
 @media (orientation: landscape) {
   .portal-gate__title {
-    top: clamp(112px, 18svh, 168px);
+    top: clamp(150px, 24svh, 228px);
     left: 50%;
     transform: translateX(-50%);
     writing-mode: horizontal-tb;
@@ -160,7 +160,7 @@
   }
 
   .portal-gate__caption {
-    top: clamp(58svh, 64svh, 67svh);
+    top: clamp(66svh, 72svh, 76svh);
     gap: 0;
     font-size: clamp(28px, 3.4vw, 46px);
   }
