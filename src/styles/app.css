@@ -11,6 +11,15 @@
   cursor: pointer;
 }
 
+@media (orientation: landscape) {
+  .portal-screen {
+    background:
+      linear-gradient(180deg, rgb(18 16 13 / 6%), rgb(18 16 13 / 38%)),
+      url('/assets/legacy/title/gif_homebg3.gif') center top / cover no-repeat,
+      var(--color-void);
+  }
+}
+
 .portal-screen::before,
 .portal-screen::after {
   position: absolute;
@@ -52,10 +61,7 @@
   position: absolute;
   inset: 0;
   isolation: isolate;
-  display: grid;
-  grid-template-rows: 1fr auto auto auto 1fr;
-  gap: 22px;
-  place-items: center;
+  display: block;
   width: 100%;
   padding: clamp(32px, 6vw, 82px);
   border: 0;
@@ -88,11 +94,15 @@
 }
 
 .portal-gate__title {
-  grid-row: 2;
+  position: absolute;
+  top: clamp(112px, 23svh, 230px);
+  left: clamp(42px, 8vw, 124px);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
   font-family: var(--font-display);
-  max-width: 100%;
-  font-size: clamp(64px, 8vw, 118px);
-  line-height: 1;
+  font-size: clamp(52px, 6vw, 92px);
+  line-height: 1.02;
+  letter-spacing: 0;
   overflow-wrap: anywhere;
   text-shadow:
     0 8px 24px rgb(0 0 0 / 72%),
@@ -100,23 +110,53 @@
 }
 
 .portal-gate__caption {
-  grid-row: 3;
+  position: absolute;
+  left: 50%;
+  top: clamp(58svh, 64svh, 68svh);
+  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   gap: 10px;
   min-height: 44px;
   color: var(--color-gold-bright);
   font-family: var(--font-stamp);
+  font-size: clamp(34px, 4.4vw, 62px);
   font-weight: 800;
+  letter-spacing: 0;
+  text-shadow:
+    0 8px 22px rgb(0 0 0 / 72%),
+    0 0 24px rgb(241 212 135 / 28%);
+  animation: portal-touch-blink 1.18s ease-in-out infinite;
+}
+
+.portal-gate__caption svg {
+  width: 0.72em;
+  height: 0.72em;
 }
 
 .portal-gate__status {
-  grid-row: 4;
+  position: absolute;
+  left: 50%;
+  top: calc(clamp(58svh, 64svh, 68svh) + clamp(52px, 5.3vw, 76px));
+  transform: translateX(-50%);
   min-height: 24px;
   color: rgb(255 244 209 / 62%);
   font-family: var(--font-stamp);
   font-size: 14px;
   font-weight: 700;
+}
+
+@keyframes portal-touch-blink {
+  0%,
+  100% {
+    opacity: 1;
+    filter: brightness(1.12);
+  }
+
+  48% {
+    opacity: 0.34;
+    filter: brightness(0.86);
+  }
 }
 
 @keyframes portal-screen-exit {
