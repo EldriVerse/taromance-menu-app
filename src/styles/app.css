@@ -743,7 +743,8 @@
   grid-template-columns: minmax(260px, 360px) minmax(300px, 1fr);
   gap: 28px;
   width: min(860px, 94vw);
-  max-height: 88svh;
+  min-height: min(620px, 90svh);
+  max-height: 94svh;
   padding: 28px;
   border: 1px solid rgb(126 75 34 / 36%);
   border-radius: var(--radius-card);
@@ -862,6 +863,28 @@
   .flavor-grid,
   .story-color-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dialog-backdrop {
+    padding: 18px;
+  }
+
+  .menu-dialog {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(46svh, 1fr) auto;
+    width: min(92vw, 760px);
+    min-height: 92svh;
+    max-height: 96svh;
+    overflow-y: auto;
+  }
+
+  .menu-dialog__visual {
+    min-height: 46svh;
+  }
+
+  .menu-dialog__body {
+    align-content: start;
+    padding-right: 42px;
   }
 }
 
