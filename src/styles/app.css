@@ -9,6 +9,8 @@
     url('/assets/legacy/title/gif_homebg3.gif') center / cover no-repeat,
     var(--color-void);
   cursor: pointer;
+  -webkit-tap-highlight-color: rgb(0 0 0 / 0%);
+  -webkit-touch-callout: none;
 }
 
 @media (orientation: landscape) {
@@ -71,11 +73,16 @@
   box-shadow: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  -webkit-focus-ring-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 .portal-gate:focus,
-.portal-gate:focus-visible {
+.portal-gate:focus-visible,
+.portal-gate:active {
   outline: none;
+  box-shadow: none;
 }
 
 .portal-gate::before,
@@ -492,7 +499,7 @@ button:focus-visible {
   align-items: center;
   min-height: 96px;
   padding: 14px 16px;
-  border: 1px solid rgb(88 58 32 / 18%);
+  border: 0;
   border-radius: var(--radius-card);
   color: var(--color-ink);
   background:
@@ -508,7 +515,7 @@ button:focus-visible {
 .menu-item::before {
   position: absolute;
   inset: 7px;
-  border: 1px solid rgb(88 58 32 / 7%);
+  border: 0;
   border-radius: 5px;
   pointer-events: none;
   content: '';
@@ -645,7 +652,13 @@ button:focus-visible {
     grid-row: 1;
     min-height: 0;
     padding-right: clamp(18px, 2.4vw, 38px);
-    z-index: 2;
+    pointer-events: none;
+    transform: translateY(-12px);
+    z-index: 3;
+  }
+
+  .grimoire-header .header-actions {
+    pointer-events: auto;
   }
 
   .language-toggle__trigger {
@@ -660,7 +673,8 @@ button:focus-visible {
     align-self: center;
     min-height: 54px;
     padding-right: clamp(128px, 12vw, 184px);
-    z-index: 1;
+    transform: translateY(-12px);
+    z-index: 4;
   }
 
   .subcategory-tabs button {
@@ -704,7 +718,7 @@ button:focus-visible {
     gap: 14px;
     min-height: 82px;
     padding: 10px 14px;
-    border-color: rgb(88 58 32 / 12%);
+    border: 0;
     background:
       linear-gradient(90deg, rgb(212 167 77 / 10%), transparent 22%),
       rgb(255 244 209 / 25%);
@@ -1031,7 +1045,7 @@ button:focus-visible {
     align-items: center;
     min-height: 0;
     margin:
-      clamp(2px, 0.8vh, 8px)
+      clamp(24px, 3.2vh, 38px)
       clamp(8px, 1.6vw, 24px)
       0
       clamp(2px, 0.8vw, 10px);
@@ -1045,13 +1059,13 @@ button:focus-visible {
     min-height: min(420px, calc(100svh - 300px));
     place-items: start center;
     padding-top: clamp(6px, 1.2vh, 14px);
-    transform: translateY(-22px);
+    transform: translateY(4px);
   }
 
   .tarot-arrow {
     grid-row: 1;
     align-self: start;
-    margin-top: clamp(118px, 16vh, 148px);
+    margin-top: clamp(144px, 18vh, 174px);
     transform: none;
   }
 
