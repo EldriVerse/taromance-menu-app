@@ -16,6 +16,7 @@ import { useMenuDataSource } from './hooks/useMenuDataSource'
 
 function App() {
   const [entered, setEntered] = useState(false)
+  const [isPortalExiting, setIsPortalExiting] = useState(false)
   const [language, setLanguage] = useState<LanguageCode>('ko')
   const wasInactiveRef = useRef(false)
   const dataSource = useMenuDataSource()
@@ -39,6 +40,7 @@ function App() {
     const guideCategory = categories.find((category) => category.id === 'guide') ?? categories[0]
 
     setEntered(false)
+    setIsPortalExiting(false)
     setLanguage('ko')
     setActiveCategoryId(guideCategory.id)
     setActiveTabId(guideCategory.tabs[0]?.id)
@@ -79,15 +81,26 @@ function App() {
     setActiveTabId(firstTabWithItems?.id ?? nextCategory?.tabs[0]?.id)
   }
 
+  async function handlePortalEnter() {
+    if (isPortalExiting || dataSource.status === 'checking') {
+      return
+    }
+
+    await dataSource.checkForUpdates()
+    setIsPortalExiting(true)
+    window.setTimeout(() => {
+      setEntered(true)
+      setIsPortalExiting(false)
+    }, 620)
+  }
+
   if (!entered) {
     return (
       <PortalScreen
-        onEnter={async () => {
-          await dataSource.checkForUpdates()
-          setEntered(true)
-        }}
+        onEnter={handlePortalEnter}
         dataStatus={dataSource.status}
         dataMessage={dataSource.message}
+        isExiting={isPortalExiting}
       />
     )
   }

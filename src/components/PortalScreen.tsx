@@ -4,16 +4,17 @@ interface PortalScreenProps {
   onEnter: () => void | Promise<void>
   dataStatus: 'idle' | 'checking' | 'ready' | 'fallback'
   dataMessage: string
+  isExiting?: boolean
 }
 
-export function PortalScreen({ onEnter, dataStatus, dataMessage }: PortalScreenProps) {
+export function PortalScreen({ onEnter, dataStatus, dataMessage, isExiting = false }: PortalScreenProps) {
   return (
-    <main className="portal-screen">
-      <button className="portal-gate" type="button" onClick={onEnter} disabled={dataStatus === 'checking'}>
+    <main className={isExiting ? 'portal-screen is-exiting' : 'portal-screen'}>
+      <button className="portal-gate" type="button" onClick={onEnter} disabled={dataStatus === 'checking' || isExiting}>
         <span className="portal-gate__title">TAROMANCE</span>
         <span className="portal-gate__caption">
           <Sparkles aria-hidden="true" size={20} />
-          {dataStatus === 'checking' ? 'LOADING' : 'PRESS TO ENTER'}
+          {dataStatus === 'checking' || isExiting ? 'LOADING' : 'PRESS TO ENTER'}
         </span>
         <span className="portal-gate__status">{dataMessage}</span>
       </button>

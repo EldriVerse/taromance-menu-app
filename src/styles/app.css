@@ -31,6 +31,18 @@
     linear-gradient(180deg, rgb(0 0 0 / 36%), transparent 30%, transparent 70%, rgb(0 0 0 / 44%));
 }
 
+.portal-screen.is-exiting {
+  animation: portal-screen-exit 620ms cubic-bezier(0.2, 0.82, 0.2, 1) forwards;
+}
+
+.portal-screen.is-exiting::before {
+  animation: portal-frame-exit 620ms cubic-bezier(0.2, 0.82, 0.2, 1) forwards;
+}
+
+.portal-screen.is-exiting .portal-gate {
+  animation: portal-gate-exit 620ms cubic-bezier(0.2, 0.82, 0.2, 1) forwards;
+}
+
 .portal-topbar {
   position: absolute;
   top: 28px;
@@ -104,6 +116,69 @@
   font-family: var(--font-stamp);
   font-size: 14px;
   font-weight: 700;
+}
+
+@keyframes portal-screen-exit {
+  0% {
+    filter: brightness(1);
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  58% {
+    filter: brightness(1.08);
+    opacity: 1;
+    transform: scale(1.018);
+  }
+
+  100% {
+    filter: brightness(0.56);
+    opacity: 0;
+    transform: scale(1.045);
+  }
+}
+
+@keyframes portal-frame-exit {
+  from {
+    inset: 34px;
+    opacity: 1;
+  }
+
+  to {
+    inset: 12px;
+    opacity: 0;
+  }
+}
+
+@keyframes portal-gate-exit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  42% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.018);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.94);
+  }
+}
+
+@keyframes app-shell-enter {
+  from {
+    filter: brightness(0.82);
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+
+  to {
+    filter: brightness(1);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .language-toggle {
@@ -187,6 +262,7 @@ button:focus-visible {
     radial-gradient(circle at 10% 16%, rgb(42 129 124 / 22%), transparent 30%),
     radial-gradient(circle at 92% 78%, rgb(183 58 52 / 12%), transparent 28%),
     linear-gradient(135deg, #110e0a 0%, #241b13 48%, #11130f 100%);
+  animation: app-shell-enter 520ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
 }
 
 .category-nav {
