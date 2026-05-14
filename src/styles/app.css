@@ -1289,9 +1289,9 @@ button:focus-visible {
 @media (orientation: portrait) {
   .app-shell {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) clamp(224px, 15.5svh, 260px);
-    gap: 16px;
-    padding: 18px 22px 42px;
+    grid-template-rows: minmax(0, 1fr) clamp(206px, 14.2svh, 238px);
+    gap: 0;
+    padding: 18px 22px 34px;
   }
 
   .category-nav {
@@ -1301,11 +1301,12 @@ button:focus-visible {
     grid-template-rows: none;
     align-content: stretch;
     gap: 12px;
-    padding-bottom: 24px;
+    padding-bottom: 22px;
+    transform: translateY(-28px);
   }
 
   .category-nav button {
-    min-height: clamp(172px, 12svh, 208px);
+    min-height: clamp(162px, 11.2svh, 196px);
   }
 
   .grimoire-panel {
