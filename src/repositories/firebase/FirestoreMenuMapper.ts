@@ -316,7 +316,7 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
   }
 
   if (kind === 'whisky') {
-    return 'recommend'
+    return 'others'
   }
 
   if (kind === 'wine') {

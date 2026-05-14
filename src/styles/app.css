@@ -1435,9 +1435,9 @@ button:focus-visible {
      bottom 값을 줄이면 버튼이 더 아래로 내려가고, 키우면 위로 올라갑니다. */
   .subcategory-tabs {
     position: absolute;
-    right: clamp(118px, 7.2vw, 164px);
-    bottom: clamp(100px, 5.2svh, 154px);
-    left: clamp(118px, 7.2vw, 164px);
+    right: clamp(100px, 6.2vw, 142px);
+    bottom: clamp(72px, 4svh, 118px);
+    left: clamp(100px, 6.2vw, 142px);
     align-items: center;
     min-height: clamp(58px, 2.8svh, 76px);
     padding-right: 0;
@@ -1467,7 +1467,7 @@ button:focus-visible {
     grid-column: 1 / -1;
     grid-row: 2;
     min-height: clamp(42px, 2.1svh, 62px);
-    margin-inline: clamp(72px, 6.2vw, 126px);
+    margin-inline: clamp(58px, 5.5vw, 108px);
     border: 0;
     background:
       linear-gradient(90deg, rgb(212 167 77 / 12%), rgb(255 244 209 / 22%), rgb(212 167 77 / 8%)),
@@ -1484,13 +1484,13 @@ button:focus-visible {
     align-self: start;
     gap: clamp(10px, 0.7svh, 18px);
     width: auto;
-    height: 100%;
+    height: calc(100% - clamp(260px, 9svh, 330px));
     min-height: 0;
     margin:
       clamp(16px, 1.1svh, 32px)
-      clamp(86px, 7.2vw, 142px)
-      clamp(230px, 10svh, 318px)
-      clamp(86px, 7.2vw, 142px);
+      clamp(58px, 5.5vw, 108px)
+      0
+      clamp(58px, 5.5vw, 108px);
     padding-right: 0;
     scrollbar-width: none;
   }
@@ -1631,7 +1631,7 @@ button:focus-visible {
     gap: clamp(18px, 1.2svh, 28px);
     width: min(58vw, 860px);
     min-height: auto;
-    max-height: 66svh;
+    max-height: 74svh;
     padding: clamp(24px, 1.8vw, 36px);
     overflow-y: auto;
   }
@@ -1639,7 +1639,7 @@ button:focus-visible {
   /* 팝업 이미지 영역입니다. 너무 크게 보이면 min-height/max-height를 낮추면 됩니다. */
   .menu-dialog__visual {
     min-height: clamp(250px, 18svh, 410px);
-    max-height: 26svh;
+    max-height: 32svh;
   }
 
   /* 팝업 텍스트 영역입니다. padding-right는 우측 X 버튼과 텍스트가 겹치지 않도록 비우는 여백입니다. */

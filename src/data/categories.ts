@@ -79,11 +79,6 @@ export const categories: MenuCategory[] = [
     },
     tabs: [
       {
-        id: 'recommend',
-        label: { ko: '추천', en: 'Recommend', ja: 'おすすめ', zh: '推荐' },
-        kinds: ['whisky'],
-      },
-      {
         id: 'scotch',
         label: { ko: '스카치', en: 'Scotch', ja: 'スコッチ', zh: '苏格兰' },
         kinds: ['whisky'],
