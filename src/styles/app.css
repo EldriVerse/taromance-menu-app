@@ -1375,7 +1375,7 @@ button:focus-visible {
 
   .grimoire-panel {
     order: 1;
-    grid-template-rows: clamp(142px, 5.9svh, 190px) clamp(42px, 2.1svh, 62px) minmax(0, 1fr);
+    grid-template-rows: clamp(82px, 3.9svh, 124px) clamp(42px, 2.1svh, 62px) minmax(0, 1fr);
     gap: clamp(12px, 0.8svh, 22px);
     padding:
       clamp(58px, 3.7svh, 108px)
@@ -1419,16 +1419,17 @@ button:focus-visible {
   }
 
   .subcategory-tabs {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    align-self: end;
+    position: absolute;
+    right: clamp(118px, 7.2vw, 164px);
+    bottom: clamp(100px, 5.2svh, 154px);
+    left: clamp(118px, 7.2vw, 164px);
     align-items: center;
-    min-height: clamp(72px, 3.6svh, 102px);
-    padding-right: clamp(190px, 18vw, 304px);
+    min-height: clamp(58px, 2.8svh, 76px);
+    padding-right: 0;
     overflow-x: auto;
     scrollbar-width: none;
     pointer-events: none;
-    z-index: 4;
+    z-index: 9;
   }
 
   .subcategory-tabs::-webkit-scrollbar {
@@ -1438,10 +1439,10 @@ button:focus-visible {
 
   .subcategory-tabs button {
     pointer-events: auto;
-    min-width: clamp(214px, 17.5vw, 322px);
-    min-height: clamp(64px, 3.2svh, 90px);
-    padding: 0 clamp(24px, 2.1vw, 38px);
-    font-size: clamp(23px, 1.55vw, 32px);
+    min-width: clamp(148px, 11.5vw, 212px);
+    min-height: clamp(54px, 2.6svh, 72px);
+    padding: 0 clamp(16px, 1.2vw, 24px);
+    font-size: clamp(19px, 1.18vw, 24px);
   }
 
   .notice-ticker {
@@ -1465,9 +1466,9 @@ button:focus-visible {
     min-height: 0;
     margin:
       clamp(16px, 1.1svh, 32px)
-      clamp(76px, 6.6vw, 132px)
-      0
-      clamp(76px, 6.6vw, 132px);
+      clamp(86px, 7.2vw, 142px)
+      clamp(230px, 10svh, 318px)
+      clamp(86px, 7.2vw, 142px);
     padding-right: 0;
     scrollbar-width: none;
   }
@@ -1591,29 +1592,29 @@ button:focus-visible {
   }
 
   .dialog-backdrop {
-    padding: clamp(40px, 4.2vw, 76px);
+    padding: clamp(140px, 10vw, 220px);
   }
 
   .menu-dialog {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(24svh, 0.58fr) auto;
-    gap: clamp(28px, 2.2svh, 52px);
-    width: min(88vw, 1420px);
-    min-height: 88svh;
-    max-height: 93svh;
-    padding: clamp(34px, 3vw, 62px);
+    grid-template-rows: minmax(18svh, 260px) auto;
+    gap: clamp(18px, 1.2svh, 28px);
+    width: min(58vw, 860px);
+    min-height: auto;
+    max-height: 66svh;
+    padding: clamp(24px, 1.8vw, 36px);
     overflow-y: auto;
   }
 
   .menu-dialog__visual {
-    min-height: 24svh;
-    max-height: 34svh;
+    min-height: clamp(250px, 18svh, 410px);
+    max-height: 26svh;
   }
 
   .menu-dialog__body {
     align-content: start;
-    gap: clamp(16px, 1.2svh, 28px);
-    padding-right: clamp(54px, 5vw, 92px);
+    gap: clamp(12px, 0.9svh, 20px);
+    padding-right: clamp(42px, 4vw, 72px);
   }
 
   .menu-dialog__body p {
@@ -1621,18 +1622,18 @@ button:focus-visible {
   }
 
   .menu-dialog__body h2 {
-    font-size: clamp(54px, 5.4vw, 92px);
+    font-size: clamp(36px, 3.4vw, 58px);
   }
 
   .menu-dialog__body span {
-    font-size: clamp(22px, 1.7vw, 34px);
+    font-size: clamp(18px, 1.15vw, 23px);
   }
 
   .dialog-close {
     top: clamp(18px, 1.5vw, 28px);
     right: clamp(18px, 1.5vw, 28px);
-    width: clamp(58px, 4.3vw, 82px);
-    height: clamp(58px, 4.3vw, 82px);
+    width: clamp(52px, 3.6vw, 66px);
+    height: clamp(52px, 3.6vw, 66px);
   }
 }
 
