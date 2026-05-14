@@ -1351,6 +1351,8 @@ button:focus-visible {
 }
 
 @media (orientation: portrait) {
+  /* 세로모드 전체 뼈대입니다. 첫 번째 행은 스크롤 이미지 패널, 두 번째 행은 하단 카테고리 버튼 영역입니다.
+     하단 카테고리 버튼 높이를 조정하려면 grid-template-rows의 두 번째 clamp 값을 먼저 조정하세요. */
   .app-shell {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) clamp(252px, 12.8svh, 376px);
@@ -1358,6 +1360,8 @@ button:focus-visible {
     padding: clamp(20px, 1.1vw, 30px) clamp(24px, 1.5vw, 38px) clamp(56px, 2.6svh, 86px);
   }
 
+  /* 하단 카테고리 버튼 4개 영역입니다. gap은 버튼 사이 간격, padding-bottom은 태블릿 하단 터치 여백,
+     transform은 스크롤 이미지와 버튼 사이의 세로 간격을 맞추는 값입니다. */
   .category-nav {
     order: 2;
     display: grid;
@@ -1369,10 +1373,14 @@ button:focus-visible {
     transform: translateY(-18px);
   }
 
+  /* 카테고리 버튼 자체의 최소 높이입니다. 세로모드에서 버튼 이미지가 작아 보이면 이 값을 올리면 됩니다. */
   .category-nav button {
     min-height: clamp(206px, 10.8svh, 318px);
   }
 
+  /* 스크롤 이미지 패널의 내부 그리드입니다.
+     1행: 언어 버튼/상단 여백, 2행: 공지 티커, 3행: 리스트 본문입니다.
+     padding은 실제 스크롤 이미지의 찢어진 가장자리와 말린 부분을 피해서 콘텐츠를 안쪽으로 넣는 값입니다. */
   .grimoire-panel {
     order: 1;
     grid-template-rows: clamp(82px, 3.9svh, 124px) clamp(42px, 2.1svh, 62px) minmax(0, 1fr);
@@ -1384,6 +1392,7 @@ button:focus-visible {
       clamp(88px, 6vw, 138px);
   }
 
+  /* 우측 상단 언어 버튼을 담는 헤더입니다. padding-right를 키우면 언어 버튼이 왼쪽으로 더 들어옵니다. */
   .grimoire-header {
     grid-column: 1 / -1;
     grid-row: 1;
@@ -1399,6 +1408,7 @@ button:focus-visible {
     pointer-events: auto;
   }
 
+  /* 언어 버튼 크기입니다. min-width/min-height는 터치 영역, font-size는 버튼 안 글자 크기입니다. */
   .language-toggle__trigger {
     gap: clamp(8px, 0.6vw, 12px);
     min-width: clamp(118px, 8.6vw, 162px);
@@ -1407,17 +1417,22 @@ button:focus-visible {
     font-size: clamp(20px, 1.45vw, 30px);
   }
 
+  /* 언어 선택 드롭다운 폭과 내부 여백입니다. 언어 목록이 좁아 보이면 width를 키우면 됩니다. */
   .language-toggle__menu {
     width: clamp(176px, 13vw, 236px);
     padding: clamp(8px, 0.6vw, 12px);
   }
 
+  /* 언어 목록의 각 버튼입니다. 중국어/일본어 글자가 답답하면 min-height나 font-size를 조정하세요. */
   .language-toggle__menu button {
     min-height: clamp(50px, 2.5svh, 68px);
     padding: 0 clamp(16px, 1.2vw, 24px);
     font-size: clamp(18px, 1.3vw, 26px);
   }
 
+  /* 세부탭 버튼 묶음입니다. 세로모드에서는 스크롤 하단 말린 부분 위에 겹쳐 배치합니다.
+     left/right는 스크롤 좌우 라인 안쪽 정렬, bottom은 하단 말린 부분 기준 세로 위치입니다.
+     bottom 값을 줄이면 버튼이 더 아래로 내려가고, 키우면 위로 올라갑니다. */
   .subcategory-tabs {
     position: absolute;
     right: clamp(118px, 7.2vw, 164px);
@@ -1437,6 +1452,8 @@ button:focus-visible {
     height: 0;
   }
 
+  /* 세부탭 개별 버튼 크기입니다. 버튼 폭은 min-width, 높이는 min-height, 글자 크기는 font-size입니다.
+     탭이 너무 넓으면 min-width의 vw/max 값을 낮추면 됩니다. */
   .subcategory-tabs button {
     pointer-events: auto;
     min-width: clamp(148px, 11.5vw, 212px);
@@ -1445,6 +1462,7 @@ button:focus-visible {
     font-size: clamp(19px, 1.18vw, 24px);
   }
 
+  /* 공지 티커 위치입니다. margin-inline은 리스트 아이템과 같은 좌우 기준을 맞추기 위한 값입니다. */
   .notice-ticker {
     grid-column: 1 / -1;
     grid-row: 2;
@@ -1456,6 +1474,10 @@ button:focus-visible {
       rgb(255 244 209 / 14%);
   }
 
+  /* 메뉴 리스트 전체 영역입니다.
+     margin 순서는 위, 오른쪽, 아래, 왼쪽입니다.
+     좌우 값은 스크롤 이미지의 내부 라인과 리스트 폭을 맞추는 핵심 값입니다.
+     아래 값은 하단 말린 스크롤 영역과 세부탭 버튼을 피하기 위한 여백입니다. */
   .menu-list {
     grid-column: 1 / -1;
     grid-row: 3;
@@ -1478,6 +1500,7 @@ button:focus-visible {
     height: 0;
   }
 
+  /* 리스트 아이템 카드입니다. min-height는 한 줄 아이템 높이, padding은 텍스트와 카드 가장자리 사이 여백입니다. */
   .menu-item {
     min-height: clamp(96px, 4.6svh, 136px);
     padding: clamp(14px, 0.9svh, 24px) clamp(18px, 1.4vw, 28px);
@@ -1492,14 +1515,17 @@ button:focus-visible {
     content: none;
   }
 
+  /* 리스트 아이템 제목 크기입니다. 메뉴명이 길면 max 값을 낮추거나 line-height를 조정하세요. */
   .menu-item__body strong {
     font-size: clamp(26px, 2vw, 38px);
   }
 
+  /* 리스트 아이템 보조 설명 크기입니다. 설명이 두 줄 이상 많아지면 font-size를 낮추는 쪽이 안정적입니다. */
   .menu-item__body small {
     font-size: clamp(16px, 1.1vw, 22px);
   }
 
+  /* 리스트 오른쪽 가격/상태 텍스트 크기입니다. 가격 표기가 좁아 보이면 max 값만 조금 낮추면 됩니다. */
   .menu-item__meta b {
     font-size: clamp(28px, 1.9vw, 40px);
   }
@@ -1591,10 +1617,14 @@ button:focus-visible {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* 상세 팝업 바깥 어두운 영역입니다. padding을 키우면 팝업이 화면 중앙에서 더 작게 보입니다. */
   .dialog-backdrop {
     padding: clamp(140px, 10vw, 220px);
   }
 
+  /* 세로모드 상세 팝업 본체입니다.
+     width는 팝업 가로 폭, max-height는 화면을 얼마나 차지할지 정하는 값입니다.
+     grid-template-rows의 첫 행은 이미지 영역, 두 번째 행은 설명 영역입니다. */
   .menu-dialog {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(18svh, 260px) auto;
@@ -1606,11 +1636,13 @@ button:focus-visible {
     overflow-y: auto;
   }
 
+  /* 팝업 이미지 영역입니다. 너무 크게 보이면 min-height/max-height를 낮추면 됩니다. */
   .menu-dialog__visual {
     min-height: clamp(250px, 18svh, 410px);
     max-height: 26svh;
   }
 
+  /* 팝업 텍스트 영역입니다. padding-right는 우측 X 버튼과 텍스트가 겹치지 않도록 비우는 여백입니다. */
   .menu-dialog__body {
     align-content: start;
     gap: clamp(12px, 0.9svh, 20px);
@@ -1621,14 +1653,17 @@ button:focus-visible {
     font-size: clamp(18px, 1.1vw, 26px);
   }
 
+  /* 팝업 메뉴명 크기입니다. 긴 칵테일 이름이 넘치면 max 값을 낮추면 됩니다. */
   .menu-dialog__body h2 {
     font-size: clamp(36px, 3.4vw, 58px);
   }
 
+  /* 팝업 설명문 크기입니다. 설명이 길어질수록 이 값을 낮추면 스크롤 부담이 줄어듭니다. */
   .menu-dialog__body span {
     font-size: clamp(18px, 1.15vw, 23px);
   }
 
+  /* 팝업 닫기 버튼 위치와 크기입니다. top/right는 팝업 내부 우측 상단 기준 위치입니다. */
   .dialog-close {
     top: clamp(18px, 1.5vw, 28px);
     right: clamp(18px, 1.5vw, 28px);
