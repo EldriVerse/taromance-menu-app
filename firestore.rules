@@ -46,6 +46,16 @@ service cloud.firestore {
       allow write: if isSignedIn();
     }
 
+    match /admin_draft_menu_board_settings/{document=**} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    match /admin_draft_menu_board_notices/{document=**} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
     match /admin_draft_cocktails/{document=**} {
       allow read, write: if isSignedIn();
     }

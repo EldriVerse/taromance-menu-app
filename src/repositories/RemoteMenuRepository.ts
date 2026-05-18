@@ -466,6 +466,30 @@ async function fetchBoardNotices(params: {
   }
 }
 
+async function fetchBoardSettings(params: {
+  firestore: Firestore
+  firestoreApi: Awaited<typeof import('firebase/firestore')>
+}) {
+  const { firestore, firestoreApi } = params
+  const settingsDocPath =
+    import.meta.env.VITE_FIRESTORE_SETTINGS_DOC || 'admin_draft_menu_board_settings/menu_board_settings'
+  const [settingsCollection, settingsDocument] = settingsDocPath.split('/')
+
+  if (!settingsCollection || !settingsDocument) {
+    return mapFirestoreSettings(null)
+  }
+
+  try {
+    const settingsSnapshot = await firestoreApi.getDoc(
+      firestoreApi.doc(firestore, settingsCollection, settingsDocument),
+    )
+
+    return mapFirestoreSettings(settingsSnapshot.exists() ? (settingsSnapshot.data() as FirestoreRecord) : null)
+  } catch {
+    return mapFirestoreSettings(null)
+  }
+}
+
 export async function fetchRemoteMenuData(): Promise<RemoteMenuResult> {
   if (!hasFirebaseEnvironment()) {
     return {
@@ -489,14 +513,7 @@ export async function fetchRemoteMenuData(): Promise<RemoteMenuResult> {
 
   try {
     const loadedAt = new Date().toISOString()
-    const settingsDocPath =
-      import.meta.env.VITE_FIRESTORE_SETTINGS_DOC || 'admin_draft_menu_board_settings/menu_board_settings'
-    const [settingsCollection, settingsDocument] = settingsDocPath.split('/')
-    const settingsSnapshot =
-      settingsCollection && settingsDocument
-        ? await firestoreApi.getDoc(firestoreApi.doc(firestore, settingsCollection, settingsDocument))
-        : null
-    const settings = mapFirestoreSettings(settingsSnapshot?.exists() ? (settingsSnapshot.data() as FirestoreRecord) : null)
+    const settings = await fetchBoardSettings({ firestore, firestoreApi })
     const boardItems = await fetchBoardItems({ firestore, firestoreApi })
     const boardNotices = await fetchBoardNotices({ firestore, firestoreApi })
 
