@@ -8,6 +8,7 @@ const languageKeys = ['ko', 'en', 'ja', 'zh'] as const
 const categoryIds: CategoryId[] = ['guide', 'cocktail', 'whisky', 'wine-spirits']
 const menuKinds: MenuKind[] = [
   'guide',
+  'cocktail',
   'tarot-signature',
   'custom-cocktail',
   'story-cocktail',
@@ -224,6 +225,10 @@ function getKind(record: FirestoreRecord, collectionName: string, categoryId: Ca
   }
 
   if (categoryId === 'cocktail') {
+    if (raw === 'cocktail') {
+      return 'cocktail'
+    }
+
     if (raw === 'custom' || raw === 'custom-cocktail') {
       return 'custom-cocktail'
     }
@@ -297,6 +302,10 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
 
   if (kind === 'tarot-signature') {
     return 'tarot-signature'
+  }
+
+  if (kind === 'cocktail') {
+    return 'cocktail'
   }
 
   if (kind === 'custom-cocktail') {

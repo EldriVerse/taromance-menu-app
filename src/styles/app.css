@@ -164,6 +164,11 @@
     gap: 0;
     font-size: clamp(28px, 3.4vw, 46px);
   }
+
+  .portal-gate__status {
+    top: clamp(78svh, 81svh, 84svh);
+    font-size: clamp(14px, 1.1vw, 18px);
+  }
 }
 
 @keyframes portal-touch-blink {

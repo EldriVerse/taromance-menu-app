@@ -6,6 +6,7 @@ export type CategoryId = 'guide' | 'cocktail' | 'whisky' | 'wine-spirits'
 
 export type MenuKind =
   | 'guide'
+  | 'cocktail'
   | 'tarot-signature'
   | 'custom-cocktail'
   | 'story-cocktail'
