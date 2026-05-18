@@ -12,8 +12,10 @@ interface MenuListProps {
 export function MenuList({ items, language, onSelect }: MenuListProps) {
   return (
     <div className="menu-list">
-      {items.map((item, index) => (
-        item.displayType === 'section_header' ? (
+      {items.map((item, index) => {
+        const opensDetailDialog = item.categoryId !== 'guide'
+
+        return item.displayType === 'section_header' ? (
           <div
             key={item.id}
             className="menu-section-header"
@@ -34,7 +36,11 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
               .join(' ')}
             style={{ '--menu-item-index': index } as CSSProperties}
             type="button"
-            onClick={() => onSelect(item)}
+            onClick={() => {
+              if (opensDetailDialog) {
+                onSelect(item)
+              }
+            }}
           >
             <span className="menu-item__media">
               {item.glassImageUrl ? (
@@ -53,7 +59,7 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
             </span>
           </button>
         )
-      ))}
+      })}
     </div>
   )
 }
