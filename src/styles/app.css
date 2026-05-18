@@ -846,7 +846,7 @@ button:focus-visible {
   }
 
   .menu-item__body strong {
-    font-size: 23px;
+    font-size: 45px;
   }
 
   .menu-item__body small {
@@ -1548,7 +1548,7 @@ button:focus-visible {
 
   /* 리스트 아이템 제목 크기입니다. 메뉴명이 길면 max 값을 낮추거나 line-height를 조정하세요. */
   .menu-item__body strong {
-    font-size: clamp(26px, 2vw, 45px);
+    font-size: clamp(26px, 2vw, 38px);
   }
 
   /* 리스트 아이템 보조 설명 크기입니다. 설명이 두 줄 이상 많아지면 font-size를 낮추는 쪽이 안정적입니다. */
