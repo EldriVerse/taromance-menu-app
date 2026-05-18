@@ -719,8 +719,8 @@ button:focus-visible {
 @media (orientation: landscape) {
   .app-shell {
     grid-template-columns: clamp(214px, 15.5vw, 236px) minmax(0, 1fr);
-    gap: 4px;
-    padding: 22px 20px;
+    gap: 0;
+    padding: 22px 12px 22px 16px;
   }
 
   .category-nav {
@@ -735,6 +735,8 @@ button:focus-visible {
       clamp(66px, 5.8vw, 98px)
       clamp(76px, 8.2vh, 104px)
       clamp(96px, 7.4vw, 132px);
+    transform: translateX(-8px) scaleX(1.012);
+    transform-origin: left center;
   }
 
   .grimoire-header {
@@ -764,7 +766,7 @@ button:focus-visible {
     align-self: center;
     min-height: 54px;
     padding-right: clamp(128px, 12vw, 184px);
-    transform: translateY(-12px);
+    transform: translate(22px, -18px);
     pointer-events: none;
     z-index: 4;
   }
@@ -794,9 +796,9 @@ button:focus-visible {
     gap: 8px;
     margin:
       clamp(10px, 1.5vh, 18px)
-      clamp(14px, 2vw, 34px)
+      clamp(26px, 2.6vw, 48px)
       clamp(44px, 7vh, 74px)
-      clamp(12px, 1.8vw, 30px);
+      clamp(24px, 2.4vw, 44px);
     padding-right: 0;
     scrollbar-width: none;
   }
