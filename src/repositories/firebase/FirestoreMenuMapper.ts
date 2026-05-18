@@ -418,18 +418,21 @@ export function mapFirestoreSettings(data: FirestoreRecord | null): AppSettings 
   const features = isRecord(data.features) ? data.features : {}
   const customCocktail = isRecord(features.customCocktail) ? features.customCocktail : {}
   const storyCocktail = isRecord(features.storyCocktail) ? features.storyCocktail : {}
+  const cocktailButtons = isRecord(data.cocktail_buttons) ? data.cocktail_buttons : {}
 
   return {
     contentVersion: asString(data.contentVersion) ?? asString(data.content_version) ?? localBundle.settings.contentVersion,
     features: {
       customCocktail: {
         enabled:
+          asBoolean(cocktailButtons.custom_cocktail_enabled) ??
           asBoolean(customCocktail.enabled) ??
           asBoolean(data.customCocktailEnabled) ??
           localBundle.settings.features.customCocktail.enabled,
       },
       storyCocktail: {
         enabled:
+          asBoolean(cocktailButtons.story_cocktail_enabled) ??
           asBoolean(storyCocktail.enabled) ??
           asBoolean(data.storyCocktailEnabled) ??
           localBundle.settings.features.storyCocktail.enabled,

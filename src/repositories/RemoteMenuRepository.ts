@@ -1,4 +1,5 @@
-import type { MenuDataBundle } from '../domain/menu'
+import type { Firestore } from 'firebase/firestore'
+import type { CategoryId, LocalizedText, MenuDataBundle, MenuItem, MenuKind, MenuNotice } from '../domain/menu'
 import {
   createRemoteBundle,
   mapFirestoreMenuItem,
@@ -6,10 +7,24 @@ import {
   mapFirestoreSettings,
 } from './firebase/FirestoreMenuMapper'
 
+type FirestoreRecord = Record<string, unknown>
+
 export interface RemoteMenuResult {
   bundle: MenuDataBundle | null
   reason?: string
 }
+
+const legacyFallbackCollections = [
+  'live_menu_items',
+  'live_cocktails',
+  'admin_draft_guide',
+  'admin_draft_spirits_public',
+]
+const sourceCollections = {
+  cocktail: 'admin_draft_cocktails',
+  guide: 'admin_draft_guide',
+  spirits: 'admin_draft_spirits',
+} as const
 
 function getCollectionNames(envValue: string | undefined, fallback: string[]) {
   return (envValue ? envValue.split(',') : fallback).map((item) => item.trim()).filter(Boolean)
@@ -23,6 +38,463 @@ function hasFirebaseEnvironment() {
   )
 }
 
+function isRecord(value: unknown): value is FirestoreRecord {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function asString(value: unknown) {
+  return typeof value === 'string' ? value.trim() || undefined : undefined
+}
+
+function asNumber(value: unknown) {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+
+  if (typeof value === 'string') {
+    const parsed = Number(value.replace(/[^0-9.-]/g, ''))
+
+    return Number.isFinite(parsed) ? parsed : undefined
+  }
+
+  return undefined
+}
+
+function asBoolean(value: unknown) {
+  return typeof value === 'boolean' ? value : undefined
+}
+
+function firstString(...values: unknown[]) {
+  for (const value of values) {
+    const parsed = asString(value)
+
+    if (parsed) {
+      return parsed
+    }
+  }
+
+  return undefined
+}
+
+function firstNumber(...values: unknown[]) {
+  for (const value of values) {
+    const parsed = asNumber(value)
+
+    if (parsed !== undefined) {
+      return parsed
+    }
+  }
+
+  return undefined
+}
+
+function firstBoolean(...values: unknown[]) {
+  for (const value of values) {
+    const parsed = asBoolean(value)
+
+    if (parsed !== undefined) {
+      return parsed
+    }
+  }
+
+  return undefined
+}
+
+function isPublishedActive(record: FirestoreRecord) {
+  const status = asString(record.status)
+  const active = firstBoolean(record.is_active, record.isActive, record.active, record.enabled) ?? true
+
+  return active && (!status || status === 'published')
+}
+
+function localize(value: unknown, fallback = ''): LocalizedText {
+  if (isRecord(value)) {
+    const ko = asString(value.ko) ?? fallback
+
+    return {
+      ko,
+      en: asString(value.en) ?? ko,
+      ja: asString(value.ja) ?? ko,
+      zh: asString(value.zh) ?? ko,
+    }
+  }
+
+  if (typeof value === 'string') {
+    return { ko: value, en: value, ja: value, zh: value }
+  }
+
+  return { ko: fallback, en: fallback, ja: fallback, zh: fallback }
+}
+
+function getLocalizedField(record: FirestoreRecord, field: string, fallback = '') {
+  const i18nValue = record[`${field}_i18n`] ?? record[`${field}I18n`] ?? record[field]
+
+  if (i18nValue) {
+    return localize(i18nValue, fallback)
+  }
+
+  const ko = asString(record[`${field}_ko`]) ?? fallback
+
+  return {
+    ko,
+    en: asString(record[`${field}_en`]) ?? ko,
+    ja: asString(record[`${field}_ja`]) ?? ko,
+    zh: asString(record[`${field}_zh`]) ?? ko,
+  }
+}
+
+function normalizeText(value: unknown) {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item)).join(' ').toLowerCase()
+  }
+
+  return String(value ?? '').toLowerCase()
+}
+
+function mapMainCode(raw: unknown): CategoryId | null {
+  const mainCode = asString(raw)
+
+  if (mainCode === 'guide') {
+    return 'guide'
+  }
+
+  if (mainCode === 'cocktail') {
+    return 'cocktail'
+  }
+
+  if (mainCode === 'whisky') {
+    return 'whisky'
+  }
+
+  if (mainCode === 'etc_liquor') {
+    return 'wine-spirits'
+  }
+
+  return null
+}
+
+function mapSubCode(subCode: string | undefined, categoryId: CategoryId) {
+  if (!subCode) {
+    return undefined
+  }
+
+  const subCodeMap: Record<string, string> = {
+    guide_rules: 'house-guide',
+    guide_notice: 'house-guide',
+    guide_delivery: 'delivery-recommend',
+    cocktail_custom: 'cocktail_custom',
+    cocktail_story: 'cocktail_story',
+    whisky_scotch: 'scotch',
+    whisky_american: 'american',
+    whisky_other: 'others',
+    etc_wine: 'wine',
+    etc_spirit: 'other-spirits',
+  }
+
+  if (subCode.startsWith('cocktail_abv_')) {
+    return subCode
+  }
+
+  return subCodeMap[subCode] ?? (categoryId === 'cocktail' ? 'cocktail_abv_10_20' : subCode)
+}
+
+function kindFromBoard(categoryId: CategoryId, tabId: string | undefined, source: FirestoreRecord): MenuKind {
+  if (categoryId === 'guide') {
+    return 'guide'
+  }
+
+  if (categoryId === 'whisky') {
+    return 'whisky'
+  }
+
+  if (categoryId === 'wine-spirits') {
+    return tabId === 'wine' ? 'wine' : 'spirit'
+  }
+
+  if (tabId === 'cocktail_custom') {
+    return 'custom-cocktail'
+  }
+
+  if (tabId === 'cocktail_story') {
+    return 'story-cocktail'
+  }
+
+  const sourceSignatureText = normalizeText([
+    source.category,
+    source.tags,
+    source.name,
+    source.name_ko,
+    source.name_en,
+  ])
+
+  return sourceSignatureText.includes('signature') ||
+    sourceSignatureText.includes('tarot') ||
+    sourceSignatureText.includes('타로')
+    ? 'tarot-signature'
+    : 'cocktail'
+}
+
+function imageUrlFromValue(value: unknown) {
+  if (typeof value === 'string') {
+    return value.trim() || undefined
+  }
+
+  if (isRecord(value)) {
+    return firstString(value.url, value.imageUrl, value.image_url, value.src)
+  }
+
+  return undefined
+}
+
+function getImageUrls(record: FirestoreRecord) {
+  const slots = Array.isArray(record.image_slots) ? record.image_slots.filter(isRecord) : []
+  const activeSlots = slots
+    .filter((slot) => firstBoolean(slot.is_active, slot.isActive, slot.active) ?? true)
+    .sort((a, b) => (asNumber(a.slot) ?? 0) - (asNumber(b.slot) ?? 0))
+    .map((slot) => ({
+      slot: asNumber(slot.slot) ?? 0,
+      role: asString(slot.role),
+      url: imageUrlFromValue(slot),
+    }))
+    .filter((slot): slot is { slot: number; role: string | undefined; url: string } => Boolean(slot.url))
+
+  const mainFromSlot = activeSlots.find((slot) => slot.slot === 1 || slot.role === 'main')?.url
+  const subFromSlots = activeSlots
+    .filter((slot) => slot.url !== mainFromSlot)
+    .map((slot) => slot.url)
+
+  const fallbackSubUrls = Array.isArray(record.image_urls)
+    ? record.image_urls.map(imageUrlFromValue).filter((url): url is string => Boolean(url))
+    : []
+
+  return {
+    mainUrl: mainFromSlot ?? firstString(record.image_url_main, record.image_url, record.imageUrl),
+    subImageUrls: subFromSlots.length ? subFromSlots : fallbackSubUrls,
+  }
+}
+
+function getSourceName(source: FirestoreRecord, id: string) {
+  return firstString(source.name, source.name_ko, source.name_en, source.title, source.ref_id) ?? id
+}
+
+function getSourceSummary(source: FirestoreRecord) {
+  return firstString(source.summary, source.secondary_name, source.tasting_note, source.flavour_character, source.notes) ?? ''
+}
+
+function getSourceDescription(source: FirestoreRecord) {
+  return firstString(
+    source.description,
+    source.body,
+    source.notes,
+    source.flavour_character,
+    source.tasting_note,
+    source.tasting_note_nose,
+    source.tasting_note_palate,
+    source.tasting_note_finish,
+  ) ?? ''
+}
+
+function getPrice(source: FirestoreRecord) {
+  return firstNumber(
+    source.price,
+    source.priceWon,
+    source.price_won,
+    source.sale_price_glass_vat_excl,
+    source.sale_price_half_vat_excl,
+    source.sale_price_bottle_vat_excl,
+  )
+}
+
+function getTags(source: FirestoreRecord) {
+  if (!Array.isArray(source.tags) && !Array.isArray(source.finder_tags)) {
+    return undefined
+  }
+
+  const rawTags = [...(Array.isArray(source.tags) ? source.tags : []), ...(Array.isArray(source.finder_tags) ? source.finder_tags : [])]
+
+  return rawTags
+    .map((tag) => asString(tag))
+    .filter((tag): tag is string => Boolean(tag))
+    .map((tag) => localize(tag, tag))
+}
+
+function mapMenuBoardNotice(id: string, data: FirestoreRecord): MenuNotice | null {
+  if (!isPublishedActive(data)) {
+    return null
+  }
+
+  const subCode = asString(data.sub_code)
+  const categoryId = mapMainCode(data.main_code) ?? (subCode?.startsWith('cocktail_') ? 'cocktail' : undefined)
+
+  return {
+    id,
+    categoryId: categoryId ?? undefined,
+    tabId: categoryId ? mapSubCode(subCode, categoryId) : subCode,
+    text: getLocalizedField(data, 'text', firstString(data.notice_title, data.message, data.notice_body) ?? ''),
+    sort_code: firstNumber(data.sort_code, data.sortCode, data.display_order, data.displayOrder) ?? Number.MAX_SAFE_INTEGER,
+    active: true,
+  }
+}
+
+function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: FirestoreRecord | null): MenuItem | null {
+  if (!isPublishedActive(row)) {
+    return null
+  }
+
+  const categoryId = mapMainCode(row.main_code)
+
+  if (!categoryId) {
+    return null
+  }
+
+  const tabId = mapSubCode(asString(row.sub_code), categoryId)
+  const itemType = asString(row.item_type) ?? 'product'
+
+  if (itemType === 'spacer') {
+    return null
+  }
+
+  if (itemType === 'section_header') {
+    const title = firstString(row.title, row.notice_title) ?? rowId
+    const description = firstString(row.description, row.summary, row.notice_body) ?? ''
+
+    return {
+      id: rowId,
+      categoryId,
+      tabId,
+      kind: categoryId === 'whisky' ? 'whisky' : categoryId === 'wine-spirits' ? 'other' : categoryId,
+      displayType: 'section_header',
+      name: getLocalizedField(row, 'title', title),
+      summary: getLocalizedField(row, 'description', description),
+      description: getLocalizedField(row, 'description', description),
+      sort_code: firstNumber(row.sort_code, row.sortCode, row.display_order, row.displayOrder) ?? Number.MAX_SAFE_INTEGER,
+    }
+  }
+
+  if (!source || !isPublishedActive(source)) {
+    return null
+  }
+
+  const refId = firstString(row.ref_id, source.cocktail_id, source.guide_id, source.spirit_id) ?? rowId
+  const fallbackName = getSourceName(source, refId)
+  const images = getImageUrls(source)
+  const kind = kindFromBoard(categoryId, tabId, source)
+
+  return {
+    id: rowId,
+    categoryId,
+    tabId,
+    kind,
+    name: source.name_i18n || source.name || source.name_ko || source.name_en
+      ? getLocalizedField(source, 'name', fallbackName)
+      : getLocalizedField(source, 'title', fallbackName),
+    summary: source.summary_i18n || source.summary
+      ? getLocalizedField(source, 'summary', getSourceSummary(source))
+      : getLocalizedField(source, 'secondary_name', getSourceSummary(source)),
+    description: source.description_i18n || source.description
+      ? getLocalizedField(source, 'description', getSourceDescription(source))
+      : getLocalizedField(source, source.body_i18n || source.body ? 'body' : 'notes', getSourceDescription(source)),
+    priceWon: getPrice(source),
+    imageUrl: images.mainUrl,
+    subImageUrls: images.subImageUrls,
+    glassImageUrl: firstString(source.glassImageUrl, source.glass_image_url, source.glassUrl, source.glass_url),
+    sort_code: firstNumber(row.sort_code, row.sortCode, source.sort_code, source.display_order, source.displayOrder) ?? Number.MAX_SAFE_INTEGER,
+    soldOut: firstBoolean(source.is_soldout, source.is_sold_out, source.soldOut, source.sold_out),
+    tags: getTags(source),
+    tarotCard:
+      kind === 'tarot-signature'
+        ? {
+            number: firstNumber(source.cardNumber, source.card_number, source.tarotNumber, source.tarot_number, row.sort_code) ?? 0,
+            imageUrl: images.mainUrl,
+          }
+        : undefined,
+  }
+}
+
+async function fetchBoardItems(params: {
+  firestore: Firestore
+  firestoreApi: Awaited<typeof import('firebase/firestore')>
+}) {
+  const { firestore, firestoreApi } = params
+  const { collection, doc, getDoc, getDocs } = firestoreApi
+  const boardCollection =
+    import.meta.env.VITE_FIRESTORE_MENU_BOARD_ITEMS_COLLECTION || 'admin_draft_menu_board_items'
+  const snapshot = await getDocs(collection(firestore, boardCollection))
+  const sourceCache = new Map<string, FirestoreRecord | null>()
+  const rows = await Promise.all(
+    snapshot.docs.map(async (documentSnapshot) => {
+      const row = documentSnapshot.data() as FirestoreRecord
+      const refModule = asString(row.ref_module)
+      const refId = asString(row.ref_id)
+      const sourceCollection =
+        refModule === 'cocktail' || refModule === 'guide' || refModule === 'spirits'
+          ? sourceCollections[refModule]
+          : undefined
+      const cacheKey = sourceCollection && refId ? `${sourceCollection}/${refId}` : undefined
+
+      if (!sourceCollection || !refId || !cacheKey) {
+        return mapMenuBoardItem(documentSnapshot.id, row, null)
+      }
+
+      if (!sourceCache.has(cacheKey)) {
+        const sourceSnapshot = await getDoc(doc(firestore, sourceCollection, refId))
+        sourceCache.set(cacheKey, sourceSnapshot.exists() ? (sourceSnapshot.data() as FirestoreRecord) : null)
+      }
+
+      return mapMenuBoardItem(documentSnapshot.id, row, sourceCache.get(cacheKey) ?? null)
+    }),
+  )
+
+  return rows.filter((item): item is MenuItem => item !== null)
+}
+
+async function fetchBoardNotices(params: {
+  firestore: Firestore
+  firestoreApi: Awaited<typeof import('firebase/firestore')>
+}) {
+  const { firestore, firestoreApi } = params
+  const noticeCollection =
+    import.meta.env.VITE_FIRESTORE_MENU_BOARD_NOTICES_COLLECTION || 'admin_draft_menu_board_notices'
+  const snapshot = await firestoreApi.getDocs(firestoreApi.collection(firestore, noticeCollection))
+
+  return snapshot.docs
+    .map((documentSnapshot) => mapMenuBoardNotice(documentSnapshot.id, documentSnapshot.data() as FirestoreRecord))
+    .filter((notice): notice is MenuNotice => notice !== null)
+}
+
+async function fetchLegacyItems(params: {
+  firestore: Firestore
+  firestoreApi: Awaited<typeof import('firebase/firestore')>
+}) {
+  const { firestore, firestoreApi } = params
+  const itemCollections = getCollectionNames(import.meta.env.VITE_FIRESTORE_MENU_COLLECTIONS, legacyFallbackCollections)
+  const noticeCollections = getCollectionNames(import.meta.env.VITE_FIRESTORE_NOTICE_COLLECTIONS, ['live_menu_notices'])
+  const items = (
+    await Promise.all(
+      itemCollections.map(async (collectionName) => {
+        const snapshot = await firestoreApi.getDocs(firestoreApi.collection(firestore, collectionName))
+
+        return snapshot.docs
+          .map((documentSnapshot) => mapFirestoreMenuItem(collectionName, documentSnapshot.id, documentSnapshot.data() as FirestoreRecord))
+          .filter((item): item is MenuItem => item !== null)
+      }),
+    )
+  ).flat()
+  const notices = (
+    await Promise.all(
+      noticeCollections.map(async (collectionName) => {
+        const snapshot = await firestoreApi.getDocs(firestoreApi.collection(firestore, collectionName))
+
+        return snapshot.docs
+          .map((documentSnapshot) => mapFirestoreNotice(documentSnapshot.id, documentSnapshot.data() as FirestoreRecord))
+          .filter((notice): notice is MenuNotice => notice !== null)
+      }),
+    )
+  ).flat()
+
+  return { items, notices }
+}
+
 export async function fetchRemoteMenuData(): Promise<RemoteMenuResult> {
   if (!hasFirebaseEnvironment()) {
     return {
@@ -31,7 +503,7 @@ export async function fetchRemoteMenuData(): Promise<RemoteMenuResult> {
     }
   }
 
-  const [{ collection, doc, getDoc, getDocs }, { getFirebaseFirestore }] = await Promise.all([
+  const [firestoreApi, { getFirebaseFirestore }] = await Promise.all([
     import('firebase/firestore'),
     import('./firebase/FirebaseClient'),
   ])
@@ -46,45 +518,24 @@ export async function fetchRemoteMenuData(): Promise<RemoteMenuResult> {
 
   try {
     const loadedAt = new Date().toISOString()
-    const settingsDocPath = import.meta.env.VITE_FIRESTORE_SETTINGS_DOC || 'meta/menu_app'
+    const settingsDocPath =
+      import.meta.env.VITE_FIRESTORE_SETTINGS_DOC || 'admin_draft_menu_board_settings/menu_board_settings'
     const [settingsCollection, settingsDocument] = settingsDocPath.split('/')
     const settingsSnapshot =
-      settingsCollection && settingsDocument ? await getDoc(doc(firestore, settingsCollection, settingsDocument)) : null
-    const settings = mapFirestoreSettings(settingsSnapshot?.exists() ? settingsSnapshot.data() : null)
-    const itemCollections = getCollectionNames(import.meta.env.VITE_FIRESTORE_MENU_COLLECTIONS, [
-      'live_menu_items',
-      'live_cocktails',
-      'admin_draft_guide',
-      'admin_draft_spirits_public',
-    ])
-    const noticeCollections = getCollectionNames(import.meta.env.VITE_FIRESTORE_NOTICE_COLLECTIONS, ['live_menu_notices'])
-    const items = (
-      await Promise.all(
-        itemCollections.map(async (collectionName) => {
-          const snapshot = await getDocs(collection(firestore, collectionName))
-
-          return snapshot.docs
-            .map((documentSnapshot) => mapFirestoreMenuItem(collectionName, documentSnapshot.id, documentSnapshot.data()))
-            .filter((item) => item !== null)
-        }),
-      )
-    ).flat()
-    const notices = (
-      await Promise.all(
-        noticeCollections.map(async (collectionName) => {
-          const snapshot = await getDocs(collection(firestore, collectionName))
-
-          return snapshot.docs
-            .map((documentSnapshot) => mapFirestoreNotice(documentSnapshot.id, documentSnapshot.data()))
-            .filter((notice) => notice !== null)
-        }),
-      )
-    ).flat()
+      settingsCollection && settingsDocument
+        ? await firestoreApi.getDoc(firestoreApi.doc(firestore, settingsCollection, settingsDocument))
+        : null
+    const settings = mapFirestoreSettings(settingsSnapshot?.exists() ? (settingsSnapshot.data() as FirestoreRecord) : null)
+    const boardItems = await fetchBoardItems({ firestore, firestoreApi })
+    const boardNotices = await fetchBoardNotices({ firestore, firestoreApi })
+    const legacy = boardItems.length ? { items: [], notices: [] } : await fetchLegacyItems({ firestore, firestoreApi })
+    const items = boardItems.length ? boardItems : legacy.items
+    const notices = boardNotices.length ? boardNotices : legacy.notices
 
     if (!items.length) {
       return {
         bundle: null,
-        reason: 'Remote menu collections did not return menu items.',
+        reason: 'Remote menu board did not return published menu items.',
       }
     }
 

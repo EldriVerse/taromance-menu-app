@@ -4,6 +4,8 @@ import { sortBySortCode } from '../domain/formatting'
 export function getAvailableCategories(bundle: MenuDataBundle) {
   const customCocktailEnabled = bundle.settings.features.customCocktail?.enabled ?? true
   const storyCocktailEnabled = bundle.settings.features.storyCocktail?.enabled ?? true
+  const customCocktailTabIds = new Set(['custom-cocktail', 'cocktail_custom'])
+  const storyCocktailTabIds = new Set(['story-cocktail', 'cocktail_story'])
 
   return bundle.categories.map((category) => {
     if (category.id !== 'cocktail') {
@@ -14,8 +16,8 @@ export function getAvailableCategories(bundle: MenuDataBundle) {
       ...category,
       tabs: category.tabs.filter(
         (tab) =>
-          (tab.id !== 'custom-cocktail' || customCocktailEnabled) &&
-          (tab.id !== 'story-cocktail' || storyCocktailEnabled),
+          (!customCocktailTabIds.has(tab.id) || customCocktailEnabled) &&
+          (!storyCocktailTabIds.has(tab.id) || storyCocktailEnabled),
       ),
     }
   })

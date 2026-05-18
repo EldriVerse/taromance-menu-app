@@ -1,3 +1,4 @@
+import { createLocalDataBundle } from '../data/localDataBundle'
 import type { MenuDataBundle } from '../domain/menu'
 
 const cacheKey = 'taromance-menu-data-bundle'
@@ -18,6 +19,7 @@ export function readCachedMenuData(): MenuDataBundle | null {
 
     return {
       ...parsed,
+      categories: createLocalDataBundle().categories,
       source: 'cache',
     }
   } catch {

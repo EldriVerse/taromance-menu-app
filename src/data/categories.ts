@@ -29,50 +29,40 @@ export const categories: MenuCategory[] = [
     imageKey: 'cocktail',
     label: { ko: '칵테일', en: 'Cocktail', ja: 'カクテル', zh: '鸡尾酒' },
     subtitle: {
-      ko: '타로 시그니처와 커스텀',
-      en: 'Tarot signatures and custom drinks',
-      ja: 'タロットシグネチャーとカスタム',
-      zh: '塔罗招牌与定制饮品',
+      ko: '도수별 칵테일과 커스텀 모드',
+      en: 'Cocktails by ABV and custom modes',
+      ja: '度数別カクテルとカスタムモード',
+      zh: '按酒精度分类的鸡尾酒和定制模式',
     },
     tabs: [
       {
-        id: 'tarot-signature',
-        label: {
-          ko: '타로카드 시그니처',
-          en: 'Tarot Card Signature',
-          ja: 'タロットカードシグネチャー',
-          zh: '塔罗牌招牌',
-        },
-        kinds: ['tarot-signature'],
+        id: 'cocktail_abv_0',
+        label: { ko: '0%', en: '0%', ja: '0%', zh: '0%' },
+        kinds: ['cocktail', 'tarot-signature'],
       },
       {
-        id: 'cocktail',
-        label: {
-          ko: '칵테일',
-          en: 'Cocktail',
-          ja: 'カクテル',
-          zh: '鸡尾酒',
-        },
-        kinds: ['cocktail'],
+        id: 'cocktail_abv_5_10',
+        label: { ko: '5~10%', en: '5~10%', ja: '5~10%', zh: '5~10%' },
+        kinds: ['cocktail', 'tarot-signature'],
       },
       {
-        id: 'custom-cocktail',
-        label: {
-          ko: '커스텀 모드',
-          en: 'Custom Mode',
-          ja: 'カスタムモード',
-          zh: '定制模式',
-        },
+        id: 'cocktail_abv_10_20',
+        label: { ko: '10~20%', en: '10~20%', ja: '10~20%', zh: '10~20%' },
+        kinds: ['cocktail', 'tarot-signature'],
+      },
+      {
+        id: 'cocktail_abv_20_40',
+        label: { ko: '20~40%', en: '20~40%', ja: '20~40%', zh: '20~40%' },
+        kinds: ['cocktail', 'tarot-signature'],
+      },
+      {
+        id: 'cocktail_custom',
+        label: { ko: '커스텀 모드', en: 'Custom Mode', ja: 'カスタムモード', zh: '定制模式' },
         kinds: ['custom-cocktail'],
       },
       {
-        id: 'story-cocktail',
-        label: {
-          ko: '스토리 모드',
-          en: 'Story Mode',
-          ja: 'ストーリーモード',
-          zh: '故事模式',
-        },
+        id: 'cocktail_story',
+        label: { ko: '스토리 모드', en: 'Story Mode', ja: 'ストーリーモード', zh: '故事模式' },
         kinds: ['story-cocktail'],
       },
     ],
@@ -82,10 +72,10 @@ export const categories: MenuCategory[] = [
     imageKey: 'whisky',
     label: { ko: '위스키', en: 'Whisky', ja: 'ウイスキー', zh: '威士忌' },
     subtitle: {
-      ko: '추천, 스카치, 아메리칸, 기타',
-      en: 'Recommend, Scotch, American, Others',
-      ja: 'おすすめ、スコッチ、アメリカン、その他',
-      zh: '推荐、苏格兰、美国、其他',
+      ko: '스카치, 아메리칸, 기타 국가',
+      en: 'Scotch, American, Other Countries',
+      ja: 'スコッチ、アメリカン、その他の国',
+      zh: '苏格兰、美国、其他国家',
     },
     tabs: [
       {
@@ -111,14 +101,14 @@ export const categories: MenuCategory[] = [
     label: {
       ko: '와인 & 기타 주류',
       en: 'Wine & Spirits',
-      ja: 'ワイン & その他酒類',
+      ja: 'ワイン & その他のお酒',
       zh: '葡萄酒 & 其他酒类',
     },
     subtitle: {
-      ko: '와인, 스피릿, 리큐르',
-      en: 'Wine, spirits and liqueurs',
-      ja: 'ワイン、スピリッツ、リキュール',
-      zh: '葡萄酒、烈酒、利口酒',
+      ko: '와인과 기타 주류',
+      en: 'Wine and other spirits',
+      ja: 'ワインとその他のお酒',
+      zh: '葡萄酒与其他酒类',
     },
     tabs: [
       {
@@ -128,7 +118,7 @@ export const categories: MenuCategory[] = [
       },
       {
         id: 'other-spirits',
-        label: { ko: '기타 주류', en: 'Other Spirits', ja: 'その他酒類', zh: '其他酒类' },
+        label: { ko: '기타 주류', en: 'Other Spirits', ja: 'その他のお酒', zh: '其他酒类' },
         kinds: ['spirit', 'liqueur', 'other'],
       },
     ],
