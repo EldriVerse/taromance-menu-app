@@ -719,8 +719,8 @@ button:focus-visible {
 @media (orientation: landscape) {
   .app-shell {
     grid-template-columns: clamp(214px, 15.5vw, 236px) minmax(0, 1fr);
-    gap: 14px;
-    padding: 22px 34px;
+    gap: 4px;
+    padding: 22px 20px;
   }
 
   .category-nav {
