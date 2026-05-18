@@ -846,7 +846,11 @@ button:focus-visible {
   }
 
   .menu-item__body strong {
-    font-size: 45px;
+    font-size: 30px;
+  }
+
+  .menu-dialog__body h2 {
+    font-size: 30px;
   }
 
   .menu-item__body small {
