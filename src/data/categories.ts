@@ -38,7 +38,7 @@ export const categories: MenuCategory[] = [
       {
         id: 'tarot-signature',
         label: {
-          ko: '타로 시그니처 칵테일',
+          ko: '타로카드 시그니처',
           en: 'Tarot Signature',
           ja: 'タロットシグネチャー',
           zh: '塔罗招牌',
