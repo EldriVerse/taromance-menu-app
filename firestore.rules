@@ -57,11 +57,13 @@ service cloud.firestore {
     }
 
     match /admin_draft_cocktails/{document=**} {
-      allow read, write: if isSignedIn();
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     match /admin_draft_spirits/{document=**} {
-      allow read, write: if isSignedIn();
+      allow read: if true;
+      allow write: if isSignedIn();
     }
 
     match /admin_draft_spirits_private/{document=**} {

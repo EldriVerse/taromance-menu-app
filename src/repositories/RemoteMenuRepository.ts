@@ -437,8 +437,12 @@ async function fetchBoardItems(params: {
       }
 
       if (!sourceCache.has(cacheKey)) {
-        const sourceSnapshot = await getDoc(doc(firestore, sourceCollection, refId))
-        sourceCache.set(cacheKey, sourceSnapshot.exists() ? (sourceSnapshot.data() as FirestoreRecord) : null)
+        try {
+          const sourceSnapshot = await getDoc(doc(firestore, sourceCollection, refId))
+          sourceCache.set(cacheKey, sourceSnapshot.exists() ? (sourceSnapshot.data() as FirestoreRecord) : null)
+        } catch {
+          sourceCache.set(cacheKey, null)
+        }
       }
 
       return mapMenuBoardItem(documentSnapshot.id, row, sourceCache.get(cacheKey) ?? null)
