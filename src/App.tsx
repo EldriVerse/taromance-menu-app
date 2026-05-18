@@ -93,6 +93,11 @@ function App() {
     }
 
     const nextState = await dataSource.checkForUpdates()
+
+    if (nextState.status === 'fallback' && nextState.bundle.source === 'empty') {
+      return
+    }
+
     await preloadMenuAssets(nextState.bundle, language, (loaded, total) => {
       setAssetProgress(`Loading assets... ${loaded} / ${total}`)
     })

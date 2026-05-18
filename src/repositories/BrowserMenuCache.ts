@@ -2,6 +2,12 @@ import { createLocalDataBundle } from '../data/localDataBundle'
 import type { MenuDataBundle } from '../domain/menu'
 
 const cacheKey = 'taromance-menu-data-bundle'
+const cacheVersion = 2
+
+interface StoredMenuDataBundle extends MenuDataBundle {
+  cacheVersion?: number
+  cachedFromRemote?: boolean
+}
 
 export function readCachedMenuData(): MenuDataBundle | null {
   try {
@@ -11,9 +17,14 @@ export function readCachedMenuData(): MenuDataBundle | null {
       return null
     }
 
-    const parsed = JSON.parse(raw) as MenuDataBundle
+    const parsed = JSON.parse(raw) as StoredMenuDataBundle
 
-    if (!parsed.settings?.contentVersion || !Array.isArray(parsed.categories) || !Array.isArray(parsed.items)) {
+    if (
+      parsed.cacheVersion !== cacheVersion ||
+      parsed.cachedFromRemote !== true ||
+      !parsed.settings?.contentVersion ||
+      !Array.isArray(parsed.items)
+    ) {
       return null
     }
 
@@ -33,6 +44,8 @@ export function writeCachedMenuData(bundle: MenuDataBundle) {
       cacheKey,
       JSON.stringify({
         ...bundle,
+        cacheVersion,
+        cachedFromRemote: true,
         source: 'cache',
       }),
     )

@@ -80,7 +80,7 @@ export interface MenuDataBundle {
   items: MenuItem[]
   notices: MenuNotice[]
   loadedAt: string
-  source: 'local' | 'cache' | 'remote'
+  source: 'empty' | 'local' | 'cache' | 'remote'
 }
 
 export interface DataSourceState {

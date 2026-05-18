@@ -14,3 +14,14 @@ export function createLocalDataBundle(): MenuDataBundle {
     source: 'local',
   }
 }
+
+export function createEmptyDataBundle(): MenuDataBundle {
+  return {
+    settings: appSettings,
+    categories,
+    items: [],
+    notices: [],
+    loadedAt: new Date().toISOString(),
+    source: 'empty',
+  }
+}

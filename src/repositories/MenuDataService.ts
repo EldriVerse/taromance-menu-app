@@ -1,10 +1,10 @@
-import { createLocalDataBundle } from '../data/localDataBundle'
+import { createEmptyDataBundle } from '../data/localDataBundle'
 import type { DataSourceState, MenuDataBundle } from '../domain/menu'
 import { readCachedMenuData, writeCachedMenuData } from './BrowserMenuCache'
 import { fetchRemoteMenuData } from './RemoteMenuRepository'
 
 function chooseInitialBundle(): MenuDataBundle {
-  return readCachedMenuData() ?? createLocalDataBundle()
+  return readCachedMenuData() ?? createEmptyDataBundle()
 }
 
 export function createInitialDataSourceState(): DataSourceState {
@@ -36,19 +36,21 @@ export async function checkMenuDataSource(currentBundle: MenuDataBundle): Promis
 
   const cachedBundle = readCachedMenuData()
 
-  if (cachedBundle && cachedBundle.settings.contentVersion !== currentBundle.settings.contentVersion) {
+  if (cachedBundle) {
     return {
       bundle: cachedBundle,
       status: 'fallback',
-      message: '저장된 메뉴 데이터로 실행 중입니다.',
+      message: 'Firebase 접속에 실패해 마지막으로 저장된 메뉴 데이터로 실행합니다.',
       lastCheckedAt: checkedAt,
     }
   }
 
   return {
-    bundle: currentBundle.source === 'cache' ? currentBundle : createLocalDataBundle(),
+    bundle: currentBundle.source === 'cache' ? currentBundle : createEmptyDataBundle(),
     status: 'fallback',
-    message: remoteResult.reason ?? '로컬 메뉴 데이터로 실행 중입니다.',
+    message: remoteResult.reason
+      ? `Firebase 접속에 실패했습니다. ${remoteResult.reason}`
+      : 'Firebase 접속에 실패했고 저장된 메뉴 데이터가 없습니다.',
     lastCheckedAt: checkedAt,
   }
 }
