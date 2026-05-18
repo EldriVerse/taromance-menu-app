@@ -736,7 +736,7 @@ button:focus-visible {
       clamp(66px, 5.8vw, 98px)
       clamp(76px, 8.2vh, 104px)
       clamp(96px, 7.4vw, 132px);
-    transform: translateX(-8px) scaleX(1.012);
+    transform: translateX(-8px) scaleX(1.006);
     transform-origin: left center;
   }
 
