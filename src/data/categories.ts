@@ -13,12 +13,17 @@ export const categories: MenuCategory[] = [
     },
     tabs: [
       {
-        id: 'house-guide',
+        id: 'guide_rules',
         label: { ko: '이용안내', en: 'Guide', ja: '利用案内', zh: '使用指南' },
         kinds: ['guide'],
       },
       {
-        id: 'delivery-recommend',
+        id: 'guide_tarot',
+        label: { ko: '타로상담', en: 'Tarot Reading', ja: 'タロット相談', zh: '塔罗咨询' },
+        kinds: ['guide'],
+      },
+      {
+        id: 'guide_delivery',
         label: { ko: '배달추천', en: 'Delivery Picks', ja: 'デリバリー推薦', zh: '外卖推荐' },
         kinds: ['guide'],
       },

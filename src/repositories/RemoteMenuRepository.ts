@@ -164,9 +164,10 @@ function mapSubCode(subCode: string | undefined, categoryId: CategoryId) {
   }
 
   const subCodeMap: Record<string, string> = {
-    guide_rules: 'house-guide',
-    guide_notice: 'house-guide',
-    guide_delivery: 'delivery-recommend',
+    guide_rules: 'guide_rules',
+    guide_notice: 'guide_rules',
+    guide_tarot: 'guide_tarot',
+    guide_delivery: 'guide_delivery',
     cocktail_signature: 'tarot-signature',
     cocktail_regular: 'cocktail-regular',
     cocktail_custom: 'cocktail_custom',

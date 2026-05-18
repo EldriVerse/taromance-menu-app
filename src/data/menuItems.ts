@@ -42,7 +42,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 'guide-house',
     categoryId: 'guide',
-    tabId: 'house-guide',
+    tabId: 'guide_rules',
     kind: 'guide',
     sort_code: 10,
     name: { ko: '이용 안내', en: 'House Guide', ja: '利用案内', zh: '使用指南' },
@@ -62,7 +62,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 'guide-food',
     categoryId: 'guide',
-    tabId: 'delivery-recommend',
+    tabId: 'guide_delivery',
     kind: 'guide',
     sort_code: 20,
     name: { ko: '외부 음식 안내', en: 'Outside Food', ja: '外部飲食物', zh: '外带食物' },
