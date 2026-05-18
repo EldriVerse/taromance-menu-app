@@ -29,31 +29,26 @@ export const categories: MenuCategory[] = [
     imageKey: 'cocktail',
     label: { ko: '칵테일', en: 'Cocktail', ja: 'カクテル', zh: '鸡尾酒' },
     subtitle: {
-      ko: '도수별 칵테일과 커스텀 모드',
-      en: 'Cocktails by ABV and custom modes',
-      ja: '度数別カクテルとカスタムモード',
-      zh: '按酒精度分类的鸡尾酒和定制模式',
+      ko: '타로 시그니처, 레귤러, 커스텀 모드',
+      en: 'Tarot signatures, regular cocktails and custom modes',
+      ja: 'タロットシグネチャー、レギュラー、カスタムモード',
+      zh: '塔罗招牌、常规鸡尾酒和定制模式',
     },
     tabs: [
       {
-        id: 'cocktail_abv_0',
-        label: { ko: '0%', en: '0%', ja: '0%', zh: '0%' },
-        kinds: ['cocktail', 'tarot-signature'],
+        id: 'tarot-signature',
+        label: {
+          ko: '타로 시그니처 칵테일',
+          en: 'Tarot Signature',
+          ja: 'タロットシグネチャー',
+          zh: '塔罗招牌',
+        },
+        kinds: ['tarot-signature'],
       },
       {
-        id: 'cocktail_abv_5_10',
-        label: { ko: '5~10%', en: '5~10%', ja: '5~10%', zh: '5~10%' },
-        kinds: ['cocktail', 'tarot-signature'],
-      },
-      {
-        id: 'cocktail_abv_10_20',
-        label: { ko: '10~20%', en: '10~20%', ja: '10~20%', zh: '10~20%' },
-        kinds: ['cocktail', 'tarot-signature'],
-      },
-      {
-        id: 'cocktail_abv_20_40',
-        label: { ko: '20~40%', en: '20~40%', ja: '20~40%', zh: '20~40%' },
-        kinds: ['cocktail', 'tarot-signature'],
+        id: 'cocktail-regular',
+        label: { ko: '레귤러', en: 'Regular', ja: 'レギュラー', zh: '常规' },
+        kinds: ['cocktail'],
       },
       {
         id: 'cocktail_custom',

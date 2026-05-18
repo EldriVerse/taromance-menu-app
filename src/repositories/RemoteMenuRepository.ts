@@ -182,6 +182,8 @@ function mapSubCode(subCode: string | undefined, categoryId: CategoryId) {
     guide_rules: 'house-guide',
     guide_notice: 'house-guide',
     guide_delivery: 'delivery-recommend',
+    cocktail_signature: 'tarot-signature',
+    cocktail_regular: 'cocktail-regular',
     cocktail_custom: 'cocktail_custom',
     cocktail_story: 'cocktail_story',
     whisky_scotch: 'scotch',
@@ -192,10 +194,10 @@ function mapSubCode(subCode: string | undefined, categoryId: CategoryId) {
   }
 
   if (subCode.startsWith('cocktail_abv_')) {
-    return subCode
+    return undefined
   }
 
-  return subCodeMap[subCode] ?? (categoryId === 'cocktail' ? 'cocktail_abv_10_20' : subCode)
+  return subCodeMap[subCode] ?? (categoryId === 'cocktail' ? 'cocktail-regular' : subCode)
 }
 
 function kindFromBoard(categoryId: CategoryId, tabId: string | undefined, source: FirestoreRecord): MenuKind {
@@ -232,6 +234,18 @@ function kindFromBoard(categoryId: CategoryId, tabId: string | undefined, source
     sourceSignatureText.includes('타로')
     ? 'tarot-signature'
     : 'cocktail'
+}
+
+function tabIdFromCocktailKind(tabId: string | undefined, kind: MenuKind) {
+  if (kind === 'tarot-signature') {
+    return 'tarot-signature'
+  }
+
+  if (kind === 'cocktail') {
+    return tabId === 'tarot-signature' ? 'tarot-signature' : 'cocktail-regular'
+  }
+
+  return tabId
 }
 
 function imageUrlFromValue(value: unknown) {
@@ -379,11 +393,12 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
   const fallbackName = getSourceName(source, refId)
   const images = getImageUrls(source)
   const kind = kindFromBoard(categoryId, tabId, source)
+  const resolvedTabId = categoryId === 'cocktail' ? tabIdFromCocktailKind(tabId, kind) : tabId
 
   return {
     id: rowId,
     categoryId,
-    tabId,
+    tabId: resolvedTabId,
     kind,
     name: source.name_i18n || source.name || source.name_ko || source.name_en
       ? getLocalizedField(source, 'name', fallbackName)

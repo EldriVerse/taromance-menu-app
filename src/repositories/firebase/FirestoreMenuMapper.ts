@@ -268,12 +268,16 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
       return 'tarot-signature'
     }
 
-    if (raw === 'custom') {
-      return 'custom-cocktail'
+    if (raw === 'custom' || raw === 'cocktail_custom') {
+      return 'cocktail_custom'
     }
 
-    if (raw === 'story') {
-      return 'story-cocktail'
+    if (raw === 'story' || raw === 'cocktail_story') {
+      return 'cocktail_story'
+    }
+
+    if (raw === 'regular' || raw === 'cocktail_regular' || raw === 'cocktail') {
+      return 'cocktail-regular'
     }
 
     const normalizedRaw = raw.toLowerCase()
@@ -305,15 +309,15 @@ function getTabId(record: FirestoreRecord, collectionName: string, kind: MenuKin
   }
 
   if (kind === 'cocktail') {
-    return 'cocktail'
+    return 'cocktail-regular'
   }
 
   if (kind === 'custom-cocktail') {
-    return 'custom-cocktail'
+    return 'cocktail_custom'
   }
 
   if (kind === 'story-cocktail') {
-    return 'story-cocktail'
+    return 'cocktail_story'
   }
 
   if (collectionName.includes('scotch')) {

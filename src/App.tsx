@@ -9,6 +9,7 @@ import { NoticeTicker } from './components/NoticeTicker'
 import { PortalScreen } from './components/PortalScreen'
 import { SubcategoryTabs } from './components/SubcategoryTabs'
 import { StoryCocktailBuilder } from './components/StoryCocktailBuilder'
+import { TarotCardSelector } from './components/TarotCardSelector'
 import type { CategoryId, LanguageCode, MenuItem } from './domain/menu'
 import { getAvailableCategories, getMenuItems, getNotices } from './repositories/LocalMenuRepository'
 import { useMenuDataSource } from './hooks/useMenuDataSource'
@@ -38,6 +39,7 @@ function App() {
   )
   const isCustomCocktailTab = activeTab?.id === 'custom-cocktail' || activeTab?.id === 'cocktail_custom'
   const isStoryCocktailTab = activeTab?.id === 'story-cocktail' || activeTab?.id === 'cocktail_story'
+  const isTarotSignatureTab = activeTab?.id === 'tarot-signature'
 
   const resetToPortal = useCallback(() => {
     const guideCategory = categories.find((category) => category.id === 'guide') ?? categories[0]
@@ -134,7 +136,9 @@ function App() {
           onSelect={setActiveTabId}
         />
         <NoticeTicker notices={notices} language={language} />
-        {activeCategory.id === 'cocktail' && isCustomCocktailTab ? (
+        {activeCategory.id === 'cocktail' && isTarotSignatureTab ? (
+          <TarotCardSelector items={items} language={language} onSelect={setSelectedItem} />
+        ) : activeCategory.id === 'cocktail' && isCustomCocktailTab ? (
           <CustomCocktailBuilder language={language} />
         ) : activeCategory.id === 'cocktail' && isStoryCocktailTab ? (
           <StoryCocktailBuilder language={language} />

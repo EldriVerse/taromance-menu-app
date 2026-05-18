@@ -1,7 +1,6 @@
 import type { MenuItem } from '../domain/menu'
 
 const glass = (name: string) => `/assets/legacy/glass/${name}.png`
-const fallbackCocktailTabs = ['cocktail_abv_5_10', 'cocktail_abv_10_20', 'cocktail_abv_10_20', 'cocktail_abv_20_40']
 
 const tarotItems: MenuItem[] = Array.from({ length: 10 }, (_, index) => {
   const number = index + 1
@@ -9,7 +8,7 @@ const tarotItems: MenuItem[] = Array.from({ length: 10 }, (_, index) => {
   return {
     id: `tarot-signature-${number}`,
     categoryId: 'cocktail',
-    tabId: fallbackCocktailTabs[index % fallbackCocktailTabs.length],
+    tabId: 'tarot-signature',
     kind: 'tarot-signature',
     sort_code: number * 10,
     priceWon: 16000 + index * 1000,
