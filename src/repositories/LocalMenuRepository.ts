@@ -1,6 +1,16 @@
 import type { CategoryId, MenuDataBundle, MenuItem } from '../domain/menu'
 import { sortBySortCode } from '../domain/formatting'
 
+function normalizeTabId(tabId?: string) {
+  const tabIdMap: Record<string, string> = {
+    'house-guide': 'guide_rules',
+    'delivery-recommend': 'guide_delivery',
+    guide_notice: 'guide_rules',
+  }
+
+  return tabId ? tabIdMap[tabId] ?? tabId : tabId
+}
+
 export function getAvailableCategories(bundle: MenuDataBundle) {
   const customCocktailEnabled = bundle.settings.features.customCocktail?.enabled ?? true
   const storyCocktailEnabled = bundle.settings.features.storyCocktail?.enabled ?? true
@@ -25,16 +35,19 @@ export function getAvailableCategories(bundle: MenuDataBundle) {
 
 export function getMenuItems(bundle: MenuDataBundle, categoryId: CategoryId, tabId?: string): MenuItem[] {
   const category = getAvailableCategories(bundle).find((item) => item.id === categoryId)
-  const tab = category?.tabs.find((item) => item.id === tabId)
+  const normalizedTabId = normalizeTabId(tabId)
+  const tab = category?.tabs.find((item) => normalizeTabId(item.id) === normalizedTabId)
 
   return sortBySortCode(
     bundle.items.filter((item) => {
+      const itemTabId = normalizeTabId(item.tabId)
+
       if (item.categoryId !== categoryId) {
         return false
       }
 
       if (!tab) {
-        return category?.tabs.length ? item.tabId === tabId : true
+        return category?.tabs.length ? itemTabId === normalizedTabId : true
       }
 
       if (!tab.kinds.includes(item.kind)) {
@@ -45,15 +58,17 @@ export function getMenuItems(bundle: MenuDataBundle, categoryId: CategoryId, tab
         return true
       }
 
-      return !item.tabId || item.tabId === tab.id
+      return !itemTabId || itemTabId === normalizeTabId(tab.id)
     }),
   )
 }
 
 export function getNotices(bundle: MenuDataBundle, categoryId: CategoryId, tabId?: string) {
+  const normalizedTabId = normalizeTabId(tabId)
+
   return bundle.notices
     .filter((notice) => notice.active)
     .filter((notice) => !notice.categoryId || notice.categoryId === categoryId)
-    .filter((notice) => !notice.tabId || notice.tabId === tabId)
+    .filter((notice) => !notice.tabId || normalizeTabId(notice.tabId) === normalizedTabId)
     .sort((a, b) => a.sort_code - b.sort_code)
 }
