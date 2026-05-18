@@ -1191,10 +1191,12 @@ button:focus-visible {
 
   .tarot-selector > .tarot-arrow:first-of-type {
     grid-column: 1;
+    transform: translateX(-16px);
   }
 
   .tarot-selector > .tarot-arrow:last-of-type {
     grid-column: 4;
+    transform: translateX(16px);
   }
 
   .tarot-card {
