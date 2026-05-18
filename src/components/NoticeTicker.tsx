@@ -23,6 +23,7 @@ export function NoticeTicker({ notices, language }: NoticeTickerProps) {
   }, [notices.length])
 
   const notice = notices[index % Math.max(notices.length, 1)]
+  const noticeText = notice ? text(notice.text, language) : undefined
   const fallbackText = {
     ko: '오늘의 안내를 준비 중입니다.',
     en: 'Today\'s notice is being prepared.',
@@ -33,7 +34,7 @@ export function NoticeTicker({ notices, language }: NoticeTickerProps) {
   return (
     <div className="notice-ticker" aria-live="polite">
       <b>NOTICE</b>
-      <span>{notice ? text(notice.text, language) : fallbackText[language]}</span>
+      <span key={`${notice?.id ?? 'fallback'}-${language}-${index}`}>{noticeText ?? fallbackText[language]}</span>
     </div>
   )
 }
