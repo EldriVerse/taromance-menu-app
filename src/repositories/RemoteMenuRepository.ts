@@ -1,11 +1,6 @@
 import type { Firestore } from 'firebase/firestore'
 import type { CategoryId, LocalizedText, MenuDataBundle, MenuItem, MenuKind, MenuNotice } from '../domain/menu'
-import {
-  createRemoteBundle,
-  mapFirestoreMenuItem,
-  mapFirestoreNotice,
-  mapFirestoreSettings,
-} from './firebase/FirestoreMenuMapper'
+import { createRemoteBundle, mapFirestoreSettings } from './firebase/FirestoreMenuMapper'
 
 type FirestoreRecord = Record<string, unknown>
 
@@ -14,21 +9,11 @@ export interface RemoteMenuResult {
   reason?: string
 }
 
-const legacyFallbackCollections = [
-  'live_menu_items',
-  'live_cocktails',
-  'admin_draft_guide',
-  'admin_draft_spirits_public',
-]
 const sourceCollections = {
   cocktail: 'admin_draft_cocktails',
   guide: 'admin_draft_guide',
   spirits: 'admin_draft_spirits',
 } as const
-
-function getCollectionNames(envValue: string | undefined, fallback: string[]) {
-  return (envValue ? envValue.split(',') : fallback).map((item) => item.trim()).filter(Boolean)
-}
 
 function hasFirebaseEnvironment() {
   return Boolean(
@@ -470,44 +455,15 @@ async function fetchBoardNotices(params: {
   const { firestore, firestoreApi } = params
   const noticeCollection =
     import.meta.env.VITE_FIRESTORE_MENU_BOARD_NOTICES_COLLECTION || 'admin_draft_menu_board_notices'
-  const snapshot = await firestoreApi.getDocs(firestoreApi.collection(firestore, noticeCollection))
+  try {
+    const snapshot = await firestoreApi.getDocs(firestoreApi.collection(firestore, noticeCollection))
 
-  return snapshot.docs
-    .map((documentSnapshot) => mapMenuBoardNotice(documentSnapshot.id, documentSnapshot.data() as FirestoreRecord))
-    .filter((notice): notice is MenuNotice => notice !== null)
-}
-
-async function fetchLegacyItems(params: {
-  firestore: Firestore
-  firestoreApi: Awaited<typeof import('firebase/firestore')>
-}) {
-  const { firestore, firestoreApi } = params
-  const itemCollections = getCollectionNames(import.meta.env.VITE_FIRESTORE_MENU_COLLECTIONS, legacyFallbackCollections)
-  const noticeCollections = getCollectionNames(import.meta.env.VITE_FIRESTORE_NOTICE_COLLECTIONS, ['live_menu_notices'])
-  const items = (
-    await Promise.all(
-      itemCollections.map(async (collectionName) => {
-        const snapshot = await firestoreApi.getDocs(firestoreApi.collection(firestore, collectionName))
-
-        return snapshot.docs
-          .map((documentSnapshot) => mapFirestoreMenuItem(collectionName, documentSnapshot.id, documentSnapshot.data() as FirestoreRecord))
-          .filter((item): item is MenuItem => item !== null)
-      }),
-    )
-  ).flat()
-  const notices = (
-    await Promise.all(
-      noticeCollections.map(async (collectionName) => {
-        const snapshot = await firestoreApi.getDocs(firestoreApi.collection(firestore, collectionName))
-
-        return snapshot.docs
-          .map((documentSnapshot) => mapFirestoreNotice(documentSnapshot.id, documentSnapshot.data() as FirestoreRecord))
-          .filter((notice): notice is MenuNotice => notice !== null)
-      }),
-    )
-  ).flat()
-
-  return { items, notices }
+    return snapshot.docs
+      .map((documentSnapshot) => mapMenuBoardNotice(documentSnapshot.id, documentSnapshot.data() as FirestoreRecord))
+      .filter((notice): notice is MenuNotice => notice !== null)
+  } catch {
+    return []
+  }
 }
 
 export async function fetchRemoteMenuData(): Promise<RemoteMenuResult> {
@@ -543,22 +499,12 @@ export async function fetchRemoteMenuData(): Promise<RemoteMenuResult> {
     const settings = mapFirestoreSettings(settingsSnapshot?.exists() ? (settingsSnapshot.data() as FirestoreRecord) : null)
     const boardItems = await fetchBoardItems({ firestore, firestoreApi })
     const boardNotices = await fetchBoardNotices({ firestore, firestoreApi })
-    const legacy = boardItems.length ? { items: [], notices: [] } : await fetchLegacyItems({ firestore, firestoreApi })
-    const items = boardItems.length ? boardItems : legacy.items
-    const notices = boardNotices.length ? boardNotices : legacy.notices
-
-    if (!items.length) {
-      return {
-        bundle: null,
-        reason: 'Remote menu board did not return published menu items.',
-      }
-    }
 
     return {
       bundle: createRemoteBundle({
         settings,
-        items,
-        notices,
+        items: boardItems,
+        notices: boardNotices,
         loadedAt,
       }),
     }

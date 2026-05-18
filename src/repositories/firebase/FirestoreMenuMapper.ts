@@ -455,7 +455,7 @@ export function createRemoteBundle(params: {
     settings: params.settings,
     categories: localBundle.categories,
     items: params.items,
-    notices: params.notices.length ? params.notices : localBundle.notices,
+    notices: params.notices,
     loadedAt: params.loadedAt,
     source: 'remote',
   }
