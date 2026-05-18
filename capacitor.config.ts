@@ -4,6 +4,10 @@ const config: CapacitorConfig = {
   appId: 'com.eldriverse.taromance.menu',
   appName: 'Taromance Menu',
   webDir: 'dist',
+  server: {
+    url: 'https://taromance-menu-app.vercel.app',
+    cleartext: false,
+  },
   plugins: {
     SplashScreen: {
       launchAutoHide: true,
