@@ -349,12 +349,14 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
 
   const tabId = mapSubCode(asString(row.sub_code), categoryId)
   const itemType = asString(row.item_type) ?? 'product'
+  const spacerItemTypes = new Set(['spacer', 'blank', 'empty', 'gap'])
+  const sectionHeaderItemTypes = new Set(['section_header', 'sectionHeader', 'sub_title', 'subtitle', 'subheading', 'divider'])
 
-  if (itemType === 'spacer') {
+  if (spacerItemTypes.has(itemType)) {
     return null
   }
 
-  if (itemType === 'section_header') {
+  if (sectionHeaderItemTypes.has(itemType)) {
     const title = firstString(row.title, row.notice_title) ?? rowId
     const description = firstString(row.description, row.summary, row.notice_body) ?? ''
 

@@ -13,7 +13,7 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
   return (
     <div className="menu-list">
       {items.map((item, index) => {
-        const opensDetailDialog = item.categoryId !== 'guide'
+        const opensDetailDialog = item.categoryId !== 'guide' && item.kind !== 'guide' && item.displayType !== 'section_header'
 
         return item.displayType === 'section_header' ? (
           <div

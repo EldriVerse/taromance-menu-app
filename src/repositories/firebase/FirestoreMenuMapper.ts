@@ -346,7 +346,9 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
     return null
   }
 
-  if (asString(data.item_type) === 'spacer') {
+  const itemType = asString(data.item_type)
+
+  if (itemType && ['spacer', 'blank', 'empty', 'gap', 'section_header', 'sectionHeader', 'sub_title', 'subtitle', 'subheading', 'divider'].includes(itemType)) {
     return null
   }
 
