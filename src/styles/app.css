@@ -1137,6 +1137,11 @@ button:focus-visible {
 }
 
 .tarot-card-summary {
+  width: 100%;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   display: none;
 }
 

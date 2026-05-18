@@ -76,7 +76,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
       <button className="tarot-arrow" type="button" aria-label="Next card" onClick={() => move(1)}>
         <ChevronRight aria-hidden="true" />
       </button>
-      <aside className="tarot-card-summary" aria-live="polite">
+      <button className="tarot-card-summary" type="button" aria-live="polite" onClick={() => onSelect(activeItem)}>
         {activeItem.subImageUrls?.length ? (
           <div className="tarot-card-summary__images" aria-label="Cocktail images">
             {activeItem.subImageUrls.map((imageUrl, index) => (
@@ -89,7 +89,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
         <span>{text(activeItem.summary, language)}</span>
         <span>{text(activeItem.description, language)}</span>
         <b>{activeItem.soldOut ? 'SOLD OUT' : activeItem.priceWon ? formatPriceShort(activeItem.priceWon) : ''}</b>
-      </aside>
+      </button>
     </section>
   )
 }
