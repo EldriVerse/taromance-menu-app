@@ -24,13 +24,13 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
     <div
       className="dialog-backdrop"
       role="presentation"
-      onPointerDown={(event) => {
+      onClick={(event) => {
         if (event.target === event.currentTarget) {
           onClose()
         }
       }}
     >
-      <section className="menu-dialog" role="dialog" aria-modal="true">
+      <section className="menu-dialog" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
         <button className="dialog-close" type="button" aria-label="Close" onClick={onClose}>
           <X aria-hidden="true" />
         </button>
