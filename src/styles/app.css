@@ -782,7 +782,7 @@ button:focus-visible {
     grid-column: 1 / -1;
     grid-row: 2;
     min-height: 36px;
-    margin-inline: clamp(18px, 2.4vw, 34px);
+    margin-inline: clamp(26px, 3vw, 54px);
     padding: 0 16px;
     border-color: rgb(88 58 32 / 12%);
     background:
@@ -796,9 +796,9 @@ button:focus-visible {
     gap: 8px;
     margin:
       clamp(10px, 1.5vh, 18px)
-      clamp(26px, 2.6vw, 48px)
+      clamp(38px, 3.2vw, 62px)
       clamp(44px, 7vh, 74px)
-      clamp(24px, 2.4vw, 44px);
+      clamp(36px, 3vw, 58px);
     padding-right: 0;
     scrollbar-width: none;
   }
@@ -1191,12 +1191,12 @@ button:focus-visible {
 
   .tarot-selector > .tarot-arrow:first-of-type {
     grid-column: 1;
-    transform: translateX(-16px);
+    transform: translateX(-30px);
   }
 
   .tarot-selector > .tarot-arrow:last-of-type {
     grid-column: 4;
-    transform: translateX(16px);
+    transform: translateX(30px);
   }
 
   .tarot-card {
