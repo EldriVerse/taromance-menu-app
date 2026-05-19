@@ -31,6 +31,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
 
   const description = text(activeItem.description, language)
   const tastingNote = activeItem.tastingNote ? text(activeItem.tastingNote, language) : ''
+  const priceText = activeItem.priceWon !== undefined ? formatPriceShort(activeItem.priceWon) : ''
 
   return (
     <section className="tarot-selector" aria-label="Tarot signature cocktail cards">
@@ -89,9 +90,19 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
         ) : null}
         <p>{String(activeItem.tarotCard?.number ?? 0).padStart(2, '0')}</p>
         <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
-        <b>{activeItem.soldOut ? 'SOLD OUT' : activeItem.priceWon ? formatPriceShort(activeItem.priceWon) : ''}</b>
-        {description ? <span>{description}</span> : null}
-        {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
+        <b>{activeItem.soldOut ? 'SOLD OUT' : priceText}</b>
+        {description ? (
+          <span>
+            <small>설명</small>
+            {description}
+          </span>
+        ) : null}
+        {tastingNote && tastingNote !== description ? (
+          <span>
+            <small>테이스팅 노트</small>
+            {tastingNote}
+          </span>
+        ) : null}
       </button>
     </section>
   )

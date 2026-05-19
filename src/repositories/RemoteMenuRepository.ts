@@ -16,6 +16,12 @@ const sourceCollections = {
   spirits: 'admin_draft_spirits',
 } as const
 
+const sourceIdFields = {
+  cocktail: 'cocktail_id',
+  guide: 'guide_id',
+  spirits: 'spirit_id',
+} as const
+
 function hasFirebaseEnvironment() {
   return Boolean(
     import.meta.env.VITE_FIREBASE_API_KEY &&
@@ -457,7 +463,7 @@ async function fetchBoardItems(params: {
   firestoreApi: Awaited<typeof import('firebase/firestore')>
 }) {
   const { firestore, firestoreApi } = params
-  const { collection, doc, getDoc, getDocs } = firestoreApi
+  const { collection, doc, getDoc, getDocs, limit, query, where } = firestoreApi
   const boardCollection =
     import.meta.env.VITE_FIRESTORE_MENU_BOARD_ITEMS_COLLECTION || 'admin_draft_menu_board_items'
   const snapshot = await getDocs(collection(firestore, boardCollection))
@@ -480,7 +486,17 @@ async function fetchBoardItems(params: {
       if (!sourceCache.has(cacheKey)) {
         try {
           const sourceSnapshot = await getDoc(doc(firestore, sourceCollection, refId))
-          sourceCache.set(cacheKey, sourceSnapshot.exists() ? (sourceSnapshot.data() as FirestoreRecord) : null)
+          let sourceData = sourceSnapshot.exists() ? (sourceSnapshot.data() as FirestoreRecord) : null
+
+          if (!sourceData) {
+            const sourceIdField = sourceIdFields[refModule as keyof typeof sourceIdFields]
+            const querySnapshot = await getDocs(
+              query(collection(firestore, sourceCollection), where(sourceIdField, '==', refId), limit(1)),
+            )
+            sourceData = querySnapshot.docs[0]?.data() as FirestoreRecord | undefined ?? null
+          }
+
+          sourceCache.set(cacheKey, sourceData)
         } catch {
           sourceCache.set(cacheKey, null)
         }

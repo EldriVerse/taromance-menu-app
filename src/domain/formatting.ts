@@ -12,7 +12,7 @@ export function text(value: LocalizedText, language: LanguageCode) {
 }
 
 export function formatPriceShort(priceWon?: number) {
-  if (!priceWon) {
+  if (priceWon === undefined) {
     return ''
   }
 

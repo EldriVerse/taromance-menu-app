@@ -1282,10 +1282,20 @@ button:focus-visible {
   }
 
   .tarot-card-summary span {
+    display: grid;
+    gap: 3px;
     color: #5f3c24;
     font-family: var(--font-subbody);
     font-size: 15px;
     line-height: 1.42;
+  }
+
+  .tarot-card-summary small,
+  .menu-dialog__body span small {
+    color: #7f4e24;
+    font-family: var(--font-body);
+    font-size: 0.82em;
+    line-height: 1;
   }
 
   .tarot-card-summary b {
@@ -1405,6 +1415,8 @@ button:focus-visible {
 }
 
 .menu-dialog__body span {
+  display: grid;
+  gap: 6px;
   color: #573923;
   font-family: var(--font-subbody);
   font-size: 18px;

@@ -21,6 +21,7 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
     : [item.imageUrl || item.assetUrl || '/assets/legacy/noimage.png']
   const description = text(item.description, language)
   const tastingNote = item.tastingNote ? text(item.tastingNote, language) : ''
+  const priceText = item.priceWon !== undefined ? formatPriceShort(item.priceWon) : ''
 
   return (
     <div
@@ -53,9 +54,19 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
         <div className="menu-dialog__body">
           <p>{item.kind.replaceAll('-', ' ').toUpperCase()}</p>
           <h2 className={item.soldOut ? 'is-sold-out-text' : ''}>{text(item.name, language)}</h2>
-          <strong>{item.soldOut ? 'SOLD OUT' : item.priceWon ? formatPriceShort(item.priceWon) : ''}</strong>
-          {description ? <span>{description}</span> : null}
-          {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
+          <strong>{item.soldOut ? 'SOLD OUT' : priceText}</strong>
+          {description ? (
+            <span>
+              <small>설명</small>
+              {description}
+            </span>
+          ) : null}
+          {tastingNote && tastingNote !== description ? (
+            <span>
+              <small>테이스팅 노트</small>
+              {tastingNote}
+            </span>
+          ) : null}
         </div>
       </section>
     </div>
