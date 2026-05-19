@@ -668,6 +668,7 @@ button:focus-visible {
 
 .menu-item__body small {
   color: #6f4c31;
+  font-family: var(--font-subbody);
   font-size: 15px;
   line-height: 1.35;
 }
@@ -1283,6 +1284,7 @@ button:focus-visible {
 
   .tarot-card-summary span {
     color: #5f3c24;
+    font-family: var(--font-subbody);
     font-size: 15px;
     line-height: 1.42;
   }
@@ -1405,6 +1407,7 @@ button:focus-visible {
 
 .menu-dialog__body span {
   color: #573923;
+  font-family: var(--font-subbody);
   font-size: 18px;
   line-height: 1.55;
 }
@@ -1647,6 +1650,7 @@ button:focus-visible {
   .tarot-card-summary span {
     display: -webkit-box;
     overflow: hidden;
+    font-family: var(--font-subbody);
     font-size: 14px;
     line-height: 1.24;
     -webkit-box-orient: vertical;

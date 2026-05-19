@@ -1,4 +1,12 @@
 @font-face {
+  font-family: 'BMEuljiro';
+  src: url('/assets/fonts/BMEULJIRO.otf') format('opentype');
+  font-display: block;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
   font-family: 'BMEuljiro10Years';
   src: url('/assets/fonts/BMEuljiro10yearslaterOTF.otf') format('opentype');
   font-display: block;
@@ -21,7 +29,8 @@
   --shadow-panel: 0 22px 50px rgb(0 0 0 / 46%);
   --shadow-raised: 0 16px 34px rgb(0 0 0 / 32%);
   --radius-card: 8px;
-  --font-body: 'BMEuljiro10Years', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'BMEuljiro', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-subbody: 'BMEuljiro10Years', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: var(--font-body);
   --font-accent: var(--font-body);
   --font-stamp: var(--font-body);
