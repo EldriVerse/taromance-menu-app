@@ -88,21 +88,13 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
             ))}
           </div>
         ) : null}
-        <p>{String(activeItem.tarotCard?.number ?? 0).padStart(2, '0')}</p>
+        {activeItem.tarotCard?.number !== undefined ? (
+          <p>{String(activeItem.tarotCard.number).padStart(2, '0')}</p>
+        ) : null}
         <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
-        <b>{activeItem.soldOut ? 'SOLD OUT' : priceText}</b>
-        {description ? (
-          <span>
-            <small>설명</small>
-            {description}
-          </span>
-        ) : null}
-        {tastingNote && tastingNote !== description ? (
-          <span>
-            <small>테이스팅 노트</small>
-            {tastingNote}
-          </span>
-        ) : null}
+        {activeItem.soldOut || priceText ? <b>{activeItem.soldOut ? 'SOLD OUT' : priceText}</b> : null}
+        {description ? <span>{description}</span> : null}
+        {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
       </button>
     </section>
   )

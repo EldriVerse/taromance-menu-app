@@ -70,7 +70,7 @@ export interface MenuItem {
   soldOut?: boolean
   tags?: LocalizedText[]
   tarotCard?: {
-    number: number
+    number?: number
     imageUrl?: string
   }
 }

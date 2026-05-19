@@ -52,21 +52,10 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
           ) : null}
         </div>
         <div className="menu-dialog__body">
-          <p>{item.kind.replaceAll('-', ' ').toUpperCase()}</p>
           <h2 className={item.soldOut ? 'is-sold-out-text' : ''}>{text(item.name, language)}</h2>
-          <strong>{item.soldOut ? 'SOLD OUT' : priceText}</strong>
-          {description ? (
-            <span>
-              <small>설명</small>
-              {description}
-            </span>
-          ) : null}
-          {tastingNote && tastingNote !== description ? (
-            <span>
-              <small>테이스팅 노트</small>
-              {tastingNote}
-            </span>
-          ) : null}
+          {item.soldOut || priceText ? <strong>{item.soldOut ? 'SOLD OUT' : priceText}</strong> : null}
+          {description ? <span>{description}</span> : null}
+          {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
         </div>
       </section>
     </div>

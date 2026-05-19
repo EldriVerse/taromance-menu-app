@@ -135,6 +135,22 @@ function getLocalizedField(record: FirestoreRecord, field: string, fallback = ''
   }, { ko, en: ko, ja: ko, zh: ko })
 }
 
+function getLocalizedDisplayField(record: FirestoreRecord, field: string, fallback = '') {
+  const i18nValue = record[`${field}_i18n`] ?? record[`${field}I18n`]
+  const i18nRecord = isRecord(i18nValue) ? i18nValue : null
+  const ko = asString(i18nRecord?.ko) ?? asString(record[`${field}_ko`]) ?? asString(record[`${field}Ko`]) ?? fallback
+
+  return languageKeys.reduce<LocalizedText>((result, key) => {
+    result[key] =
+      asString(i18nRecord?.[key]) ??
+      asString(record[`${field}_${key}`]) ??
+      asString(record[`${field}${key.charAt(0).toUpperCase()}${key.slice(1)}`]) ??
+      ko
+
+    return result
+  }, { ko, en: ko, ja: ko, zh: ko })
+}
+
 function hasLocalizedText(value: LocalizedText | undefined) {
   return Boolean(value && languageKeys.some((key) => value[key].trim().length > 0))
 }
@@ -424,9 +440,11 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
   const guideBody = getLocalizedField(source, 'body', getSourceDescription(source))
   const description = categoryId === 'guide'
     ? guideBody
-    : source.description_i18n || source.description
-      ? getLocalizedField(source, 'description', getSourceDescription(source))
-      : getLocalizedField(source, source.notes_i18n || source.notes ? 'notes' : 'body', getSourceDescription(source))
+    : categoryId === 'cocktail'
+      ? getLocalizedDisplayField(source, 'description')
+      : source.description_i18n || source.description_ko || source.description_en || source.description_ja || source.description_zh
+        ? getLocalizedDisplayField(source, 'description')
+        : getLocalizedField(source, source.notes_i18n || source.notes ? 'notes' : 'body', getSourceDescription(source))
   const tastingNote = getSourceTastingNote(source)
   const summary = categoryId === 'guide'
     ? guideBody
@@ -451,7 +469,7 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
     tarotCard:
       kind === 'tarot-signature'
         ? {
-            number: firstNumber(source.cardNumber, source.card_number, source.tarotNumber, source.tarot_number, row.sort_code) ?? 0,
+            number: firstNumber(source.cardNumber, source.card_number, source.tarotNumber, source.tarot_number),
             imageUrl: images.mainUrl,
           }
         : undefined,
