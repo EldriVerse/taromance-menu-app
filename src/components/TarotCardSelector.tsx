@@ -1,7 +1,8 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import type { LanguageCode, MenuItem } from '../domain/menu'
-import { formatPriceShort, text } from '../domain/formatting'
+import { alcoholLabels, formatAbv, formatPriceShort, text } from '../domain/formatting'
+import { handleImageFallback } from '../utils/imageFallback'
 
 interface TarotCardSelectorProps {
   items: MenuItem[]
@@ -32,6 +33,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
   const description = text(activeItem.description, language)
   const tastingNote = activeItem.tastingNote ? text(activeItem.tastingNote, language) : ''
   const priceText = activeItem.priceWon !== undefined ? formatPriceShort(activeItem.priceWon) : ''
+  const abvText = formatAbv(activeItem.alcoholAbv)
 
   return (
     <section className="tarot-selector" aria-label="Tarot signature cocktail cards">
@@ -92,7 +94,24 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
           <p>{String(activeItem.tarotCard.number).padStart(2, '0')}</p>
         ) : null}
         <span className="tarot-card-summary__heading">
-          <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
+          {activeItem.glassImageUrl ? (
+            <img
+              className="tarot-card-summary__glass"
+              src={activeItem.glassImageUrl}
+              alt=""
+              decoding="async"
+              draggable="false"
+              onError={handleImageFallback}
+            />
+          ) : null}
+          <span className="tarot-card-summary__name">
+            <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
+            {abvText ? (
+              <span className="tarot-card-summary__abv">
+                ( {alcoholLabels[language]} : {abvText}% )
+              </span>
+            ) : null}
+          </span>
           {activeItem.soldOut || priceText ? <b>{activeItem.soldOut ? 'SOLD OUT' : priceText}</b> : null}
         </span>
         {description ? <span>{description}</span> : null}

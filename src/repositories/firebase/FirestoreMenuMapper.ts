@@ -374,6 +374,7 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
     priceWon: firstNumber(data.priceWon, data.price_won, data.price),
     priceGlassWon: firstNumber(data.priceGlassWon, data.price_glass_won, data.sale_price_glass_vat_excl),
     priceBottleWon: firstNumber(data.priceBottleWon, data.price_bottle_won, data.sale_price_bottle_vat_excl),
+    alcoholAbv: firstNumber(data.final_abv_pct, data.finalAbvPct, data.abv, data.abv_pct),
     imageUrl: firstString(data.imageUrl, data.image_url, data.thumbnailUrl, data.thumbnail_url, data.photoUrl),
     assetUrl: firstString(data.assetUrl, data.asset_url),
     subImageUrls: stringArray(
@@ -386,7 +387,8 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
       data.subImages,
       data.sub_images,
     ),
-    glassImageUrl: firstString(data.glassImageUrl, data.glass_image_url, data.glassUrl, data.glass_url),
+    glassImageUrl: firstString(data.glassImageUrl, data.glass_image_url, data.glassUrl, data.glass_url) ??
+      (firstString(data.glass_shape, data.glassShape) ? `/media/galsses/${firstString(data.glass_shape, data.glassShape)}.png` : undefined),
     sort_code: firstNumber(data.sort_code, data.sortCode, data.display_order, data.displayOrder, data.order) ?? Number.MAX_SAFE_INTEGER,
     soldOut: firstBoolean(data.soldOut, data.sold_out, data.isSoldOut, data.is_soldout, data.is_sold_out),
     tarotCard:

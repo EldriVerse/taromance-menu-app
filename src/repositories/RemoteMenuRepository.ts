@@ -344,6 +344,13 @@ function getImageUrls(record: FirestoreRecord) {
   }
 }
 
+function getGlassImageUrl(source: FirestoreRecord) {
+  const glassShape = firstString(source.glass_shape, source.glassShape)
+
+  return firstString(source.glassImageUrl, source.glass_image_url, source.glassUrl, source.glass_url) ??
+    (glassShape ? `/media/galsses/${glassShape}.png` : undefined)
+}
+
 function getSourceName(source: FirestoreRecord, id: string) {
   return firstString(source.name, source.name_ko, source.name_en, source.title, source.ref_id) ?? id
 }
@@ -531,9 +538,10 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
     priceWon: getPrice(source),
     priceGlassWon: getGlassPrice(source),
     priceBottleWon: getBottlePrice(source),
+    alcoholAbv: firstNumber(source.final_abv_pct, source.finalAbvPct, source.abv, source.abv_pct),
     imageUrl: images.mainUrl,
     subImageUrls: images.subImageUrls,
-    glassImageUrl: firstString(source.glassImageUrl, source.glass_image_url, source.glassUrl, source.glass_url),
+    glassImageUrl: getGlassImageUrl(source),
     sort_code: firstNumber(row.sort_code, row.sortCode, source.sort_code, source.display_order, source.displayOrder) ?? Number.MAX_SAFE_INTEGER,
     soldOut: firstBoolean(source.is_soldout, source.is_sold_out, source.soldOut, source.sold_out),
     tags: getTags(source),

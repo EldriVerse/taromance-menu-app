@@ -663,6 +663,13 @@ button:focus-visible {
   min-width: 0;
 }
 
+.menu-item__title-line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
 .menu-item__body strong {
   position: relative;
   width: fit-content;
@@ -671,6 +678,15 @@ button:focus-visible {
   font-family: var(--font-accent);
   font-size: 23px;
   line-height: 1.1;
+}
+
+.menu-item__abv {
+  flex: 0 1 auto;
+  color: #6f4c31;
+  font-family: var(--font-subbody);
+  font-size: 0.64em;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 .menu-item__body small {
@@ -1242,8 +1258,8 @@ button:focus-visible {
   .tarot-selector {
     grid-column: 1 / -1;
     grid-row: 3;
-    grid-template-columns: 50px minmax(300px, 0.56fr) minmax(248px, 0.44fr) 50px;
-    column-gap: 12px;
+    grid-template-columns: 50px minmax(280px, 0.52fr) minmax(330px, 0.48fr) 50px;
+    column-gap: 4px;
     align-items: center;
     min-height: 0;
     margin:
@@ -1336,17 +1352,40 @@ button:focus-visible {
 
   .tarot-card-summary span.tarot-card-summary__heading {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(54px, auto);
+    grid-template-columns: 52px minmax(0, 1fr) minmax(70px, auto);
     align-items: start;
     gap: 14px;
+  }
+
+  .tarot-card-summary__glass {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+  }
+
+  .tarot-card-summary__name {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 0;
   }
 
   .tarot-card-summary__heading strong {
     min-width: 0;
   }
 
+  .tarot-card-summary__abv {
+    flex: 0 1 auto;
+    color: #6f4c31;
+    font-family: var(--font-subbody);
+    font-size: 0.58em;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
   .tarot-card-summary__heading b {
     justify-self: end;
+    align-self: start;
     text-align: right;
   }
 
@@ -1358,10 +1397,26 @@ button:focus-visible {
     line-height: 1.42;
   }
 
+  .tarot-card-summary span.tarot-card-summary__heading {
+    display: grid;
+  }
+
+  .tarot-card-summary span.tarot-card-summary__name {
+    display: flex;
+    font-size: inherit;
+    line-height: 1.04;
+  }
+
+  .tarot-card-summary span.tarot-card-summary__abv {
+    display: inline;
+    font-size: 0.58em;
+    line-height: 1.1;
+  }
+
   .tarot-card-summary b {
     color: #512a19;
     font-family: var(--font-stamp);
-    font-size: 24px;
+    font-size: clamp(26px, 2.4vw, 36px);
     line-height: 1;
   }
 }
@@ -1467,6 +1522,25 @@ button:focus-visible {
   font-weight: 900;
 }
 
+.menu-dialog__cocktail-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-dialog__cocktail-info img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+}
+
+.menu-dialog__cocktail-info span {
+  color: #6f4c31;
+  font-family: var(--font-subbody);
+  font-size: 20px;
+  line-height: 1.2;
+}
+
 .menu-dialog__body h2 {
   margin: 0;
   font-family: var(--font-display);
@@ -1481,6 +1555,14 @@ button:focus-visible {
   font-family: var(--font-subbody);
   font-size: 18px;
   line-height: 1.55;
+}
+
+.menu-dialog__body .menu-dialog__cocktail-info span {
+  display: inline;
+  color: #6f4c31;
+  font-family: var(--font-subbody);
+  font-size: 20px;
+  line-height: 1.2;
 }
 
 @media (orientation: portrait) {
@@ -1720,9 +1802,30 @@ button:focus-visible {
 
   .tarot-card-summary span.tarot-card-summary__heading {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(48px, auto);
+    grid-template-columns: 42px minmax(0, 1fr) minmax(48px, auto);
     align-items: start;
     gap: 10px;
+  }
+
+  .tarot-card-summary__glass {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+  }
+
+  .tarot-card-summary__name {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .tarot-card-summary__abv {
+    color: #6f4c31;
+    font-family: var(--font-subbody);
+    font-size: 0.58em;
+    line-height: 1.1;
+    white-space: nowrap;
   }
 
   .tarot-card-summary__heading b {
@@ -1740,10 +1843,26 @@ button:focus-visible {
     -webkit-line-clamp: 1;
   }
 
+  .tarot-card-summary span.tarot-card-summary__heading {
+    display: grid;
+  }
+
+  .tarot-card-summary span.tarot-card-summary__name {
+    display: flex;
+    font-size: inherit;
+    line-height: 1.02;
+  }
+
+  .tarot-card-summary span.tarot-card-summary__abv {
+    display: inline;
+    font-size: 0.58em;
+    line-height: 1.1;
+  }
+
   .tarot-card-summary b {
     color: #512a19;
     font-family: var(--font-stamp);
-    font-size: 20px;
+    font-size: 24px;
     line-height: 1;
   }
 

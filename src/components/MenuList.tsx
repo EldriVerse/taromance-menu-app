@@ -1,7 +1,8 @@
 import { ImageOff } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import type { LanguageCode, MenuItem } from '../domain/menu'
-import { formatPriceShort, text } from '../domain/formatting'
+import { alcoholLabels, formatAbv, formatPriceShort, text } from '../domain/formatting'
+import { handleImageFallback } from '../utils/imageFallback'
 
 interface MenuListProps {
   items: MenuItem[]
@@ -20,6 +21,8 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
         const priceText = item.priceWon !== undefined ? formatPriceShort(item.priceWon) : ''
         const glassPriceText = item.priceGlassWon !== undefined ? formatPriceShort(item.priceGlassWon) : ''
         const bottlePriceText = item.priceBottleWon !== undefined ? formatPriceShort(item.priceBottleWon) : ''
+        const abvText = formatAbv(item.alcoholAbv)
+        const isCocktailItem = item.categoryId === 'cocktail' || item.kind === 'cocktail' || item.kind === 'tarot-signature'
         const usesPourPrices =
           item.categoryId === 'whisky' ||
           item.categoryId === 'wine-spirits' ||
@@ -53,6 +56,7 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
               'menu-item',
               item.soldOut ? 'is-sold-out' : '',
               item.glassImageUrl ? '' : 'menu-item--no-media',
+              isCocktailItem ? 'menu-item--cocktail' : '',
             ]
               .filter(Boolean)
               .join(' ')}
@@ -66,13 +70,20 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
           >
             <span className="menu-item__media">
               {item.glassImageUrl ? (
-                <img src={item.glassImageUrl} alt="" decoding="async" draggable="false" />
+                <img src={item.glassImageUrl} alt="" decoding="async" draggable="false" onError={handleImageFallback} />
               ) : (
                 <ImageOff aria-hidden="true" />
               )}
             </span>
             <span className="menu-item__body">
-              <strong>{text(item.name, language)}</strong>
+              <span className="menu-item__title-line">
+                <strong>{text(item.name, language)}</strong>
+                {isCocktailItem && abvText ? (
+                  <span className="menu-item__abv">
+                    ( {alcoholLabels[language]} : {abvText}% )
+                  </span>
+                ) : null}
+              </span>
               {secondaryText ? <small>{secondaryText}</small> : null}
             </span>
             <span className={['menu-item__meta', hasPourPrices ? 'menu-item__meta--stacked' : ''].filter(Boolean).join(' ')}>

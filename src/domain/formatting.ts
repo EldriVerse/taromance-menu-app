@@ -7,6 +7,13 @@ export const languageLabels: Record<LanguageCode, string> = {
   zh: '中文',
 }
 
+export const alcoholLabels: Record<LanguageCode, string> = {
+  ko: '알콜 도수',
+  en: 'ABV',
+  ja: 'アルコール度数',
+  zh: '酒精度',
+}
+
 export function text(value: LocalizedText, language: LanguageCode) {
   return value[language] || value.ko
 }
@@ -17,6 +24,14 @@ export function formatPriceShort(priceWon?: number) {
   }
 
   return String(Math.trunc(priceWon / 1000))
+}
+
+export function formatAbv(abv?: number) {
+  if (abv === undefined || !Number.isFinite(abv)) {
+    return ''
+  }
+
+  return Number.isInteger(abv) ? String(abv) : String(Number(abv.toFixed(1)))
 }
 
 export function sortBySortCode<T extends Pick<MenuItem, 'sort_code' | 'name'>>(items: T[]) {

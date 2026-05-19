@@ -64,6 +64,7 @@ export interface MenuItem {
   priceWon?: number
   priceGlassWon?: number
   priceBottleWon?: number
+  alcoholAbv?: number
   imageUrl?: string
   assetUrl?: string
   subImageUrls?: string[]

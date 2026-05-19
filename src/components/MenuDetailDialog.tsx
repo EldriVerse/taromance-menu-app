@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import type { LanguageCode, MenuItem } from '../domain/menu'
-import { formatPriceShort, text } from '../domain/formatting'
+import { alcoholLabels, formatAbv, formatPriceShort, text } from '../domain/formatting'
+import { handleImageFallback } from '../utils/imageFallback'
 
 interface MenuDetailDialogProps {
   item: MenuItem | null
@@ -22,6 +23,8 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
   const description = text(item.description, language)
   const tastingNote = item.tastingNote ? text(item.tastingNote, language) : ''
   const priceText = item.priceWon !== undefined ? formatPriceShort(item.priceWon) : ''
+  const abvText = formatAbv(item.alcoholAbv)
+  const isCocktailItem = item.categoryId === 'cocktail' || item.kind === 'cocktail' || item.kind === 'tarot-signature'
 
   return (
     <div
@@ -47,12 +50,31 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
           ) : (
             <img src={detailImageUrls[0]} alt="" decoding="async" draggable="false" />
           )}
-          {!isTarotSignature && item.glassImageUrl ? (
-            <img className="menu-dialog__glass" src={item.glassImageUrl} alt="" decoding="async" draggable="false" />
+          {item.glassImageUrl ? (
+            <img
+              className="menu-dialog__glass"
+              src={item.glassImageUrl}
+              alt=""
+              decoding="async"
+              draggable="false"
+              onError={handleImageFallback}
+            />
           ) : null}
         </div>
         <div className="menu-dialog__body">
           <h2 className={item.soldOut ? 'is-sold-out-text' : ''}>{text(item.name, language)}</h2>
+          {isCocktailItem && (item.glassImageUrl || abvText) ? (
+            <p className="menu-dialog__cocktail-info">
+              {item.glassImageUrl ? (
+                <img src={item.glassImageUrl} alt="" decoding="async" draggable="false" onError={handleImageFallback} />
+              ) : null}
+              {abvText ? (
+                <span>
+                  {alcoholLabels[language]} : {abvText}%
+                </span>
+              ) : null}
+            </p>
+          ) : null}
           {item.soldOut || priceText ? <strong>{item.soldOut ? 'SOLD OUT' : priceText}</strong> : null}
           {description ? <span>{description}</span> : null}
           {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
