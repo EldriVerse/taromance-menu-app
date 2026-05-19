@@ -3,6 +3,7 @@ import type { CategoryId, LocalizedText, MenuDataBundle, MenuItem, MenuKind, Men
 import { createRemoteBundle, mapFirestoreSettings } from './firebase/FirestoreMenuMapper'
 
 type FirestoreRecord = Record<string, unknown>
+const languageKeys = ['ko', 'en', 'ja', 'zh'] as const
 
 export interface RemoteMenuResult {
   bundle: MenuDataBundle | null
@@ -113,19 +114,38 @@ function localize(value: unknown, fallback = ''): LocalizedText {
 
 function getLocalizedField(record: FirestoreRecord, field: string, fallback = '') {
   const i18nValue = record[`${field}_i18n`] ?? record[`${field}I18n`] ?? record[field]
+  const i18nRecord = isRecord(i18nValue) ? i18nValue : null
+  const directValue = typeof i18nValue === 'string' ? i18nValue : undefined
+  const ko = asString(i18nRecord?.ko) ?? asString(record[`${field}_ko`]) ?? asString(record[`${field}Ko`]) ?? asString(directValue) ?? fallback
 
-  if (i18nValue) {
-    return localize(i18nValue, fallback)
-  }
+  return languageKeys.reduce<LocalizedText>((result, key) => {
+    result[key] =
+      asString(i18nRecord?.[key]) ??
+      asString(record[`${field}_${key}`]) ??
+      asString(record[`${field}${key.charAt(0).toUpperCase()}${key.slice(1)}`]) ??
+      ko
 
-  const ko = asString(record[`${field}_ko`]) ?? fallback
+    return result
+  }, { ko, en: ko, ja: ko, zh: ko })
+}
 
-  return {
-    ko,
-    en: asString(record[`${field}_en`]) ?? ko,
-    ja: asString(record[`${field}_ja`]) ?? ko,
-    zh: asString(record[`${field}_zh`]) ?? ko,
-  }
+function hasLocalizedText(value: LocalizedText | undefined) {
+  return Boolean(value && languageKeys.some((key) => value[key].trim().length > 0))
+}
+
+function localizedFallback(value: LocalizedText | undefined, fallback: LocalizedText): LocalizedText {
+  return value && hasLocalizedText(value) ? value : fallback
+}
+
+function joinLocalized(parts: LocalizedText[]) {
+  return languageKeys.reduce<LocalizedText>((result, key) => {
+    result[key] = parts
+      .map((part) => part[key].trim())
+      .filter(Boolean)
+      .join('\n')
+
+    return result
+  }, { ko: '', en: '', ja: '', zh: '' })
 }
 
 function normalizeText(value: unknown) {
@@ -277,10 +297,6 @@ function getSourceName(source: FirestoreRecord, id: string) {
   return firstString(source.name, source.name_ko, source.name_en, source.title, source.ref_id) ?? id
 }
 
-function getSourceSummary(source: FirestoreRecord) {
-  return firstString(source.summary, source.secondary_name, source.tasting_note, source.flavour_character, source.notes) ?? ''
-}
-
 function getSourceDescription(source: FirestoreRecord) {
   return firstString(
     source.description,
@@ -292,6 +308,20 @@ function getSourceDescription(source: FirestoreRecord) {
     source.tasting_note_palate,
     source.tasting_note_finish,
   ) ?? ''
+}
+
+function getSourceTastingNote(source: FirestoreRecord) {
+  const tastingNote = getLocalizedField(source, 'tasting_note', firstString(source.tasting_note) ?? '')
+
+  if (hasLocalizedText(tastingNote)) {
+    return tastingNote
+  }
+
+  return joinLocalized([
+    getLocalizedField(source, 'tasting_note_nose', firstString(source.tasting_note_nose) ?? ''),
+    getLocalizedField(source, 'tasting_note_palate', firstString(source.tasting_note_palate) ?? ''),
+    getLocalizedField(source, 'tasting_note_finish', firstString(source.tasting_note_finish) ?? ''),
+  ])
 }
 
 function getPrice(source: FirestoreRecord) {
@@ -382,21 +412,29 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
   const images = getImageUrls(source)
   const kind = kindFromBoard(categoryId, tabId, source)
   const resolvedTabId = categoryId === 'cocktail' ? tabIdFromCocktailKind(tabId, kind) : tabId
+  const sourceName = source.name_i18n || source.name || source.name_ko || source.name_en
+    ? getLocalizedField(source, 'name', fallbackName)
+    : getLocalizedField(source, 'title', fallbackName)
+  const guideBody = getLocalizedField(source, 'body', getSourceDescription(source))
+  const description = categoryId === 'guide'
+    ? guideBody
+    : source.description_i18n || source.description
+      ? getLocalizedField(source, 'description', getSourceDescription(source))
+      : getLocalizedField(source, source.notes_i18n || source.notes ? 'notes' : 'body', getSourceDescription(source))
+  const tastingNote = getSourceTastingNote(source)
+  const summary = categoryId === 'guide'
+    ? guideBody
+    : localizedFallback(tastingNote, description)
 
   return {
     id: rowId,
     categoryId,
     tabId: resolvedTabId,
     kind,
-    name: source.name_i18n || source.name || source.name_ko || source.name_en
-      ? getLocalizedField(source, 'name', fallbackName)
-      : getLocalizedField(source, 'title', fallbackName),
-    summary: source.summary_i18n || source.summary
-      ? getLocalizedField(source, 'summary', getSourceSummary(source))
-      : getLocalizedField(source, 'secondary_name', getSourceSummary(source)),
-    description: source.description_i18n || source.description
-      ? getLocalizedField(source, 'description', getSourceDescription(source))
-      : getLocalizedField(source, source.body_i18n || source.body ? 'body' : 'notes', getSourceDescription(source)),
+    name: sourceName,
+    summary,
+    description,
+    tastingNote: hasLocalizedText(tastingNote) ? tastingNote : undefined,
     priceWon: getPrice(source),
     imageUrl: images.mainUrl,
     subImageUrls: images.subImageUrls,

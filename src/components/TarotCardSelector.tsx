@@ -29,6 +29,9 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
     return null
   }
 
+  const description = text(activeItem.description, language)
+  const tastingNote = activeItem.tastingNote ? text(activeItem.tastingNote, language) : ''
+
   return (
     <section className="tarot-selector" aria-label="Tarot signature cocktail cards">
       <button className="tarot-arrow" type="button" aria-label="Previous card" onClick={() => move(-1)}>
@@ -86,9 +89,9 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
         ) : null}
         <p>{String(activeItem.tarotCard?.number ?? 0).padStart(2, '0')}</p>
         <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
-        <span>{text(activeItem.summary, language)}</span>
-        <span>{text(activeItem.description, language)}</span>
         <b>{activeItem.soldOut ? 'SOLD OUT' : activeItem.priceWon ? formatPriceShort(activeItem.priceWon) : ''}</b>
+        {description ? <span>{description}</span> : null}
+        {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
       </button>
     </section>
   )

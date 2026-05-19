@@ -2,7 +2,7 @@ import { createLocalDataBundle } from '../data/localDataBundle'
 import type { MenuDataBundle } from '../domain/menu'
 
 const cacheKey = 'taromance-menu-data-bundle'
-const cacheVersion = 3
+const cacheVersion = 4
 
 interface StoredMenuDataBundle extends MenuDataBundle {
   cacheVersion?: number

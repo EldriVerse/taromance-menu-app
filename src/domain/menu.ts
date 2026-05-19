@@ -60,6 +60,7 @@ export interface MenuItem {
   name: LocalizedText
   summary: LocalizedText
   description: LocalizedText
+  tastingNote?: LocalizedText
   priceWon?: number
   imageUrl?: string
   assetUrl?: string

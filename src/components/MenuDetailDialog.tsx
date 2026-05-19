@@ -19,6 +19,8 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
       ? item.subImageUrls
       : ['/assets/legacy/noimage.png']
     : [item.imageUrl || item.assetUrl || '/assets/legacy/noimage.png']
+  const description = text(item.description, language)
+  const tastingNote = item.tastingNote ? text(item.tastingNote, language) : ''
 
   return (
     <div
@@ -52,7 +54,8 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
           <p>{item.kind.replaceAll('-', ' ').toUpperCase()}</p>
           <h2 className={item.soldOut ? 'is-sold-out-text' : ''}>{text(item.name, language)}</h2>
           <strong>{item.soldOut ? 'SOLD OUT' : item.priceWon ? formatPriceShort(item.priceWon) : ''}</strong>
-          <span>{text(item.description, language)}</span>
+          {description ? <span>{description}</span> : null}
+          {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
         </div>
       </section>
     </div>
