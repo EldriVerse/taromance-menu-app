@@ -14,6 +14,10 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
     <div className="menu-list">
       {items.map((item, index) => {
         const opensDetailDialog = item.categoryId !== 'guide' && item.kind !== 'guide' && item.displayType !== 'section_header'
+        const description = text(item.description, language)
+        const tastingNote = item.tastingNote ? text(item.tastingNote, language) : ''
+        const secondaryText = item.categoryId === 'guide' ? description : tastingNote || description || text(item.summary, language)
+        const priceText = item.priceWon !== undefined ? formatPriceShort(item.priceWon) : ''
 
         return item.displayType === 'section_header' ? (
           <div
@@ -51,11 +55,11 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
             </span>
             <span className="menu-item__body">
               <strong>{text(item.name, language)}</strong>
-              <small>{text(item.summary, language)}</small>
+              {secondaryText ? <small>{secondaryText}</small> : null}
             </span>
             <span className="menu-item__meta">
               {item.soldOut ? <em>SOLD OUT</em> : null}
-              {item.priceWon ? <b>{formatPriceShort(item.priceWon)}</b> : null}
+              {priceText ? <b>{priceText}</b> : null}
             </span>
           </button>
         )

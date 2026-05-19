@@ -829,10 +829,10 @@ button:focus-visible {
   }
 
   .menu-item {
-    grid-template-columns: 54px minmax(0, 1fr) minmax(58px, auto);
-    gap: 14px;
+    grid-template-columns: 42px minmax(0, 1fr) minmax(86px, auto);
+    gap: 18px;
     min-height: 82px;
-    padding: 10px 14px;
+    padding: 10px 18px;
     border: 0;
     background:
       linear-gradient(90deg, rgb(212 167 77 / 10%), transparent 22%),
@@ -849,15 +849,15 @@ button:focus-visible {
   }
 
   .menu-item__media {
-    width: 48px;
-    height: 48px;
+    width: 38px;
+    height: 38px;
     background: rgb(255 244 209 / 20%);
     box-shadow: inset 0 0 0 1px rgb(88 58 32 / 8%);
   }
 
   .menu-item__media img {
-    max-width: 46px;
-    max-height: 46px;
+    max-width: 36px;
+    max-height: 36px;
   }
 
   .menu-item__body {
@@ -873,12 +873,23 @@ button:focus-visible {
   }
 
   .menu-item__body small {
-    font-size: 14px;
-    line-height: 1.25;
+    display: -webkit-box;
+    overflow: hidden;
+    white-space: pre-line;
+    font-size: 16px;
+    line-height: 1.28;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .menu-item__meta {
+    justify-items: end;
   }
 
   .menu-item__meta b {
-    font-size: 26px;
+    min-width: 72px;
+    text-align: right;
+    font-size: 30px;
   }
 }
 
