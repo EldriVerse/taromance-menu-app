@@ -769,8 +769,10 @@ button:focus-visible {
   }
 
   .language-toggle__trigger {
-    min-height: 34px;
-    padding: 0 14px;
+    min-width: 144px;
+    min-height: 50px;
+    padding: 0 20px;
+    justify-content: center;
   }
 
   .subcategory-tabs {
@@ -780,7 +782,7 @@ button:focus-visible {
     align-self: center;
     min-height: 54px;
     padding-right: clamp(128px, 12vw, 184px);
-    transform: translate(22px, -18px);
+    transform: translate(42px, -18px);
     pointer-events: none;
     z-index: 4;
   }
