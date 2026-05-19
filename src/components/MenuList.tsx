@@ -19,7 +19,14 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
         const secondaryText = item.categoryId === 'guide' ? description : tastingNote || description || text(item.summary, language)
         const priceText = item.priceWon !== undefined ? formatPriceShort(item.priceWon) : ''
 
-        return item.displayType === 'section_header' ? (
+        return item.displayType === 'spacer' ? (
+          <div
+            key={item.id}
+            className="menu-spacer"
+            aria-hidden="true"
+            style={{ '--menu-item-index': index } as CSSProperties}
+          />
+        ) : item.displayType === 'section_header' ? (
           <div
             key={item.id}
             className="menu-section-header"

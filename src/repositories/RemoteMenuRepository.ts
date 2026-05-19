@@ -95,8 +95,9 @@ function firstBoolean(...values: unknown[]) {
 function isPublishedActive(record: FirestoreRecord) {
   const status = asString(record.status)
   const active = firstBoolean(record.is_active, record.isActive, record.active, record.enabled) ?? true
+  const hiddenStatuses = new Set(['archived', 'deleted', 'disabled', 'hidden', 'inactive'])
 
-  return active && (!status || status === 'published')
+  return active && (!status || !hiddenStatuses.has(status))
 }
 
 function localize(value: unknown, fallback = ''): LocalizedText {
@@ -264,6 +265,34 @@ function kindFromBoard(categoryId: CategoryId, tabId: string | undefined, source
     : 'cocktail'
 }
 
+function structuralKindFromTab(categoryId: CategoryId, tabId: string | undefined): MenuKind {
+  if (categoryId === 'guide') {
+    return 'guide'
+  }
+
+  if (categoryId === 'whisky') {
+    return 'whisky'
+  }
+
+  if (categoryId === 'wine-spirits') {
+    return tabId === 'wine' ? 'wine' : 'other'
+  }
+
+  if (tabId === 'tarot-signature') {
+    return 'tarot-signature'
+  }
+
+  if (tabId === 'cocktail_custom') {
+    return 'custom-cocktail'
+  }
+
+  if (tabId === 'cocktail_story') {
+    return 'story-cocktail'
+  }
+
+  return 'cocktail'
+}
+
 function tabIdFromCocktailKind(tabId: string | undefined, kind: MenuKind) {
   if (kind === 'tarot-signature') {
     return 'tarot-signature'
@@ -401,11 +430,31 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
 
   const tabId = mapSubCode(asString(row.sub_code), categoryId)
   const itemType = asString(row.item_type) ?? 'product'
-  const spacerItemTypes = new Set(['spacer', 'blank', 'empty', 'gap'])
-  const sectionHeaderItemTypes = new Set(['section_header', 'sectionHeader', 'sub_title', 'subtitle', 'subheading', 'divider'])
+  const spacerItemTypes = new Set(['spacer', 'blank', 'empty', 'gap', 'line_break', 'lineBreak'])
+  const sectionHeaderItemTypes = new Set([
+    'section_header',
+    'sectionHeader',
+    'section',
+    'header',
+    'title',
+    'sub_title',
+    'subtitle',
+    'subheading',
+    'divider',
+  ])
 
   if (spacerItemTypes.has(itemType)) {
-    return null
+    return {
+      id: rowId,
+      categoryId,
+      tabId,
+      kind: structuralKindFromTab(categoryId, tabId),
+      displayType: 'spacer',
+      name: localize(''),
+      summary: localize(''),
+      description: localize(''),
+      sort_code: firstNumber(row.sort_code, row.sortCode, row.display_order, row.displayOrder) ?? Number.MAX_SAFE_INTEGER,
+    }
   }
 
   if (sectionHeaderItemTypes.has(itemType)) {
@@ -416,7 +465,7 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
       id: rowId,
       categoryId,
       tabId,
-      kind: categoryId === 'whisky' ? 'whisky' : categoryId === 'wine-spirits' ? 'other' : categoryId,
+      kind: structuralKindFromTab(categoryId, tabId),
       displayType: 'section_header',
       name: getLocalizedField(row, 'title', title),
       summary: getLocalizedField(row, 'description', description),

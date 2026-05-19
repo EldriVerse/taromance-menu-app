@@ -56,7 +56,7 @@ export interface MenuItem {
   categoryId: CategoryId
   tabId?: string
   kind: MenuKind
-  displayType?: 'product' | 'section_header'
+  displayType?: 'product' | 'section_header' | 'spacer'
   name: LocalizedText
   summary: LocalizedText
   description: LocalizedText
