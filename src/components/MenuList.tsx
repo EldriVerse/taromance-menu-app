@@ -18,6 +18,17 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
         const tastingNote = item.tastingNote ? text(item.tastingNote, language) : ''
         const secondaryText = item.categoryId === 'guide' ? description : tastingNote || description || text(item.summary, language)
         const priceText = item.priceWon !== undefined ? formatPriceShort(item.priceWon) : ''
+        const glassPriceText = item.priceGlassWon !== undefined ? formatPriceShort(item.priceGlassWon) : ''
+        const bottlePriceText = item.priceBottleWon !== undefined ? formatPriceShort(item.priceBottleWon) : ''
+        const usesPourPrices =
+          item.categoryId === 'whisky' ||
+          item.categoryId === 'wine-spirits' ||
+          item.kind === 'whisky' ||
+          item.kind === 'wine' ||
+          item.kind === 'spirit' ||
+          item.kind === 'liqueur' ||
+          item.kind === 'other'
+        const hasPourPrices = usesPourPrices && Boolean(glassPriceText || bottlePriceText)
 
         return item.displayType === 'spacer' ? (
           <div
@@ -64,9 +75,26 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
               <strong>{text(item.name, language)}</strong>
               {secondaryText ? <small>{secondaryText}</small> : null}
             </span>
-            <span className="menu-item__meta">
+            <span className={['menu-item__meta', hasPourPrices ? 'menu-item__meta--stacked' : ''].filter(Boolean).join(' ')}>
               {item.soldOut ? <em>SOLD OUT</em> : null}
-              {priceText ? <b>{priceText}</b> : null}
+              {hasPourPrices ? (
+                <>
+                  {glassPriceText ? (
+                    <b className="menu-item__price-line">
+                      <span>G :</span>
+                      <span>{glassPriceText}</span>
+                    </b>
+                  ) : null}
+                  {bottlePriceText ? (
+                    <b className="menu-item__price-line">
+                      <span>B :</span>
+                      <span>{bottlePriceText}</span>
+                    </b>
+                  ) : null}
+                </>
+              ) : priceText ? (
+                <b>{priceText}</b>
+              ) : null}
             </span>
           </button>
         )

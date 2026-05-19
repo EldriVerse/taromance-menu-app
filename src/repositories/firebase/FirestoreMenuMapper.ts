@@ -372,6 +372,8 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
     summary: getLocalizedField(data, 'summary', asString(data.subtitle) ?? asString(data.notes) ?? ''),
     description: getLocalizedField(data, descriptionField, asString(data.detail) ?? asString(data.body) ?? ''),
     priceWon: firstNumber(data.priceWon, data.price_won, data.price),
+    priceGlassWon: firstNumber(data.priceGlassWon, data.price_glass_won, data.sale_price_glass_vat_excl),
+    priceBottleWon: firstNumber(data.priceBottleWon, data.price_bottle_won, data.sale_price_bottle_vat_excl),
     imageUrl: firstString(data.imageUrl, data.image_url, data.thumbnailUrl, data.thumbnail_url, data.photoUrl),
     assetUrl: firstString(data.assetUrl, data.asset_url),
     subImageUrls: stringArray(

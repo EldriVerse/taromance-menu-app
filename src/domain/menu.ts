@@ -62,6 +62,8 @@ export interface MenuItem {
   description: LocalizedText
   tastingNote?: LocalizedText
   priceWon?: number
+  priceGlassWon?: number
+  priceBottleWon?: number
   imageUrl?: string
   assetUrl?: string
   subImageUrls?: string[]

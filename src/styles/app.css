@@ -682,10 +682,17 @@ button:focus-visible {
 
 .menu-item__meta {
   display: grid;
+  justify-self: end;
   justify-items: end;
   gap: 5px;
   font-weight: 900;
   text-align: right;
+}
+
+.menu-item__meta--stacked {
+  justify-items: start;
+  min-width: 120px;
+  text-align: left;
 }
 
 .menu-item__meta b,
@@ -694,6 +701,14 @@ button:focus-visible {
   color: #512a19;
   font-family: var(--font-stamp);
   font-size: 30px;
+}
+
+.menu-item__price-line {
+  display: grid;
+  grid-template-columns: 42px minmax(0, auto);
+  column-gap: 8px;
+  justify-content: start;
+  white-space: nowrap;
 }
 
 .menu-item__meta em,
@@ -892,10 +907,21 @@ button:focus-visible {
     justify-items: end;
   }
 
+  .menu-item__meta--stacked {
+    justify-items: start;
+    min-width: 108px;
+  }
+
   .menu-item__meta b {
     min-width: 72px;
     text-align: right;
     font-size: 30px;
+  }
+
+  .menu-item__price-line {
+    grid-template-columns: 38px minmax(0, auto);
+    min-width: 0;
+    text-align: left;
   }
 }
 

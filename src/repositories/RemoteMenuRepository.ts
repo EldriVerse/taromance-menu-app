@@ -386,6 +386,26 @@ function getPrice(source: FirestoreRecord) {
   )
 }
 
+function getGlassPrice(source: FirestoreRecord) {
+  return firstNumber(
+    source.priceGlassWon,
+    source.price_glass_won,
+    source.glass_price,
+    source.sale_price_glass_vat_excl,
+    source.recommended_price_glass_vat_excl,
+  )
+}
+
+function getBottlePrice(source: FirestoreRecord) {
+  return firstNumber(
+    source.priceBottleWon,
+    source.price_bottle_won,
+    source.bottle_price,
+    source.sale_price_bottle_vat_excl,
+    source.recommended_price_bottle_vat_excl,
+  )
+}
+
 function getTags(source: FirestoreRecord) {
   if (!Array.isArray(source.tags) && !Array.isArray(source.finder_tags)) {
     return undefined
@@ -509,6 +529,8 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
     description,
     tastingNote: hasLocalizedText(tastingNote) ? tastingNote : undefined,
     priceWon: getPrice(source),
+    priceGlassWon: getGlassPrice(source),
+    priceBottleWon: getBottlePrice(source),
     imageUrl: images.mainUrl,
     subImageUrls: images.subImageUrls,
     glassImageUrl: firstString(source.glassImageUrl, source.glass_image_url, source.glassUrl, source.glass_url),
