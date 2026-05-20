@@ -538,7 +538,7 @@ function mapMenuBoardItem(rowId: string, row: FirestoreRecord, source: Firestore
     priceWon: getPrice(source),
     priceGlassWon: getGlassPrice(source),
     priceBottleWon: getBottlePrice(source),
-    alcoholAbv: firstNumber(source.final_abv_pct, source.finalAbvPct, source.abv, source.abv_pct),
+    alcoholAbv: firstNumber(source.ABV, source.final_abv_pct, source.finalAbvPct, source.abv, source.abv_pct),
     imageUrl: images.mainUrl,
     subImageUrls: images.subImageUrls,
     glassImageUrl: getGlassImageUrl(source),

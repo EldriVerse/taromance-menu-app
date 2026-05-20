@@ -33,7 +33,7 @@ function asNumber(value: unknown) {
   }
 
   if (typeof value === 'string') {
-    const parsed = Number(value)
+    const parsed = Number(value.replace(/[^0-9.-]/g, ''))
 
     return Number.isFinite(parsed) ? parsed : undefined
   }
@@ -374,7 +374,7 @@ export function mapFirestoreMenuItem(collectionName: string, id: string, data: F
     priceWon: firstNumber(data.priceWon, data.price_won, data.price),
     priceGlassWon: firstNumber(data.priceGlassWon, data.price_glass_won, data.sale_price_glass_vat_excl),
     priceBottleWon: firstNumber(data.priceBottleWon, data.price_bottle_won, data.sale_price_bottle_vat_excl),
-    alcoholAbv: firstNumber(data.final_abv_pct, data.finalAbvPct, data.abv, data.abv_pct),
+    alcoholAbv: firstNumber(data.ABV, data.final_abv_pct, data.finalAbvPct, data.abv, data.abv_pct),
     imageUrl: firstString(data.imageUrl, data.image_url, data.thumbnailUrl, data.thumbnail_url, data.photoUrl),
     assetUrl: firstString(data.assetUrl, data.asset_url),
     subImageUrls: stringArray(
