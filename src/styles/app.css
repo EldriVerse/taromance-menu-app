@@ -107,7 +107,7 @@
   left: clamp(42px, 8vw, 124px);
   writing-mode: vertical-rl;
   text-orientation: upright;
-  font-family: var(--font-subbody);
+  font-family: var(--font-body);
   font-size: clamp(52px, 6vw, 92px);
   line-height: 1.02;
   letter-spacing: 0;

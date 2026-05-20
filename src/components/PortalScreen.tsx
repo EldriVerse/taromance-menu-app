@@ -19,8 +19,7 @@ export function PortalScreen({ onEnter, dataStatus, dataMessage, isExiting = fal
       return
     }
 
-    document.fonts
-      .load('1em BMEuljiro10Years')
+    Promise.all([document.fonts.load('1em BMEuljiro'), document.fonts.load('1em BMEuljiro10Years')])
       .then(() => document.fonts.ready)
       .finally(() => {
         if (isMounted) {
