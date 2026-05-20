@@ -27,7 +27,7 @@ const staticAssetUrls = [
 const loadedAssets = new Set<string>()
 
 function isLocalAsset(url: string) {
-  return url.startsWith('/assets/')
+  return url.startsWith('/assets/') || url.startsWith('/media/') || url.startsWith('blob:')
 }
 
 function loadImage(url: string) {
@@ -55,7 +55,7 @@ export async function preloadMenuAssets(
   onProgress?: (loaded: number, total: number) => void,
 ) {
   const itemAssetUrls = bundle.items.flatMap((item) =>
-    [item.assetUrl, item.glassImageUrl, item.tarotCard?.imageUrl, ...(item.subImageUrls ?? [])].filter(
+    [item.imageUrl, item.assetUrl, item.glassImageUrl, item.tarotCard?.imageUrl, ...(item.subImageUrls ?? [])].filter(
       (url): url is string => typeof url === 'string' && isLocalAsset(url),
     ),
   )
