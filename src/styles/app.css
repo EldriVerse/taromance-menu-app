@@ -1188,17 +1188,11 @@ button:focus-visible {
   aspect-ratio: 7 / 12;
   min-width: 214px;
   padding: 0;
-  border: 2px solid rgb(212 167 77 / 74%);
-  border-radius: var(--radius-card);
+  border: 0;
+  border-radius: 0;
   color: var(--color-cream);
-  background:
-    radial-gradient(circle at 50% 24%, rgb(241 212 135 / 16%), transparent 30%),
-    linear-gradient(180deg, rgb(18 16 13 / 16%), rgb(18 16 13 / 82%)),
-    url('/assets/legacy/iv_popup_background.png') center / cover no-repeat,
-    #3a251b;
-  box-shadow:
-    0 26px 56px rgb(0 0 0 / 40%),
-    inset 0 0 0 1px rgb(255 244 209 / 14%);
+  background: transparent;
+  box-shadow: none;
   cursor: pointer;
   transition:
     transform 220ms ease,
@@ -1207,11 +1201,7 @@ button:focus-visible {
 }
 
 .tarot-card.is-active {
-  border-color: var(--color-gold-bright);
-  box-shadow:
-    0 30px 66px rgb(0 0 0 / 48%),
-    0 0 38px rgb(212 167 77 / 22%),
-    inset 0 0 0 1px rgb(255 244 209 / 18%);
+  box-shadow: none;
 }
 
 .tarot-card__number {
