@@ -705,6 +705,10 @@ button:focus-visible {
   text-align: right;
 }
 
+.menu-item--cocktail .menu-item__meta:not(.menu-item__meta--stacked) {
+  margin-right: clamp(18px, 1.4vw, 34px);
+}
+
 .menu-item__meta--stacked {
   justify-items: start;
   min-width: 120px;
@@ -930,6 +934,10 @@ button:focus-visible {
 
   .menu-item__meta {
     justify-items: end;
+  }
+
+  .menu-item--cocktail .menu-item__meta:not(.menu-item__meta--stacked) {
+    margin-right: clamp(28px, 2.2vw, 48px);
   }
 
   .menu-item__meta--stacked {
