@@ -80,8 +80,8 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
               {item.soldOut ? 'SOLD OUT' : priceText}
             </strong>
           ) : null}
-          {description ? <span>{description}</span> : null}
-          {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
+          {description ? <span className="menu-dialog__description">{description}</span> : null}
+          {tastingNote && tastingNote !== description ? <span className="menu-dialog__description">{tastingNote}</span> : null}
         </div>
       </section>
     </div>

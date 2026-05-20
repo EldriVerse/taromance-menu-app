@@ -1524,6 +1524,10 @@ button:focus-visible {
     line-height: 1.42;
   }
 
+  .tarot-card-summary span.tarot-card-summary__description {
+    white-space: pre-line;
+  }
+
   .tarot-card-summary span.tarot-card-summary__heading {
     display: grid;
   }
@@ -1682,6 +1686,10 @@ button:focus-visible {
   font-family: var(--font-subbody);
   font-size: 18px;
   line-height: 1.55;
+}
+
+.menu-dialog__body span.menu-dialog__description {
+  white-space: pre-line;
 }
 
 .menu-dialog__body .menu-dialog__cocktail-info span {

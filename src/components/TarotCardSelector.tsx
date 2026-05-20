@@ -114,8 +114,10 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
           </span>
           {activeItem.soldOut || priceText ? <b>{activeItem.soldOut ? 'SOLD OUT' : priceText}</b> : null}
         </span>
-        {description ? <span>{description}</span> : null}
-        {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
+        {description ? <span className="tarot-card-summary__description">{description}</span> : null}
+        {tastingNote && tastingNote !== description ? (
+          <span className="tarot-card-summary__description">{tastingNote}</span>
+        ) : null}
       </button>
     </section>
   )
