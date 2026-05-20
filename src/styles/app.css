@@ -588,7 +588,7 @@ button:focus-visible {
 
 .menu-price-header {
   display: grid;
-  grid-template-columns: 70px minmax(0, 1fr) minmax(284px, auto);
+  grid-template-columns: 70px minmax(0, 1fr) minmax(270px, auto);
   gap: 16px;
   align-items: end;
   min-height: 30px;
@@ -603,11 +603,19 @@ button:focus-visible {
 .menu-price-header__columns {
   justify-self: end;
   display: grid;
-  grid-template-columns: 154px 112px;
-  column-gap: 28px;
-  margin-right: 48px;
+  grid-template-columns: 136px 104px;
+  column-gap: 30px;
+  margin-right: 52px;
   text-align: center;
   white-space: nowrap;
+}
+
+.menu-price-header__columns b,
+.menu-item__meta--whisky-columns b {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  text-align: center;
 }
 
 .menu-item {
@@ -757,11 +765,11 @@ button:focus-visible {
 }
 
 .menu-item__meta--whisky-columns {
-  grid-template-columns: 154px 112px;
-  column-gap: 28px;
+  grid-template-columns: 136px 104px;
+  column-gap: 30px;
   justify-items: center;
-  min-width: 294px;
-  margin-right: 48px;
+  min-width: 270px;
+  margin-right: 52px;
   text-align: center;
 }
 
@@ -940,15 +948,15 @@ button:focus-visible {
   }
 
   .menu-list--whisky .menu-item {
-    grid-template-columns: 42px minmax(0, 1fr) minmax(284px, auto);
+    grid-template-columns: 42px minmax(0, 1fr) minmax(270px, auto);
   }
 
   .menu-list--whisky .menu-item--no-media {
-    grid-template-columns: minmax(0, 1fr) minmax(284px, auto);
+    grid-template-columns: minmax(0, 1fr) minmax(270px, auto);
   }
 
   .menu-price-header {
-    grid-template-columns: 42px minmax(0, 1fr) minmax(284px, auto);
+    grid-template-columns: 42px minmax(0, 1fr) minmax(270px, auto);
     gap: 18px;
     min-height: 34px;
     padding: 0 18px 2px;
@@ -957,10 +965,10 @@ button:focus-visible {
 
   .menu-price-header__columns,
   .menu-item__meta--whisky-columns {
-    grid-template-columns: 154px 112px;
-    column-gap: 28px;
-    min-width: 294px;
-    margin-right: 56px;
+    grid-template-columns: 136px 104px;
+    column-gap: 30px;
+    min-width: 270px;
+    margin-right: 52px;
   }
 
   .menu-item__media {
