@@ -333,14 +333,32 @@ button:focus-visible {
 .language-toggle__trigger {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  min-width: 82px;
-  padding: 0 14px;
-  border-radius: 999px;
-  color: #24170e;
-  background: linear-gradient(180deg, var(--color-gold-bright), var(--color-gold));
-  box-shadow: 0 9px 18px rgb(0 0 0 / 20%);
+  justify-content: center;
+  gap: 6px;
+  min-width: 90px;
+  height: 48px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 0;
+  color: #583a20;
+  background: url('/assets/generated/button_tab.png') center / 100% 100% no-repeat;
+  box-shadow: none;
+  cursor: pointer;
+  font-family: var(--font-stamp);
+  font-size: 14px;
   font-weight: 900;
+  transition: transform 0.1s ease, filter 0.2s ease;
+}
+
+.language-toggle__trigger:active {
+  transform: scale(0.95);
+  filter: brightness(0.9);
+}
+
+.language-toggle__trigger svg {
+  margin: 0;
+  stroke: #583a20 !important;
+  stroke-width: 2.5px;
 }
 
 .language-toggle__menu {
@@ -350,26 +368,36 @@ button:focus-visible {
   display: grid;
   width: 142px;
   padding: 6px;
-  border: 1px solid rgb(212 167 77 / 52%);
-  border-radius: var(--radius-card);
-  background: rgb(27 23 18 / 96%);
-  box-shadow: 0 16px 30px rgb(0 0 0 / 34%);
+  border: 2px solid #583a20;
+  border-radius: 4px;
+  background: #f4e4bf;
+  box-shadow: 
+    0 16px 30px rgba(0, 0, 0, 0.45),
+    inset 0 0 15px rgba(88, 58, 32, 0.15);
   z-index: 80;
 }
 
 .language-toggle__menu button {
   width: 100%;
-  padding: 0 12px;
-  border-radius: 6px;
-  color: rgb(255 244 209 / 78%);
+  padding: 8px 12px;
+  border: none;
+  border-radius: 2px;
+  color: #583a20;
   background: transparent;
   text-align: left;
+  font-weight: 800;
+  transition: background-color 0.2s ease;
+}
+
+.language-toggle__menu button:hover {
+  background: rgba(88, 58, 32, 0.15);
 }
 
 .language-toggle__menu button.is-active {
-  color: var(--color-ink);
-  background: var(--color-gold);
+  color: #fff4d1;
+  background: #b73a34;
   font-weight: 900;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .app-shell {
@@ -491,9 +519,7 @@ button:focus-visible {
   align-items: center;
 }
 
-.icon-button,
-.tarot-arrow,
-.dialog-close {
+.icon-button {
   display: inline-grid;
   width: 48px;
   height: 48px;
@@ -504,6 +530,65 @@ button:focus-visible {
   background: linear-gradient(180deg, rgb(255 244 209 / 78%), rgb(212 167 77 / 52%));
   box-shadow: 0 10px 18px rgb(52 44 36 / 16%);
   cursor: pointer;
+}
+
+.tarot-arrow {
+  display: inline-grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: none;
+  border-radius: 0;
+  color: transparent;
+  background: url('/assets/generated/arrow_left.png') center / contain no-repeat;
+  box-shadow: none;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.tarot-selector > .tarot-arrow:last-of-type {
+  transform: scaleX(-1);
+}
+
+.tarot-arrow svg {
+  display: none;
+}
+
+.tarot-arrow:active {
+  filter: brightness(0.8) contrast(1.2);
+}
+
+.dialog-close {
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 2px solid #581d1a;
+  border-radius: 48% 52% 50% 50% / 50% 50% 52% 48%; /* Wax seal shape */
+  color: #fff4d1;
+  background: radial-gradient(circle at 45% 45%, #d15650 0%, #b73a34 50%, #7e2420 100%);
+  box-shadow: 
+    0 6px 12px rgba(0, 0, 0, 0.35),
+    inset 0 1px 3px rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.dialog-close svg {
+  width: 20px;
+  height: 20px;
+  stroke: #fff4d1;
+  stroke-width: 3.5px;
+}
+
+.dialog-close:hover {
+  transform: rotate(3deg) scale(1.05);
+  filter: brightness(1.05);
+}
+
+.dialog-close:active {
+  transform: scale(0.95);
+  filter: brightness(0.9);
 }
 
 .subcategory-tabs {
@@ -518,20 +603,27 @@ button:focus-visible {
   min-width: 150px;
   min-height: 54px;
   padding: 0 22px;
-  border: 1px solid rgb(88 58 32 / 24%);
-  border-radius: 999px;
-  color: #6a4429;
-  background: rgb(255 244 209 / 36%);
+  border: none;
+  border-radius: 0;
+  color: #583a20;
+  background: url('/assets/generated/button_tab.png') center / 100% 100% no-repeat;
+  box-shadow: none;
   font-family: var(--font-stamp);
   font-size: 18px;
   font-weight: 900;
   cursor: pointer;
+  transition: transform 0.1s ease, filter 0.2s ease;
+}
+
+.subcategory-tabs button:active {
+  transform: scale(0.96);
 }
 
 .subcategory-tabs button.is-active {
-  color: var(--color-cream);
-  background: linear-gradient(180deg, var(--color-ash), #1d1711);
-  box-shadow: inset 0 0 0 1px rgb(212 167 77 / 18%);
+  color: #fff4d1;
+  filter: sepia(0.5) hue-rotate(-50deg) saturate(3) brightness(0.85);
+  box-shadow: none;
+  font-weight: 900;
 }
 
 .notice-ticker {
@@ -1386,7 +1478,7 @@ button:focus-visible {
 
   .tarot-selector > .tarot-arrow:last-of-type {
     grid-column: 4;
-    transform: translateX(42px);
+    transform: translateX(42px) scaleX(-1);
   }
 
   .tarot-card {
@@ -1535,22 +1627,19 @@ button:focus-visible {
   width: min(860px, 94vw);
   min-height: min(620px, 90svh);
   max-height: 94svh;
-  padding: 28px;
-  border: 1px solid rgb(126 75 34 / 36%);
-  border-radius: var(--radius-card);
+  padding: 96px 160px 96px 132px; /* Top, Right, Bottom, Left. Clear the wooden frame border */
+  border: none;
+  border-radius: 0;
   color: var(--color-ink);
-  background:
-    linear-gradient(90deg, rgb(118 78 37 / 12%), transparent 22%),
-    var(--color-paper);
-  box-shadow:
-    var(--shadow-panel),
-    inset 0 0 0 1px rgb(255 244 209 / 26%);
+  background: url('/assets/generated/popup_bg.png') center / 100% 100% no-repeat;
+  box-shadow: var(--shadow-panel);
 }
 
 .dialog-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 56px;
+  right: 76px;
+  z-index: 10;
 }
 
 .menu-dialog__visual {
@@ -1997,10 +2086,10 @@ button:focus-visible {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(18svh, 260px) auto;
     gap: clamp(18px, 1.2svh, 28px);
-    width: min(58vw, 860px);
+    width: min(80vw, 860px);
     min-height: auto;
-    max-height: 74svh;
-    padding: clamp(24px, 1.8vw, 36px);
+    max-height: 84svh;
+    padding: 88px 100px 88px 88px;
     overflow-y: auto;
   }
 
@@ -2033,8 +2122,8 @@ button:focus-visible {
 
   /* 팝업 닫기 버튼 위치와 크기입니다. top/right는 팝업 내부 우측 상단 기준 위치입니다. */
   .dialog-close {
-    top: clamp(18px, 1.5vw, 28px);
-    right: clamp(18px, 1.5vw, 28px);
+    top: 50px;
+    right: 56px;
     width: clamp(52px, 3.6vw, 66px);
     height: clamp(52px, 3.6vw, 66px);
   }
@@ -2055,6 +2144,8 @@ button:focus-visible {
 
   .menu-dialog {
     grid-template-columns: 1fr;
+    width: 92vw;
+    padding: 72px 80px 72px 72px;
     overflow-y: auto;
   }
 
