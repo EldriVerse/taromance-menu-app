@@ -1407,7 +1407,7 @@ button:focus-visible {
 
   .tarot-selector > .tarot-arrow:last-of-type {
     grid-column: 4;
-    transform: translateX(42px);
+    transform: translateX(62px);
   }
 
   .tarot-card {
