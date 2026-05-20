@@ -586,6 +586,29 @@ button:focus-visible {
   padding-right: 6px;
 }
 
+.menu-price-header {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) minmax(284px, auto);
+  gap: 16px;
+  align-items: end;
+  min-height: 30px;
+  padding: 0 16px 2px;
+  color: #3f2a1b;
+  font-family: var(--font-subbody);
+  font-size: 20px;
+  line-height: 1;
+  animation: menu-item-reveal 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.menu-price-header__columns {
+  justify-self: end;
+  display: grid;
+  grid-template-columns: 154px 112px;
+  column-gap: 18px;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .menu-item {
   position: relative;
   display: grid;
@@ -730,6 +753,14 @@ button:focus-visible {
   min-width: 120px;
   margin-right: clamp(18px, 1.5vw, 34px);
   text-align: left;
+}
+
+.menu-item__meta--whisky-columns {
+  grid-template-columns: 154px 112px;
+  column-gap: 18px;
+  justify-items: center;
+  min-width: 284px;
+  text-align: center;
 }
 
 .menu-item__meta b,
@@ -906,6 +937,29 @@ button:focus-visible {
     grid-template-columns: minmax(0, 1fr) minmax(58px, auto);
   }
 
+  .menu-list--whisky .menu-item {
+    grid-template-columns: 42px minmax(0, 1fr) minmax(284px, auto);
+  }
+
+  .menu-list--whisky .menu-item--no-media {
+    grid-template-columns: minmax(0, 1fr) minmax(284px, auto);
+  }
+
+  .menu-price-header {
+    grid-template-columns: 42px minmax(0, 1fr) minmax(284px, auto);
+    gap: 18px;
+    min-height: 34px;
+    padding: 0 18px 2px;
+    font-size: 22px;
+  }
+
+  .menu-price-header__columns,
+  .menu-item__meta--whisky-columns {
+    grid-template-columns: 154px 112px;
+    column-gap: 18px;
+    min-width: 284px;
+  }
+
   .menu-item__media {
     width: 38px;
     height: 38px;
@@ -966,6 +1020,11 @@ button:focus-visible {
     min-width: 72px;
     text-align: right;
     font-size: 30px;
+  }
+
+  .menu-item__meta--whisky-columns b {
+    min-width: 0;
+    text-align: center;
   }
 
   .menu-item__price-line {

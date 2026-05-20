@@ -153,6 +153,7 @@ function App() {
             items={items}
             language={language}
             onSelect={setSelectedItem}
+            showWhiskyPriceHeader={activeCategory.id === 'whisky'}
           />
         )}
       </section>

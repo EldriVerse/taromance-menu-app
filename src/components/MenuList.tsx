@@ -8,11 +8,22 @@ interface MenuListProps {
   items: MenuItem[]
   language: LanguageCode
   onSelect: (item: MenuItem) => void
+  showWhiskyPriceHeader?: boolean
 }
 
-export function MenuList({ items, language, onSelect }: MenuListProps) {
+export function MenuList({ items, language, onSelect, showWhiskyPriceHeader = false }: MenuListProps) {
   return (
-    <div className="menu-list">
+    <div className={['menu-list', showWhiskyPriceHeader ? 'menu-list--whisky' : ''].filter(Boolean).join(' ')}>
+      {showWhiskyPriceHeader ? (
+        <div className="menu-price-header" aria-hidden="true">
+          <span />
+          <span />
+          <span className="menu-price-header__columns">
+            <b>Glass (30ml)</b>
+            <b>Bottle</b>
+          </span>
+        </div>
+      ) : null}
       {items.map((item, index) => {
         const opensDetailDialog = item.categoryId !== 'guide' && item.kind !== 'guide' && item.displayType !== 'section_header'
         const description = text(item.description, language)
@@ -23,12 +34,12 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
         const bottlePriceText = item.priceBottleWon !== undefined ? formatPriceShort(item.priceBottleWon) : ''
         const abvText = formatAbv(item.alcoholAbv)
         const isCocktailItem = item.categoryId === 'cocktail' || item.kind === 'cocktail' || item.kind === 'tarot-signature'
+        const usesWhiskyPriceColumns = item.categoryId === 'whisky' || item.kind === 'whisky'
         const mediaImageUrl = item.glassImageUrl || (isCocktailItem ? '/assets/legacy/noimage.png' : '')
         const usesPourPrices =
-          item.categoryId === 'whisky' ||
-          item.categoryId === 'wine-spirits' ||
-          item.kind === 'whisky' ||
+          usesWhiskyPriceColumns ||
           item.kind === 'wine' ||
+          item.categoryId === 'wine-spirits' ||
           item.kind === 'spirit' ||
           item.kind === 'liqueur' ||
           item.kind === 'other'
@@ -87,9 +98,22 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
               </span>
               {secondaryText ? <small>{secondaryText}</small> : null}
             </span>
-            <span className={['menu-item__meta', hasPourPrices ? 'menu-item__meta--stacked' : ''].filter(Boolean).join(' ')}>
+            <span
+              className={[
+                'menu-item__meta',
+                hasPourPrices && usesWhiskyPriceColumns ? 'menu-item__meta--whisky-columns' : '',
+                hasPourPrices && !usesWhiskyPriceColumns ? 'menu-item__meta--stacked' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
               {item.soldOut ? <em>SOLD OUT</em> : null}
-              {hasPourPrices ? (
+              {hasPourPrices && usesWhiskyPriceColumns ? (
+                <>
+                  <b>{glassPriceText}</b>
+                  <b>{bottlePriceText}</b>
+                </>
+              ) : hasPourPrices ? (
                 <>
                   {glassPriceText ? (
                     <b className="menu-item__price-line">
