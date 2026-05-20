@@ -833,6 +833,8 @@ button:focus-visible {
 
 @media (orientation: landscape) {
   .app-shell {
+    --menu-tab-button-height: 50px;
+
     grid-template-columns: clamp(214px, 15.5vw, 236px) minmax(0, 1fr);
     gap: 0;
     padding: 22px 12px 22px 16px;
@@ -870,7 +872,8 @@ button:focus-visible {
   }
 
   .language-toggle__trigger {
-    min-height: 50px;
+    height: var(--menu-tab-button-height);
+    min-height: var(--menu-tab-button-height);
     padding: 0 14px;
   }
 
@@ -889,7 +892,8 @@ button:focus-visible {
   .subcategory-tabs button {
     pointer-events: auto;
     min-width: 144px;
-    min-height: 50px;
+    height: var(--menu-tab-button-height);
+    min-height: var(--menu-tab-button-height);
     padding: 0 20px;
   }
 
@@ -1664,6 +1668,8 @@ button:focus-visible {
   /* 세로모드 전체 뼈대입니다. 첫 번째 행은 스크롤 이미지 패널, 두 번째 행은 하단 카테고리 버튼 영역입니다.
      하단 카테고리 버튼 높이를 조정하려면 grid-template-rows의 두 번째 clamp 값을 먼저 조정하세요. */
   .app-shell {
+    --menu-tab-button-height: clamp(54px, 2.6svh, 72px);
+
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) clamp(252px, 12.8svh, 376px);
     gap: 0;
@@ -1722,7 +1728,8 @@ button:focus-visible {
   .language-toggle__trigger {
     gap: clamp(8px, 0.6vw, 12px);
     min-width: clamp(118px, 8.6vw, 162px);
-    min-height: clamp(54px, 2.9svh, 78px);
+    height: var(--menu-tab-button-height);
+    min-height: var(--menu-tab-button-height);
     padding: 0 clamp(18px, 1.6vw, 30px);
     font-size: clamp(20px, 1.45vw, 30px);
   }
@@ -1767,7 +1774,8 @@ button:focus-visible {
   .subcategory-tabs button {
     pointer-events: auto;
     min-width: clamp(148px, 11.5vw, 212px);
-    min-height: clamp(54px, 2.6svh, 72px);
+    height: var(--menu-tab-button-height);
+    min-height: var(--menu-tab-button-height);
     padding: 0 clamp(16px, 1.2vw, 24px);
     font-size: clamp(19px, 1.18vw, 24px);
   }
