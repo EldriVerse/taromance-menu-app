@@ -117,6 +117,18 @@
     0 0 28px rgb(212 167 77 / 26%);
 }
 
+.portal-gate__title,
+.portal-gate__caption,
+.portal-gate__status {
+  opacity: 0;
+}
+
+.portal-screen.is-font-ready .portal-gate__title,
+.portal-screen.is-font-ready .portal-gate__caption,
+.portal-screen.is-font-ready .portal-gate__status {
+  opacity: 1;
+}
+
 .portal-gate__caption {
   position: absolute;
   left: 50%;
@@ -134,6 +146,10 @@
   text-shadow:
     0 8px 22px rgb(0 0 0 / 72%),
     0 0 24px rgb(241 212 135 / 28%);
+  animation: none;
+}
+
+.portal-screen.is-font-ready .portal-gate__caption {
   animation: portal-touch-blink 1.18s ease-in-out infinite;
 }
 
