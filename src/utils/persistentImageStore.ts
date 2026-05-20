@@ -1,3 +1,4 @@
+import { Capacitor, CapacitorHttp } from '@capacitor/core'
 import type { MenuDataBundle, MenuItem } from '../domain/menu'
 
 const databaseName = 'taromance-image-store'
@@ -64,7 +65,44 @@ function createObjectUrl(originalUrl: string, blob: Blob) {
   return objectUrl
 }
 
+function headerValue(headers: Record<string, string> | undefined, name: string) {
+  const lowerName = name.toLowerCase()
+  const entry = Object.entries(headers ?? {}).find(([key]) => key.toLowerCase() === lowerName)
+
+  return entry?.[1]
+}
+
+function base64ToBlob(base64: string, contentType = 'application/octet-stream') {
+  const binary = atob(base64)
+  const bytes = new Uint8Array(binary.length)
+
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index)
+  }
+
+  return new Blob([bytes], { type: contentType })
+}
+
 async function downloadImage(url: string) {
+  if (Capacitor.isNativePlatform()) {
+    const response = await CapacitorHttp.get({
+      url,
+      responseType: 'blob',
+    })
+
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(`Image download failed: ${response.status}`)
+    }
+
+    if (response.data instanceof Blob) {
+      return response.data
+    }
+
+    if (typeof response.data === 'string') {
+      return base64ToBlob(response.data, headerValue(response.headers, 'content-type'))
+    }
+  }
+
   const response = await fetch(url, { cache: 'reload' })
 
   if (!response.ok) {
