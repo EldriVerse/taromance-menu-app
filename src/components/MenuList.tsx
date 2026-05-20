@@ -23,6 +23,7 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
         const bottlePriceText = item.priceBottleWon !== undefined ? formatPriceShort(item.priceBottleWon) : ''
         const abvText = formatAbv(item.alcoholAbv)
         const isCocktailItem = item.categoryId === 'cocktail' || item.kind === 'cocktail' || item.kind === 'tarot-signature'
+        const mediaImageUrl = item.glassImageUrl || (isCocktailItem ? '/assets/legacy/noimage.png' : '')
         const usesPourPrices =
           item.categoryId === 'whisky' ||
           item.categoryId === 'wine-spirits' ||
@@ -55,7 +56,7 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
             className={[
               'menu-item',
               item.soldOut ? 'is-sold-out' : '',
-              item.glassImageUrl ? '' : 'menu-item--no-media',
+              mediaImageUrl ? '' : 'menu-item--no-media',
               isCocktailItem ? 'menu-item--cocktail' : '',
             ]
               .filter(Boolean)
@@ -69,8 +70,8 @@ export function MenuList({ items, language, onSelect }: MenuListProps) {
             }}
           >
             <span className="menu-item__media">
-              {item.glassImageUrl ? (
-                <img src={item.glassImageUrl} alt="" decoding="async" draggable="false" onError={handleImageFallback} />
+              {mediaImageUrl ? (
+                <img src={mediaImageUrl} alt="" decoding="async" draggable="false" onError={handleImageFallback} />
               ) : (
                 <ImageOff aria-hidden="true" />
               )}
