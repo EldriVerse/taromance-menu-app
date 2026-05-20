@@ -69,6 +69,7 @@ export function MenuList({ items, language, onSelect, showWhiskyPriceHeader = fa
               item.soldOut ? 'is-sold-out' : '',
               mediaImageUrl ? '' : 'menu-item--no-media',
               isCocktailItem ? 'menu-item--cocktail' : '',
+              item.categoryId === 'guide' ? 'menu-item--guide' : '',
             ]
               .filter(Boolean)
               .join(' ')}

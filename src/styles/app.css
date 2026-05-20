@@ -776,6 +776,21 @@ button:focus-visible {
   line-height: 1.35;
 }
 
+.menu-item--guide .menu-item__body {
+  gap: 10px;
+}
+
+.menu-item--guide .menu-item__body strong {
+  font-size: 30px;
+  line-height: 1.08;
+}
+
+.menu-item--guide .menu-item__body small {
+  white-space: pre-line;
+  font-size: 22px;
+  line-height: 1.38;
+}
+
 .menu-item__meta {
   display: grid;
   justify-self: end;
@@ -1048,6 +1063,22 @@ button:focus-visible {
     line-height: 1.28;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+  }
+
+  .menu-item--guide .menu-item__body {
+    gap: 12px;
+  }
+
+  .menu-item--guide .menu-item__body strong {
+    font-size: 40px;
+  }
+
+  .menu-item--guide .menu-item__body small {
+    display: block;
+    overflow: visible;
+    font-size: 28px;
+    line-height: 1.42;
+    -webkit-line-clamp: initial;
   }
 
   .menu-item__meta {
