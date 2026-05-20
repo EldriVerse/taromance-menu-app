@@ -75,7 +75,11 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
               ) : null}
             </p>
           ) : null}
-          {item.soldOut || priceText ? <strong>{item.soldOut ? 'SOLD OUT' : priceText}</strong> : null}
+          {item.soldOut || priceText ? (
+            <strong className={isCocktailItem ? 'menu-dialog__price menu-dialog__price--cocktail' : 'menu-dialog__price'}>
+              {item.soldOut ? 'SOLD OUT' : priceText}
+            </strong>
+          ) : null}
           {description ? <span>{description}</span> : null}
           {tastingNote && tastingNote !== description ? <span>{tastingNote}</span> : null}
         </div>

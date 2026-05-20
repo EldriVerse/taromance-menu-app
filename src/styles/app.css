@@ -1258,8 +1258,8 @@ button:focus-visible {
   .tarot-selector {
     grid-column: 1 / -1;
     grid-row: 3;
-    grid-template-columns: 50px minmax(280px, 0.52fr) minmax(330px, 0.48fr) 50px;
-    column-gap: 4px;
+    grid-template-columns: 50px minmax(260px, 0.46fr) minmax(390px, 0.54fr) 50px;
+    column-gap: 0;
     align-items: center;
     min-height: 0;
     margin:
@@ -1316,6 +1316,7 @@ button:focus-visible {
     align-self: start;
     display: grid;
     gap: 10px;
+    width: calc(100% + 36px);
     max-height: min(340px, calc(100svh - 350px));
     margin-top: clamp(4px, 1.2vh, 14px);
     padding: 18px 20px;
@@ -1329,6 +1330,7 @@ button:focus-visible {
       inset 0 0 0 1px rgb(255 244 209 / 16%),
       0 18px 34px rgb(52 44 36 / 10%);
     overflow: hidden;
+    transform: translateX(-36px);
   }
 
   .tarot-card-summary__images {
@@ -1563,6 +1565,11 @@ button:focus-visible {
   font-family: var(--font-subbody);
   font-size: 20px;
   line-height: 1.2;
+}
+
+.menu-dialog__body .menu-dialog__price--cocktail {
+  font-size: clamp(36px, 4.7vw, 62px);
+  line-height: 1.02;
 }
 
 @media (orientation: portrait) {
