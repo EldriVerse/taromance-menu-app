@@ -9,6 +9,8 @@ const staticAssetUrls = [
   '/assets/legacy/scroll/iv_scroll.png',
   '/assets/legacy/iv_popup_background.png',
   '/assets/legacy/noimage.png',
+  '/assets/legacy/ui/arrow_button_left.png',
+  '/assets/legacy/ui/arrow_button_right.png',
   '/assets/legacy/glass/brandyglass.png',
   '/assets/legacy/glass/cylinderchampagneglass.png',
   '/assets/legacy/glass/highballglass.png',

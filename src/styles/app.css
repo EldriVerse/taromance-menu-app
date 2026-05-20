@@ -506,6 +506,27 @@ button:focus-visible {
   cursor: pointer;
 }
 
+.tarot-arrow {
+  width: 64px;
+  height: 64px;
+  border: 0;
+  color: transparent;
+  background: url('/assets/legacy/ui/arrow_button_left.png') center / contain no-repeat;
+  box-shadow: none;
+}
+
+.tarot-arrow svg {
+  display: none;
+}
+
+.tarot-arrow:active {
+  filter: brightness(0.9);
+}
+
+.tarot-stage + .tarot-arrow {
+  background-image: url('/assets/legacy/ui/arrow_button_right.png');
+}
+
 .subcategory-tabs {
   display: flex;
   gap: 10px;
