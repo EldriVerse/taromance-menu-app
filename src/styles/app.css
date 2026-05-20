@@ -336,11 +336,15 @@ button:focus-visible {
   gap: 7px;
   min-width: 82px;
   padding: 0 14px;
-  border-radius: 999px;
-  color: #24170e;
-  background: linear-gradient(180deg, var(--color-gold-bright), var(--color-gold));
-  box-shadow: 0 9px 18px rgb(0 0 0 / 20%);
+  border-radius: 0;
+  color: #1f1711;
+  background: url('/assets/legacy/ui/subtab_fire_inactive.png') center / 100% 100% no-repeat;
+  box-shadow: none;
+  font-size: 18px;
   font-weight: 900;
+  text-shadow:
+    0 1px 0 rgb(255 244 209 / 34%),
+    0 0 8px rgb(0 0 0 / 22%);
 }
 
 .language-toggle__menu {
@@ -529,22 +533,22 @@ button:focus-visible {
 
 .subcategory-tabs {
   display: flex;
-  gap: 10px;
-  min-height: 58px;
+  gap: 16px;
+  min-height: 66px;
   overflow-x: auto;
 }
 
 .subcategory-tabs button {
   flex: 0 0 auto;
-  min-width: 158px;
-  min-height: 58px;
-  padding: 0 28px;
+  min-width: 168px;
+  min-height: 66px;
+  padding: 0 30px;
   border: 0;
   border-radius: 0;
   color: #1f1711;
   background: url('/assets/legacy/ui/subtab_fire_inactive.png') center / 100% 100% no-repeat;
   font-family: var(--font-stamp);
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 900;
   cursor: pointer;
   box-shadow: none;
@@ -861,7 +865,7 @@ button:focus-visible {
 
 @media (orientation: landscape) {
   .app-shell {
-    --menu-tab-button-height: 50px;
+    --menu-tab-button-height: 58px;
 
     grid-template-columns: clamp(214px, 15.5vw, 236px) minmax(0, 1fr);
     gap: 0;
@@ -903,6 +907,7 @@ button:focus-visible {
     height: var(--menu-tab-button-height);
     min-height: var(--menu-tab-button-height);
     padding: 0 14px;
+    font-size: 20px;
   }
 
   .subcategory-tabs {
@@ -910,7 +915,7 @@ button:focus-visible {
     grid-row: 1;
     align-items: center;
     align-self: center;
-    min-height: 54px;
+    min-height: 62px;
     padding-right: clamp(128px, 12vw, 184px);
     transform: translate(42px, -18px);
     pointer-events: none;
@@ -919,10 +924,10 @@ button:focus-visible {
 
   .subcategory-tabs button {
     pointer-events: auto;
-    min-width: 144px;
+    min-width: 164px;
     height: var(--menu-tab-button-height);
     min-height: var(--menu-tab-button-height);
-    padding: 0 20px;
+    padding: 0 28px;
   }
 
   .notice-ticker {
