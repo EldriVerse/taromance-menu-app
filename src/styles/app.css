@@ -700,7 +700,7 @@ button:focus-visible {
   flex: 0 1 auto;
   color: #6f4c31;
   font-family: var(--font-subbody);
-  font-size: 0.64em;
+  font-size: clamp(18px, 1.1vw, 24px);
   line-height: 1.1;
   white-space: nowrap;
 }
@@ -1404,7 +1404,7 @@ button:focus-visible {
     flex: 0 1 auto;
     color: #6f4c31;
     font-family: var(--font-subbody);
-    font-size: 0.58em;
+    font-size: clamp(18px, 1.1vw, 24px);
     line-height: 1.1;
     white-space: nowrap;
   }
@@ -1435,7 +1435,7 @@ button:focus-visible {
 
   .tarot-card-summary span.tarot-card-summary__abv {
     display: inline;
-    font-size: 0.58em;
+    font-size: clamp(18px, 1.1vw, 24px);
     line-height: 1.1;
   }
 
@@ -1854,7 +1854,7 @@ button:focus-visible {
   .tarot-card-summary__abv {
     color: #6f4c31;
     font-family: var(--font-subbody);
-    font-size: 0.58em;
+    font-size: clamp(16px, 1.4vw, 22px);
     line-height: 1.1;
     white-space: nowrap;
   }
@@ -1886,7 +1886,7 @@ button:focus-visible {
 
   .tarot-card-summary span.tarot-card-summary__abv {
     display: inline;
-    font-size: 0.58em;
+    font-size: clamp(16px, 1.4vw, 22px);
     line-height: 1.1;
   }
 
