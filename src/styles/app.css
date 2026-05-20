@@ -1251,9 +1251,9 @@ button:focus-visible {
   border-radius: 0;
   color: var(--color-cream);
   background: transparent;
-  box-shadow:
-    0 24px 44px rgb(0 0 0 / 42%),
-    0 8px 16px rgb(0 0 0 / 30%);
+  filter:
+    drop-shadow(0 24px 26px rgb(0 0 0 / 38%))
+    drop-shadow(0 8px 10px rgb(0 0 0 / 26%));
   cursor: pointer;
   transition:
     transform 220ms ease,
@@ -1262,9 +1262,9 @@ button:focus-visible {
 }
 
 .tarot-card.is-active {
-  box-shadow:
-    0 32px 62px rgb(0 0 0 / 50%),
-    0 12px 24px rgb(0 0 0 / 34%);
+  filter:
+    drop-shadow(0 30px 34px rgb(0 0 0 / 46%))
+    drop-shadow(0 10px 14px rgb(0 0 0 / 30%));
 }
 
 .tarot-card__number {
