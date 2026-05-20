@@ -604,7 +604,8 @@ button:focus-visible {
   justify-self: end;
   display: grid;
   grid-template-columns: 154px 112px;
-  column-gap: 18px;
+  column-gap: 28px;
+  margin-right: 48px;
   text-align: center;
   white-space: nowrap;
 }
@@ -757,9 +758,10 @@ button:focus-visible {
 
 .menu-item__meta--whisky-columns {
   grid-template-columns: 154px 112px;
-  column-gap: 18px;
+  column-gap: 28px;
   justify-items: center;
-  min-width: 284px;
+  min-width: 294px;
+  margin-right: 48px;
   text-align: center;
 }
 
@@ -956,8 +958,9 @@ button:focus-visible {
   .menu-price-header__columns,
   .menu-item__meta--whisky-columns {
     grid-template-columns: 154px 112px;
-    column-gap: 18px;
-    min-width: 284px;
+    column-gap: 28px;
+    min-width: 294px;
+    margin-right: 56px;
   }
 
   .menu-item__media {
