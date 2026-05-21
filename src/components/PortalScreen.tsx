@@ -34,6 +34,9 @@ export function PortalScreen({ onEnter, dataStatus, dataMessage, isExiting = fal
 
   return (
     <main className={`portal-screen ${isExiting ? 'is-exiting' : ''} ${isTitleFontReady ? 'is-font-ready' : ''}`}>
+      <video className="portal-screen__video" autoPlay muted loop playsInline preload="auto" aria-hidden="true">
+        <source src="/assets/legacy/title/title.mp4" type="video/mp4" />
+      </video>
       <button className="portal-gate" type="button" onClick={onEnter} disabled={dataStatus === 'checking' || isExiting}>
         <span className="portal-gate__title">TAROMANCE</span>
         <span className="portal-gate__caption">

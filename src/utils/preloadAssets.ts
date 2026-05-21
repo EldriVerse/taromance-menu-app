@@ -5,7 +5,6 @@ const categoryButtonLanguages = ['k', 'e']
 const categoryButtonStates = ['00', '01']
 
 const staticAssetUrls = [
-  '/assets/legacy/title/gif_homebg3.gif',
   '/assets/menu/backgroundimage.png',
   '/assets/legacy/iv_popup_background.png',
   '/assets/legacy/noimage.png',
