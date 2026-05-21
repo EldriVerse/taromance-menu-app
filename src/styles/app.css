@@ -334,9 +334,9 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  min-width: 142px;
+  min-width: 178px;
   justify-content: center;
-  padding: 0 24px;
+  padding: 0 32px;
   border-radius: 0;
   color: #1f1711;
   background: url('/assets/legacy/ui/subtab_fire_inactive.png') center / 100% 100% no-repeat;
@@ -535,22 +535,22 @@ button:focus-visible {
 
 .subcategory-tabs {
   display: flex;
-  gap: 22px;
-  min-height: 78px;
+  gap: 28px;
+  min-height: 92px;
   overflow-x: auto;
 }
 
 .subcategory-tabs button {
   flex: 0 0 auto;
-  min-width: 198px;
-  min-height: 78px;
-  padding: 0 36px;
+  min-width: 238px;
+  min-height: 92px;
+  padding: 0 44px;
   border: 0;
   border-radius: 0;
   color: #1f1711;
   background: url('/assets/legacy/ui/subtab_fire_inactive.png') center / 100% 100% no-repeat;
   font-family: var(--font-stamp);
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 900;
   cursor: pointer;
   box-shadow: none;
@@ -883,7 +883,7 @@ button:focus-visible {
 
 @media (orientation: landscape) {
   .app-shell {
-    --menu-tab-button-height: 70px;
+    --menu-tab-button-height: 84px;
 
     grid-template-columns: clamp(152px, 11.4vw, 184px) minmax(0, 1fr);
     gap: clamp(8px, 0.7vw, 14px);
@@ -897,7 +897,7 @@ button:focus-visible {
   }
 
   .grimoire-panel {
-    grid-template-rows: 82px 42px minmax(0, 1fr);
+    grid-template-rows: 98px 42px minmax(0, 1fr);
     gap: 14px;
     padding:
       clamp(34px, 3.8vh, 48px)
@@ -926,9 +926,9 @@ button:focus-visible {
   .language-toggle__trigger {
     height: var(--menu-tab-button-height);
     min-height: var(--menu-tab-button-height);
-    min-width: 156px;
-    padding: 0 28px;
-    font-size: 24px;
+    min-width: 198px;
+    padding: 0 38px;
+    font-size: 30px;
   }
 
   .subcategory-tabs {
@@ -936,19 +936,19 @@ button:focus-visible {
     grid-row: 1;
     align-items: center;
     align-self: center;
-    min-height: 76px;
-    padding-right: clamp(132px, 10.8vw, 188px);
-    transform: translate(20px, -4px);
+    min-height: 90px;
+    padding-right: clamp(204px, 14vw, 260px);
+    transform: translate(20px, 0);
     pointer-events: none;
     z-index: 4;
   }
 
   .subcategory-tabs button {
     pointer-events: auto;
-    min-width: 196px;
+    min-width: 236px;
     height: var(--menu-tab-button-height);
     min-height: var(--menu-tab-button-height);
-    padding: 0 36px;
+    padding: 0 44px;
   }
 
   .notice-ticker {
