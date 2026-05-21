@@ -1474,8 +1474,10 @@ button:focus-visible {
   inset: 0;
   display: grid;
   place-items: center;
-  padding: clamp(48px, 4vw, 96px);
-  background: rgb(18 16 13 / 82%);
+  padding: clamp(44px, 4vw, 92px);
+  background:
+    radial-gradient(circle at center, rgb(20 14 9 / 58%), rgb(8 6 5 / 88%) 72%),
+    rgb(8 6 5 / 82%);
   z-index: 24;
 }
 
@@ -1483,25 +1485,38 @@ button:focus-visible {
   position: relative;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
-  gap: 14px;
-  width: min(860px, 94vw);
-  height: min(620px, 86svh);
-  padding: 28px;
-  border: 1px solid rgb(126 75 34 / 36%);
-  border-radius: var(--radius-card);
-  background:
-    linear-gradient(90deg, rgb(118 78 37 / 12%), transparent 22%),
-    var(--color-paper);
+  gap: 18px;
+  width: min(1180px, 82vw);
+  height: min(760px, 82svh);
+  padding: clamp(28px, 2.2vw, 42px);
+  border: 1px solid rgb(245 216 150 / 24%);
+  border-radius: 10px;
+  background: rgb(16 12 9 / 78%);
   box-shadow:
-    var(--shadow-panel),
-    inset 0 0 0 1px rgb(255 244 209 / 26%);
+    0 26px 70px rgb(0 0 0 / 46%),
+    inset 0 0 0 1px rgb(255 244 209 / 10%);
   overflow: hidden;
+  backdrop-filter: blur(3px);
+}
+
+.image-dialog .dialog-close {
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgb(245 216 150 / 34%);
+  color: #f8e8b8;
+  background: rgb(18 13 9 / 72%);
+  box-shadow: 0 10px 22px rgb(0 0 0 / 28%);
 }
 
 .image-dialog__gallery {
   display: flex;
   min-width: 0;
   min-height: 0;
+  border-radius: 8px;
+  background: rgb(0 0 0 / 18%);
   overflow: hidden;
 }
 
@@ -1518,8 +1533,8 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 22px;
-  color: #4c2f1f;
+  gap: 24px;
+  color: #f8e8b8;
   font-family: var(--font-stamp);
   font-size: 22px;
 }
@@ -1529,11 +1544,19 @@ button:focus-visible {
   width: 54px;
   height: 44px;
   place-items: center;
-  border: 0;
+  border: 1px solid rgb(245 216 150 / 26%);
   border-radius: 6px;
-  color: #2b1c12;
-  background: rgb(255 244 209 / 42%);
+  color: #f8e8b8;
+  background: rgb(18 13 9 / 58%);
   cursor: pointer;
+}
+
+.image-dialog .image-dots button {
+  background: rgb(248 232 184 / 34%);
+}
+
+.image-dialog .image-dots button.is-active {
+  background: #f8e8b8;
 }
 
 @media (orientation: landscape) {
