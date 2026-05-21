@@ -128,9 +128,12 @@
   line-height: 1.02;
   letter-spacing: 0;
   overflow-wrap: anywhere;
+  -webkit-text-stroke: 1px rgb(255 244 209 / 42%);
   text-shadow:
-    0 8px 24px rgb(0 0 0 / 72%),
-    0 0 28px rgb(212 167 77 / 26%);
+    0 2px 0 rgb(68 36 18 / 82%),
+    0 8px 24px rgb(0 0 0 / 82%),
+    0 0 26px rgb(212 167 77 / 34%),
+    0 0 46px rgb(0 0 0 / 58%);
 }
 
 .portal-gate__title,
@@ -183,7 +186,7 @@
 
 @media (orientation: landscape) {
   .portal-gate__title {
-    top: clamp(150px, 24svh, 228px);
+    top: clamp(172px, 27svh, 258px);
     left: 50%;
     transform: translateX(-50%);
     writing-mode: horizontal-tb;
