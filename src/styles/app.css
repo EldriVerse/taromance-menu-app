@@ -1821,8 +1821,9 @@ button:focus-visible {
 }
 
 .menu-dialog--guide .menu-dialog__body span {
-  font-size: clamp(30px, 2.2vw, 40px);
-  line-height: 1.48;
+  color: var(--color-ink);
+  font-size: clamp(34px, 2.45vw, 46px);
+  line-height: 1.62;
 }
 
 .dialog-close {
@@ -1889,7 +1890,7 @@ button:focus-visible {
 
 .menu-dialog__body p {
   margin: 0;
-  color: #7f4e24;
+  color: var(--color-ink);
   font-size: 14px;
   font-weight: 900;
 }
@@ -1907,10 +1908,10 @@ button:focus-visible {
 }
 
 .menu-dialog__cocktail-info span {
-  color: #6f4c31;
+  color: var(--color-ink);
   font-family: var(--font-subbody);
-  font-size: 20px;
-  line-height: 1.2;
+  font-size: 24px;
+  line-height: 1.35;
 }
 
 .menu-dialog__body h2 {
@@ -1923,10 +1924,10 @@ button:focus-visible {
 .menu-dialog__body span {
   display: grid;
   gap: 6px;
-  color: #573923;
+  color: var(--color-ink);
   font-family: var(--font-subbody);
-  font-size: 18px;
-  line-height: 1.55;
+  font-size: 24px;
+  line-height: 1.72;
 }
 
 .menu-dialog__body span.menu-dialog__description {
@@ -1935,10 +1936,10 @@ button:focus-visible {
 
 .menu-dialog__body .menu-dialog__cocktail-info span {
   display: inline;
-  color: #6f4c31;
+  color: var(--color-ink);
   font-family: var(--font-subbody);
-  font-size: 20px;
-  line-height: 1.2;
+  font-size: 24px;
+  line-height: 1.35;
 }
 
 .menu-dialog__body .menu-dialog__price--cocktail {
@@ -2275,8 +2276,9 @@ button:focus-visible {
   }
 
   .menu-dialog.menu-dialog--guide .menu-dialog__body span {
-    font-size: clamp(34px, 2.2vw, 46px);
-    line-height: 1.5;
+    color: var(--color-ink);
+    font-size: clamp(38px, 2.45vw, 52px);
+    line-height: 1.62;
   }
 
   .custom-builder__form {
@@ -2322,7 +2324,8 @@ button:focus-visible {
   }
 
   .menu-dialog__body p {
-    font-size: clamp(18px, 1.1vw, 26px);
+    color: var(--color-ink);
+    font-size: clamp(22px, 1.3vw, 30px);
   }
 
   /* 팝업 메뉴명 크기입니다. 긴 칵테일 이름이 넘치면 max 값을 낮추면 됩니다. */
@@ -2332,7 +2335,9 @@ button:focus-visible {
 
   /* 팝업 설명문 크기입니다. 설명이 길어질수록 이 값을 낮추면 스크롤 부담이 줄어듭니다. */
   .menu-dialog__body span {
-    font-size: clamp(18px, 1.15vw, 23px);
+    color: var(--color-ink);
+    font-size: clamp(22px, 1.35vw, 30px);
+    line-height: 1.7;
   }
 
   /* 팝업 닫기 버튼 위치와 크기입니다. top/right는 팝업 내부 우측 상단 기준 위치입니다. */
