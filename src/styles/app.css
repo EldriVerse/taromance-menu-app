@@ -958,11 +958,11 @@ button:focus-visible {
   }
 
   .language-toggle__trigger {
-    height: clamp(66px, 4.5vw, 76px);
-    min-height: clamp(66px, 4.5vw, 76px);
-    min-width: 166px;
-    padding: 0 28px;
-    font-size: 26px;
+    height: clamp(52px, 3.4vw, 62px);
+    min-height: clamp(52px, 3.4vw, 62px);
+    min-width: 132px;
+    padding: 0 22px;
+    font-size: 22px;
   }
 
   .subcategory-tabs {
@@ -2009,12 +2009,12 @@ button:focus-visible {
 
   /* 언어 버튼 크기입니다. min-width/min-height는 터치 영역, font-size는 버튼 안 글자 크기입니다. */
   .language-toggle__trigger {
-    gap: clamp(8px, 0.6vw, 12px);
-    min-width: clamp(118px, 8.6vw, 162px);
-    height: var(--menu-tab-button-height);
-    min-height: var(--menu-tab-button-height);
-    padding: 0 clamp(18px, 1.6vw, 30px);
-    font-size: clamp(20px, 1.45vw, 30px);
+    gap: clamp(6px, 0.5vw, 10px);
+    min-width: clamp(100px, 7vw, 136px);
+    height: clamp(46px, 2.4svh, 60px);
+    min-height: clamp(46px, 2.4svh, 60px);
+    padding: 0 clamp(14px, 1.2vw, 22px);
+    font-size: clamp(17px, 1.1vw, 23px);
   }
 
   /* 언어 선택 드롭다운 폭과 내부 여백입니다. 언어 목록이 좁아 보이면 width를 키우면 됩니다. */
