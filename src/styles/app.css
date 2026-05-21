@@ -334,8 +334,9 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  min-width: 82px;
-  padding: 0 14px;
+  min-width: 142px;
+  justify-content: center;
+  padding: 0 24px;
   border-radius: 0;
   color: #1f1711;
   background: url('/assets/legacy/ui/subtab_fire_inactive.png') center / 100% 100% no-repeat;
@@ -923,7 +924,8 @@ button:focus-visible {
   .language-toggle__trigger {
     height: var(--menu-tab-button-height);
     min-height: var(--menu-tab-button-height);
-    padding: 0 18px;
+    min-width: 156px;
+    padding: 0 28px;
     font-size: 24px;
   }
 
