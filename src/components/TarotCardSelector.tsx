@@ -36,7 +36,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
   const tastingNote = activeItem.tastingNote ? text(activeItem.tastingNote, language) : ''
   const priceText = activeItem.priceWon !== undefined ? formatPriceShort(activeItem.priceWon) : ''
   const abvText = formatAbv(activeItem.alcoholAbv)
-  const subImageUrls = activeItem.subImageUrls?.length ? activeItem.subImageUrls : []
+  const subImageUrls = activeItem.subImageUrls?.length ? activeItem.subImageUrls : ['/assets/legacy/noimage.png']
 
   return (
     <section className="tarot-selector" aria-label="Tarot signature cocktail cards">
