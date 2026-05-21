@@ -12,6 +12,10 @@ interface StoredImage {
   savedAt: string
 }
 
+interface PersistMenuImagesOptions {
+  blockUntilComplete?: boolean
+}
+
 function shouldPersistImage(url: string | undefined) {
   return Boolean(url && /^https?:\/\//i.test(url))
 }
@@ -129,6 +133,43 @@ async function persistImageUrl(database: IDBDatabase, url: string) {
   return createObjectUrl(url, blob)
 }
 
+async function runWithConcurrency<T>(items: T[], concurrency: number, worker: (item: T) => Promise<void>) {
+  let nextIndex = 0
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+      while (nextIndex < items.length) {
+        const item = items[nextIndex]
+        nextIndex += 1
+        await worker(item)
+      }
+    }),
+  )
+}
+
+async function persistMissingImagesInBackground(urls: string[]) {
+  if (!urls.length || !('indexedDB' in window)) {
+    return
+  }
+
+  let database: IDBDatabase | undefined
+
+  try {
+    database = await openDatabase()
+    const openedDatabase = database
+
+    await runWithConcurrency(urls, 3, async (url) => {
+      try {
+        await persistImageUrl(openedDatabase, url)
+      } catch {
+        // Background image persistence should never block menu entry.
+      }
+    })
+  } finally {
+    database?.close()
+  }
+}
+
 function imageUrlsFromItem(item: MenuItem) {
   return [
     item.imageUrl,
@@ -160,6 +201,7 @@ async function persistItemImages(item: MenuItem, urlMap: Map<string, string>) {
 export async function persistMenuImages(
   bundle: MenuDataBundle,
   onProgress?: (saved: number, total: number) => void,
+  options: PersistMenuImagesOptions = {},
 ): Promise<MenuDataBundle> {
   if (!('indexedDB' in window)) {
     return bundle
@@ -173,7 +215,9 @@ export async function persistMenuImages(
 
   let database: IDBDatabase | undefined
   const urlMap = new Map<string, string>()
+  const missingUrls: string[] = []
   let saved = 0
+  const blockUntilComplete = options.blockUntilComplete ?? true
 
   try {
     database = await openDatabase()
@@ -181,18 +225,40 @@ export async function persistMenuImages(
 
     onProgress?.(saved, imageUrls.length)
 
-    await Promise.all(
-      imageUrls.map(async (url) => {
+    await runWithConcurrency(imageUrls, 6, async (url) => {
+      try {
+        const stored = await readStoredImage(openedDatabase, url)
+
+        if (stored?.blob) {
+          urlMap.set(url, createObjectUrl(url, stored.blob))
+        } else {
+          missingUrls.push(url)
+        }
+      } catch {
+        missingUrls.push(url)
+      } finally {
+        saved += 1
+        onProgress?.(saved, imageUrls.length)
+      }
+    })
+
+    if (blockUntilComplete && missingUrls.length) {
+      saved = imageUrls.length - missingUrls.length
+      onProgress?.(saved, imageUrls.length)
+
+      await runWithConcurrency(missingUrls, 3, async (url) => {
         try {
           urlMap.set(url, await persistImageUrl(openedDatabase, url))
         } catch {
           urlMap.set(url, '/assets/legacy/noimage.png')
         } finally {
           saved += 1
-          onProgress?.(saved, imageUrls.length)
+          onProgress?.(Math.min(saved, imageUrls.length), imageUrls.length)
         }
-      }),
-    )
+      })
+    } else if (missingUrls.length) {
+      void persistMissingImagesInBackground(missingUrls)
+    }
 
     const items = await Promise.all(bundle.items.map((item) => persistItemImages(item, urlMap)))
 

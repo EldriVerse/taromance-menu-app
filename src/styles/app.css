@@ -612,13 +612,46 @@ button:focus-visible {
   }
 }
 
+@keyframes scroll-arrow-breathe {
+  0%,
+  100% {
+    opacity: 0.24;
+    transform: translateY(-4px);
+  }
+
+  50% {
+    opacity: 0.58;
+    transform: translateY(4px);
+  }
+}
+
 .menu-list {
+  position: relative;
   display: grid;
   align-content: start;
   gap: 10px;
   min-height: 0;
   overflow-y: auto;
   padding-right: 6px;
+}
+
+.menu-list::after,
+.menu-dialog--guide::after,
+.tarot-card-summary span.tarot-card-summary__description::after {
+  content: '';
+  position: sticky;
+  bottom: 18px;
+  z-index: 3;
+  display: block;
+  width: 46px;
+  height: 58px;
+  margin-top: -58px;
+  margin-left: auto;
+  margin-right: 10px;
+  pointer-events: none;
+  background: url('/assets/legacy/arrow.png') center / contain no-repeat;
+  filter: drop-shadow(0 6px 8px rgb(52 44 36 / 22%));
+  animation: scroll-arrow-breathe 2.4s ease-in-out infinite;
 }
 
 .menu-price-header {
@@ -1666,6 +1699,7 @@ button:focus-visible {
     grid-template-columns: minmax(0, 1fr) minmax(86px, auto);
     align-items: start;
     gap: 18px;
+    padding-left: 14px;
   }
 
   .tarot-card-summary__name {
@@ -1703,7 +1737,9 @@ button:focus-visible {
   }
 
   .tarot-card-summary span.tarot-card-summary__description {
+    position: relative;
     overflow-y: auto;
+    padding-right: 58px;
     white-space: pre-line;
   }
 
@@ -1764,6 +1800,7 @@ button:focus-visible {
 }
 
 .menu-dialog--guide {
+  position: relative;
   grid-template-columns: minmax(0, 1fr);
   overflow-y: auto;
 }

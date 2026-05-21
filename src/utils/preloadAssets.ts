@@ -9,6 +9,7 @@ const staticAssetUrls = [
   '/assets/menu/backgroundimage.png',
   '/assets/legacy/iv_popup_background.png',
   '/assets/legacy/noimage.png',
+  '/assets/legacy/arrow.png',
   '/assets/legacy/ui/arrow_button_left.png',
   '/assets/legacy/ui/arrow_button_right.png',
   '/assets/legacy/ui/subtab_fire_active.png',

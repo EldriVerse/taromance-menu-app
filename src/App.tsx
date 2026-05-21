@@ -102,9 +102,8 @@ function App() {
       return
     }
 
-    const localImageBundle = await persistMenuImages(nextState.bundle, (loaded, total) => {
-      setAssetProgress(`이미지 저장 중... ${loaded} / ${total}`)
-    })
+    setAssetProgress('저장된 이미지 확인 중...')
+    const localImageBundle = await persistMenuImages(nextState.bundle, undefined, { blockUntilComplete: false })
 
     setPreparedBundle(localImageBundle)
 
