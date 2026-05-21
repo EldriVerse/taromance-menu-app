@@ -1391,32 +1391,26 @@ button:focus-visible {
   display: none;
 }
 
-.tarot-card-summary__images {
-  display: flex;
-  gap: 12px;
+.tarot-card-summary__carousel {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  grid-template-rows: minmax(0, 1fr) 16px;
+  gap: 10px;
+  align-items: center;
   min-width: 0;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.tarot-card-summary__images::-webkit-scrollbar {
-  width: 0;
-  height: 0;
 }
 
 .tarot-card-summary__image-button {
-  flex: 0 0 auto;
-  width: clamp(96px, 9vw, 136px);
-  aspect-ratio: 1 / 1;
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   padding: 0;
   border: 0;
   border-radius: 6px;
   background: rgb(255 244 209 / 22%);
   cursor: pointer;
   overflow: hidden;
-  scroll-snap-align: start;
   box-shadow:
     inset 0 0 0 1px rgb(88 58 32 / 14%),
     0 8px 16px rgb(52 44 36 / 12%);
@@ -1427,6 +1421,52 @@ button:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.tarot-card-summary__carousel-arrow {
+  display: grid;
+  width: 42px;
+  height: 54px;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  color: #2b1c12;
+  background: rgb(255 244 209 / 34%);
+  box-shadow: inset 0 0 0 1px rgb(88 58 32 / 12%);
+  cursor: pointer;
+}
+
+.tarot-card-summary__carousel-arrow:first-child {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.tarot-card-summary__carousel-arrow:nth-child(3) {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.image-dots {
+  display: flex;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-content: center;
+  gap: 8px;
+}
+
+.image-dots button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(92 58 32 / 34%);
+  cursor: pointer;
+}
+
+.image-dots button.is-active {
+  width: 22px;
+  background: #7f4e24;
 }
 
 .image-dialog-backdrop {
@@ -1478,7 +1518,7 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 22px;
   color: #4c2f1f;
   font-family: var(--font-stamp);
   font-size: 22px;
@@ -1540,7 +1580,7 @@ button:focus-visible {
 
   .tarot-selector > .tarot-arrow:last-of-type {
     grid-column: 4;
-    transform: translateX(86px);
+    transform: translateX(42px);
   }
 
   .tarot-card {

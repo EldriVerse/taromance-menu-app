@@ -13,6 +13,7 @@ interface TarotCardSelectorProps {
 
 export function TarotCardSelector({ items, language, onSelect }: TarotCardSelectorProps) {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [summaryImageIndex, setSummaryImageIndex] = useState(0)
   const [galleryIndex, setGalleryIndex] = useState<number | null>(null)
   const activeItem = items[activeIndex]
   const visibleItems = useMemo(
@@ -26,6 +27,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
 
   function move(direction: -1 | 1) {
     setActiveIndex((current) => (current + direction + items.length) % items.length)
+    setSummaryImageIndex(0)
   }
 
   if (!activeItem) {
@@ -37,6 +39,10 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
   const priceText = activeItem.priceWon !== undefined ? formatPriceShort(activeItem.priceWon) : ''
   const abvText = formatAbv(activeItem.alcoholAbv)
   const subImageUrls = activeItem.subImageUrls?.length ? activeItem.subImageUrls : ['/assets/legacy/noimage.png']
+
+  function moveSummaryImage(direction: -1 | 1) {
+    setSummaryImageIndex((current) => (current + direction + subImageUrls.length) % subImageUrls.length)
+  }
 
   return (
     <section className="tarot-selector" aria-label="Tarot signature cocktail cards">
@@ -99,21 +105,54 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
         }}
       >
         {subImageUrls.length ? (
-          <div className="tarot-card-summary__images" aria-label="Cocktail images">
-            {subImageUrls.map((imageUrl, index) => (
+          <div className="tarot-card-summary__carousel" aria-label="Cocktail images" onClick={(event) => event.stopPropagation()}>
+            {subImageUrls.length > 1 ? (
               <button
-                key={`${activeItem.id}-sub-${index}`}
-                className="tarot-card-summary__image-button"
+                className="tarot-card-summary__carousel-arrow"
                 type="button"
-                aria-label={`Open cocktail image ${index + 1}`}
-                onClick={(event) => {
-                  event.stopPropagation()
-                  setGalleryIndex(index)
-                }}
+                aria-label="Previous cocktail image"
+                onClick={() => moveSummaryImage(-1)}
               >
-                <img src={imageUrl} alt="" decoding="async" draggable="false" onError={handleImageFallback} />
+                <ChevronLeft aria-hidden="true" />
               </button>
-            ))}
+            ) : null}
+            <button
+              className="tarot-card-summary__image-button"
+              type="button"
+              aria-label="Open cocktail image"
+              onClick={() => setGalleryIndex(summaryImageIndex)}
+            >
+              <img
+                src={subImageUrls[summaryImageIndex] ?? subImageUrls[0]}
+                alt=""
+                decoding="async"
+                draggable="false"
+                onError={handleImageFallback}
+              />
+            </button>
+            {subImageUrls.length > 1 ? (
+              <button
+                className="tarot-card-summary__carousel-arrow"
+                type="button"
+                aria-label="Next cocktail image"
+                onClick={() => moveSummaryImage(1)}
+              >
+                <ChevronRight aria-hidden="true" />
+              </button>
+            ) : null}
+            {subImageUrls.length > 1 ? (
+              <div className="image-dots" aria-label="Cocktail image pages">
+                {subImageUrls.map((_, index) => (
+                  <button
+                    key={`${activeItem.id}-summary-dot-${index}`}
+                    type="button"
+                    aria-label={`Show cocktail image ${index + 1}`}
+                    className={index === summaryImageIndex ? 'is-active' : ''}
+                    onClick={() => setSummaryImageIndex(index)}
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
         ) : null}
         <span className="tarot-card-summary__heading">
@@ -167,9 +206,17 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
                 <button type="button" onClick={() => setGalleryIndex((current) => ((current ?? 0) - 1 + subImageUrls.length) % subImageUrls.length)}>
                   <ChevronLeft aria-hidden="true" />
                 </button>
-                <span>
-                  {galleryIndex + 1} / {subImageUrls.length}
-                </span>
+                <div className="image-dots" aria-label="Cocktail image pages">
+                  {subImageUrls.map((_, index) => (
+                    <button
+                      key={`${activeItem.id}-dialog-dot-${index}`}
+                      type="button"
+                      aria-label={`Show cocktail image ${index + 1}`}
+                      className={index === galleryIndex ? 'is-active' : ''}
+                      onClick={() => setGalleryIndex(index)}
+                    />
+                  ))}
+                </div>
                 <button type="button" onClick={() => setGalleryIndex((current) => ((current ?? 0) + 1) % subImageUrls.length)}>
                   <ChevronRight aria-hidden="true" />
                 </button>
