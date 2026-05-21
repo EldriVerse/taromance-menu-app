@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { CSSProperties } from 'react'
 import type { LanguageCode, MenuItem } from '../domain/menu'
 import { formatAbv, formatPriceShort, text } from '../domain/formatting'
@@ -223,7 +224,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
           <span className="tarot-card-summary__description">{tastingNote}</span>
         ) : null}
       </section>
-      {galleryIndex !== null && subImageUrls.length ? (
+      {galleryIndex !== null && subImageUrls.length && typeof document !== 'undefined' ? createPortal(
         <div
           className="image-dialog-backdrop"
           role="presentation"
@@ -285,7 +286,8 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
               </div>
             ) : null}
           </section>
-        </div>
+        </div>,
+        document.body,
       ) : null}
     </section>
   )

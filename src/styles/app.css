@@ -1522,10 +1522,9 @@ button:focus-visible {
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 28px;
-  width: 76vw;
-  max-width: 1720px;
-  height: 82svh;
-  max-height: 1380px;
+  width: 94vw;
+  min-height: 86svh;
+  max-height: 92svh;
   padding: clamp(42px, 3.2vw, 64px);
   border: 1px solid rgb(126 75 34 / 36%);
   border-radius: var(--radius-card);
@@ -2312,6 +2311,13 @@ button:focus-visible {
   }
 
   /* 팝업 이미지 영역입니다. 너무 크게 보이면 min-height/max-height를 낮추면 됩니다. */
+  .image-dialog {
+    width: min(92vw, 1760px);
+    min-height: 82svh;
+    max-height: 88svh;
+    padding: clamp(40px, 2.8vw, 72px);
+  }
+
   .menu-dialog__visual {
     min-height: clamp(250px, 18svh, 410px);
     max-height: 32svh;
