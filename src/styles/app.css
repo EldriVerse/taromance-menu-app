@@ -891,9 +891,10 @@ button:focus-visible {
   }
 
   .category-nav {
-    grid-template-rows: repeat(4, clamp(220px, 18.5vh, 292px));
+    grid-template-rows: repeat(4, clamp(184px, 11.8vh, 204px));
     align-content: center;
-    gap: 18px;
+    gap: clamp(6px, 0.6vh, 10px);
+    padding-block: clamp(64px, 6vh, 112px);
   }
 
   .grimoire-panel {
