@@ -6,7 +6,7 @@ const categoryButtonStates = ['00', '01']
 
 const staticAssetUrls = [
   '/assets/legacy/title/gif_homebg3.gif',
-  '/assets/legacy/scroll/iv_scroll.png',
+  '/assets/menu/backgroundimage.png',
   '/assets/legacy/iv_popup_background.png',
   '/assets/legacy/noimage.png',
   '/assets/legacy/ui/arrow_button_left.png',

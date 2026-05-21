@@ -386,9 +386,8 @@ button:focus-visible {
   padding: 18px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 10% 16%, rgb(42 129 124 / 22%), transparent 30%),
-    radial-gradient(circle at 92% 78%, rgb(183 58 52 / 12%), transparent 28%),
-    linear-gradient(135deg, #110e0a 0%, #241b13 48%, #11130f 100%);
+    linear-gradient(90deg, rgb(70 38 16 / 12%), transparent 18%, transparent 82%, rgb(70 38 16 / 12%)),
+    url('/assets/menu/backgroundimage.png') center / cover no-repeat;
   animation: app-shell-enter 520ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
 }
 
@@ -476,7 +475,7 @@ button:focus-visible {
   border-radius: 0;
   overflow: hidden;
   color: var(--color-ink);
-  background: url('/assets/legacy/scroll/iv_scroll.png') center / 100% 100% no-repeat;
+  background: transparent;
   box-shadow: none;
   animation: grimoire-materialize 680ms cubic-bezier(0.2, 0.82, 0.2, 1) 110ms both;
 }
@@ -612,6 +611,7 @@ button:focus-visible {
 
 .menu-list {
   display: grid;
+  align-content: start;
   gap: 10px;
   min-height: 0;
   overflow-y: auto;
@@ -882,24 +882,26 @@ button:focus-visible {
   .app-shell {
     --menu-tab-button-height: 58px;
 
-    grid-template-columns: clamp(214px, 15.5vw, 236px) minmax(0, 1fr);
-    gap: 0;
-    padding: 22px 12px 22px 16px;
+    grid-template-columns: clamp(152px, 11.4vw, 184px) minmax(0, 1fr);
+    gap: clamp(8px, 0.7vw, 14px);
+    padding: 18px 18px 18px 16px;
   }
 
   .category-nav {
-    gap: 16px;
+    grid-template-rows: repeat(4, clamp(260px, 21vh, 335px));
+    align-content: center;
+    gap: 14px;
   }
 
   .grimoire-panel {
-    grid-template-rows: 78px 38px minmax(0, 1fr);
-    gap: 12px;
+    grid-template-rows: 70px 42px minmax(0, 1fr);
+    gap: 14px;
     padding:
-      clamp(42px, 5.5vh, 58px)
-      clamp(66px, 5.8vw, 98px)
-      clamp(76px, 8.2vh, 104px)
-      clamp(96px, 7.4vw, 132px);
-    transform: translateX(-8px) scaleX(1);
+      clamp(34px, 3.8vh, 48px)
+      clamp(44px, 3.2vw, 70px)
+      clamp(44px, 4.6vh, 70px)
+      clamp(48px, 3.8vw, 78px);
+    transform: none;
     transform-origin: left center;
   }
 
@@ -931,8 +933,8 @@ button:focus-visible {
     align-items: center;
     align-self: center;
     min-height: 62px;
-    padding-right: clamp(128px, 12vw, 184px);
-    transform: translate(42px, -18px);
+    padding-right: clamp(118px, 10vw, 164px);
+    transform: translate(22px, -8px);
     pointer-events: none;
     z-index: 4;
   }
@@ -951,9 +953,9 @@ button:focus-visible {
     min-height: 36px;
     margin:
       0
-      clamp(54px, 3.8vw, 78px)
+      clamp(12px, 1.6vw, 32px)
       0
-      clamp(26px, 3vw, 54px);
+      clamp(10px, 1.4vw, 28px);
     padding: 0 16px;
     border-color: rgb(88 58 32 / 12%);
     background:
@@ -964,12 +966,12 @@ button:focus-visible {
   .menu-list {
     grid-column: 1 / -1;
     grid-row: 3;
-    gap: 8px;
+    gap: 10px;
     margin:
-      clamp(10px, 1.5vh, 18px)
-      clamp(54px, 4vw, 86px)
-      clamp(44px, 7vh, 74px)
-      clamp(36px, 3vw, 58px);
+      clamp(6px, 0.8vh, 12px)
+      clamp(10px, 1.2vw, 28px)
+      clamp(16px, 2.4vh, 32px)
+      clamp(10px, 1.2vw, 28px);
     padding-right: 0;
     scrollbar-width: none;
   }
@@ -980,15 +982,15 @@ button:focus-visible {
   }
 
   .menu-item {
-    grid-template-columns: 42px minmax(0, 1fr) minmax(86px, auto);
-    gap: 18px;
-    min-height: 82px;
-    padding: 10px 18px;
+    grid-template-columns: 48px minmax(0, 1fr) minmax(96px, auto);
+    gap: 22px;
+    min-height: 104px;
+    padding: 14px 24px;
     border: 0;
     background:
-      linear-gradient(90deg, rgb(212 167 77 / 10%), transparent 22%),
-      rgb(255 244 209 / 25%);
-    box-shadow: none;
+      linear-gradient(90deg, rgb(212 167 77 / 18%), transparent 24%),
+      rgb(255 244 209 / 42%);
+    box-shadow: inset 0 0 0 1px rgb(88 58 32 / 8%);
   }
 
   .menu-item::before {
@@ -1000,19 +1002,19 @@ button:focus-visible {
   }
 
   .menu-list--whisky .menu-item {
-    grid-template-columns: 42px minmax(0, 1fr) minmax(270px, auto);
+    grid-template-columns: 48px minmax(0, 1fr) minmax(286px, auto);
   }
 
   .menu-list--whisky .menu-item--no-media {
-    grid-template-columns: minmax(0, 1fr) minmax(270px, auto);
+    grid-template-columns: minmax(0, 1fr) minmax(286px, auto);
   }
 
   .menu-price-header {
-    grid-template-columns: 42px minmax(0, 1fr) minmax(270px, auto);
-    gap: 18px;
-    min-height: 34px;
-    padding: 0 18px 2px;
-    font-size: 22px;
+    grid-template-columns: 48px minmax(0, 1fr) minmax(286px, auto);
+    gap: 22px;
+    min-height: 38px;
+    padding: 0 24px 4px;
+    font-size: 24px;
   }
 
   .menu-price-header__columns,
@@ -1024,23 +1026,23 @@ button:focus-visible {
   }
 
   .menu-item__media {
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     background: rgb(255 244 209 / 20%);
     box-shadow: inset 0 0 0 1px rgb(88 58 32 / 8%);
   }
 
   .menu-item__media img {
-    max-width: 36px;
-    max-height: 36px;
+    max-width: 42px;
+    max-height: 42px;
   }
 
   .menu-item__body {
-    gap: 4px;
+    gap: 6px;
   }
 
   .menu-item__body strong {
-    font-size: 30px;
+    font-size: 36px;
   }
 
   .menu-section-header strong {
@@ -1059,8 +1061,8 @@ button:focus-visible {
     display: -webkit-box;
     overflow: hidden;
     white-space: pre-line;
-    font-size: 16px;
-    line-height: 1.28;
+    font-size: 21px;
+    line-height: 1.32;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
@@ -1096,9 +1098,9 @@ button:focus-visible {
   }
 
   .menu-item__meta b {
-    min-width: 72px;
+    min-width: 82px;
     text-align: right;
-    font-size: 30px;
+    font-size: 36px;
   }
 
   .menu-item__meta--whisky-columns b {
