@@ -1615,6 +1615,30 @@ button:focus-visible {
     inset 0 0 0 1px rgb(255 244 209 / 26%);
 }
 
+.menu-dialog--guide {
+  grid-template-columns: minmax(0, 1fr);
+  width: 94vw;
+  min-height: 86svh;
+  max-height: 92svh;
+  padding: clamp(42px, 3.2vw, 64px);
+  overflow-y: auto;
+}
+
+.menu-dialog--guide .menu-dialog__body {
+  align-content: start;
+  gap: clamp(24px, 2vw, 36px);
+  padding-right: clamp(56px, 5vw, 92px);
+}
+
+.menu-dialog--guide .menu-dialog__body h2 {
+  font-size: clamp(48px, 4.4vw, 76px);
+}
+
+.menu-dialog--guide .menu-dialog__body span {
+  font-size: clamp(30px, 2.2vw, 40px);
+  line-height: 1.48;
+}
+
 .dialog-close {
   position: absolute;
   top: 14px;
@@ -2045,6 +2069,28 @@ button:focus-visible {
   .story-builder {
     grid-template-columns: minmax(0, 1fr);
     overflow-y: auto;
+  }
+
+  .menu-dialog.menu-dialog--guide {
+    grid-template-rows: auto;
+    width: min(92vw, 1760px);
+    min-height: 82svh;
+    max-height: 88svh;
+    padding: clamp(40px, 2.8vw, 72px);
+  }
+
+  .menu-dialog.menu-dialog--guide .menu-dialog__body {
+    gap: clamp(24px, 1.8vw, 40px);
+    padding-right: clamp(72px, 5vw, 112px);
+  }
+
+  .menu-dialog.menu-dialog--guide .menu-dialog__body h2 {
+    font-size: clamp(54px, 4.2vw, 84px);
+  }
+
+  .menu-dialog.menu-dialog--guide .menu-dialog__body span {
+    font-size: clamp(34px, 2.2vw, 46px);
+    line-height: 1.5;
   }
 
   .custom-builder__form {

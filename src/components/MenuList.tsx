@@ -25,7 +25,7 @@ export function MenuList({ items, language, onSelect, showWhiskyPriceHeader = fa
         </div>
       ) : null}
       {items.map((item, index) => {
-        const opensDetailDialog = item.categoryId !== 'guide' && item.kind !== 'guide' && item.displayType !== 'section_header'
+        const opensDetailDialog = item.displayType !== 'section_header' && item.displayType !== 'spacer'
         const description = text(item.description, language)
         const tastingNote = item.tastingNote ? text(item.tastingNote, language) : ''
         const secondaryText = item.categoryId === 'guide' ? description : tastingNote || description || text(item.summary, language)

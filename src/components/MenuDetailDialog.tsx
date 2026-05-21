@@ -15,6 +15,7 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
   }
 
   const isTarotSignature = item.kind === 'tarot-signature'
+  const isGuideItem = item.categoryId === 'guide' || item.kind === 'guide'
   const detailImageUrls = isTarotSignature
     ? item.subImageUrls?.length
       ? item.subImageUrls
@@ -36,31 +37,38 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
         }
       }}
     >
-      <section className="menu-dialog" role="dialog" aria-modal="true" onClick={(event) => event.stopPropagation()}>
+      <section
+        className={['menu-dialog', isGuideItem ? 'menu-dialog--guide' : ''].filter(Boolean).join(' ')}
+        role="dialog"
+        aria-modal="true"
+        onClick={(event) => event.stopPropagation()}
+      >
         <button className="dialog-close" type="button" aria-label="Close" onClick={onClose}>
           <X aria-hidden="true" />
         </button>
-        <div className="menu-dialog__visual">
-          {detailImageUrls.length > 1 ? (
-            <div className="menu-dialog__gallery" aria-label="Menu images">
-              {detailImageUrls.map((imageUrl, index) => (
-                <img key={`${item.id}-dialog-${index}`} src={imageUrl} alt="" decoding="async" draggable="false" />
-              ))}
-            </div>
-          ) : (
-            <img src={detailImageUrls[0]} alt="" decoding="async" draggable="false" />
-          )}
-          {item.glassImageUrl ? (
-            <img
-              className="menu-dialog__glass"
-              src={item.glassImageUrl}
-              alt=""
-              decoding="async"
-              draggable="false"
-              onError={handleImageFallback}
-            />
-          ) : null}
-        </div>
+        {!isGuideItem ? (
+          <div className="menu-dialog__visual">
+            {detailImageUrls.length > 1 ? (
+              <div className="menu-dialog__gallery" aria-label="Menu images">
+                {detailImageUrls.map((imageUrl, index) => (
+                  <img key={`${item.id}-dialog-${index}`} src={imageUrl} alt="" decoding="async" draggable="false" />
+                ))}
+              </div>
+            ) : (
+              <img src={detailImageUrls[0]} alt="" decoding="async" draggable="false" />
+            )}
+            {item.glassImageUrl ? (
+              <img
+                className="menu-dialog__glass"
+                src={item.glassImageUrl}
+                alt=""
+                decoding="async"
+                draggable="false"
+                onError={handleImageFallback}
+              />
+            ) : null}
+          </div>
+        ) : null}
         <div className="menu-dialog__body">
           <h2 className={item.soldOut ? 'is-sold-out-text' : ''}>{text(item.name, language)}</h2>
           {isCocktailItem && (item.glassImageUrl || abvText) ? (
