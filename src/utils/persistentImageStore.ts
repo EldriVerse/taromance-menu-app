@@ -147,29 +147,6 @@ async function runWithConcurrency<T>(items: T[], concurrency: number, worker: (i
   )
 }
 
-async function persistMissingImagesInBackground(urls: string[]) {
-  if (!urls.length || !('indexedDB' in window)) {
-    return
-  }
-
-  let database: IDBDatabase | undefined
-
-  try {
-    database = await openDatabase()
-    const openedDatabase = database
-
-    await runWithConcurrency(urls, 3, async (url) => {
-      try {
-        await persistImageUrl(openedDatabase, url)
-      } catch {
-        // Background image persistence should never block menu entry.
-      }
-    })
-  } finally {
-    database?.close()
-  }
-}
-
 function imageUrlsFromItem(item: MenuItem) {
   return [
     item.imageUrl,
@@ -216,14 +193,11 @@ export async function persistMenuImages(
   let database: IDBDatabase | undefined
   const urlMap = new Map<string, string>()
   const missingUrls: string[] = []
-  let saved = 0
   const blockUntilComplete = options.blockUntilComplete ?? true
 
   try {
     database = await openDatabase()
     const openedDatabase = database
-
-    onProgress?.(saved, imageUrls.length)
 
     await runWithConcurrency(imageUrls, 6, async (url) => {
       try {
@@ -236,15 +210,12 @@ export async function persistMenuImages(
         }
       } catch {
         missingUrls.push(url)
-      } finally {
-        saved += 1
-        onProgress?.(saved, imageUrls.length)
       }
     })
 
     if (blockUntilComplete && missingUrls.length) {
-      saved = imageUrls.length - missingUrls.length
-      onProgress?.(saved, imageUrls.length)
+      let patched = 0
+      onProgress?.(patched, missingUrls.length)
 
       await runWithConcurrency(missingUrls, 3, async (url) => {
         try {
@@ -252,12 +223,16 @@ export async function persistMenuImages(
         } catch {
           urlMap.set(url, '/assets/legacy/noimage.png')
         } finally {
-          saved += 1
-          onProgress?.(Math.min(saved, imageUrls.length), imageUrls.length)
+          patched += 1
+          onProgress?.(patched, missingUrls.length)
         }
       })
     } else if (missingUrls.length) {
-      void persistMissingImagesInBackground(missingUrls)
+      for (const url of missingUrls) {
+        urlMap.set(url, '/assets/legacy/noimage.png')
+      }
+    } else {
+      onProgress?.(0, 0)
     }
 
     const items = await Promise.all(bundle.items.map((item) => persistItemImages(item, urlMap)))

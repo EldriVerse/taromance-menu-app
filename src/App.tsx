@@ -103,7 +103,9 @@ function App() {
     }
 
     setAssetProgress('저장된 이미지 확인 중...')
-    const localImageBundle = await persistMenuImages(nextState.bundle, undefined, { blockUntilComplete: false })
+    const localImageBundle = await persistMenuImages(nextState.bundle, (loaded, total) => {
+      setAssetProgress(total > 0 ? `이미지 패치 중... ${loaded} / ${total}` : '저장된 이미지 사용 중...')
+    })
 
     setPreparedBundle(localImageBundle)
 
