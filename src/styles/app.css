@@ -913,9 +913,9 @@ button:focus-visible {
     grid-column: 1 / -1;
     grid-row: 1;
     min-height: 0;
-    padding-right: clamp(18px, 2.4vw, 38px);
+    padding-right: clamp(6px, 1vw, 18px);
     pointer-events: none;
-    transform: translateY(-12px);
+    transform: translate(54px, -12px);
     z-index: 8;
   }
 
@@ -924,11 +924,11 @@ button:focus-visible {
   }
 
   .language-toggle__trigger {
-    height: var(--menu-tab-button-height);
-    min-height: var(--menu-tab-button-height);
-    min-width: 198px;
-    padding: 0 38px;
-    font-size: 30px;
+    height: clamp(66px, 4.5vw, 76px);
+    min-height: clamp(66px, 4.5vw, 76px);
+    min-width: 166px;
+    padding: 0 28px;
+    font-size: 26px;
   }
 
   .subcategory-tabs {
