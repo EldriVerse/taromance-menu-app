@@ -504,11 +504,15 @@ button:focus-visible {
   width: 48px;
   height: 48px;
   place-items: center;
-  border: 1px solid rgb(52 44 36 / 22%);
+  border: 2px solid rgb(255 244 209 / 82%);
   border-radius: 999px;
-  color: var(--color-ink);
-  background: linear-gradient(180deg, rgb(255 244 209 / 78%), rgb(212 167 77 / 52%));
-  box-shadow: 0 10px 18px rgb(52 44 36 / 16%);
+  color: #fff4d1;
+  background:
+    radial-gradient(circle at 34% 24%, rgb(255 244 209 / 28%), transparent 34%),
+    linear-gradient(180deg, rgb(144 28 22 / 94%), rgb(72 14 12 / 96%));
+  box-shadow:
+    0 10px 18px rgb(52 44 36 / 24%),
+    inset 0 0 0 1px rgb(52 6 6 / 32%);
   cursor: pointer;
 }
 
@@ -1512,8 +1516,8 @@ button:focus-visible {
   place-items: center;
   padding: 28px;
   background:
-    radial-gradient(circle at 50% 42%, rgb(42 129 124 / 16%), transparent 28%),
-    rgb(18 16 13 / 78%);
+    radial-gradient(circle at 50% 44%, rgb(255 244 209 / 10%), transparent 34%),
+    rgb(0 0 0 / 82%);
   z-index: 20;
 }
 
@@ -1526,20 +1530,30 @@ button:focus-visible {
   min-height: 86svh;
   max-height: 92svh;
   padding: clamp(42px, 3.2vw, 64px);
-  border: 1px solid rgb(126 75 34 / 36%);
+  border: 1px solid rgb(255 244 209 / 18%);
   border-radius: var(--radius-card);
-  color: var(--color-ink);
+  color: rgb(255 244 209 / 86%);
   background:
-    linear-gradient(90deg, rgb(118 78 37 / 12%), transparent 22%),
-    var(--color-paper);
+    linear-gradient(180deg, rgb(255 244 209 / 7%), rgb(255 244 209 / 2%)),
+    rgb(5 4 4 / 72%);
   box-shadow:
-    var(--shadow-panel),
-    inset 0 0 0 1px rgb(255 244 209 / 26%);
+    0 28px 72px rgb(0 0 0 / 54%),
+    inset 0 0 0 1px rgb(255 244 209 / 10%);
   overflow: hidden;
+  backdrop-filter: blur(8px);
 }
 
 .image-dialog .dialog-close {
   z-index: 2;
+  border-color: rgb(255 244 209 / 88%);
+  color: #fff4d1;
+  background:
+    radial-gradient(circle at 34% 24%, rgb(255 244 209 / 22%), transparent 34%),
+    linear-gradient(180deg, rgb(170 31 26 / 96%), rgb(86 12 12 / 98%));
+  box-shadow:
+    0 12px 24px rgb(0 0 0 / 46%),
+    0 0 0 1px rgb(0 0 0 / 32%),
+    inset 0 0 0 1px rgb(255 244 209 / 16%);
 }
 
 .image-dialog__gallery {
@@ -1549,8 +1563,11 @@ button:focus-visible {
   place-self: stretch;
   border-radius: var(--radius-card);
   background:
-    radial-gradient(circle at center, rgb(52 44 36 / 22%), rgb(10 8 6 / 86%) 74%),
-    rgb(10 8 6 / 82%);
+    radial-gradient(circle at center, rgb(255 244 209 / 8%), rgb(0 0 0 / 88%) 72%),
+    rgb(0 0 0 / 78%);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 244 209 / 12%),
+    inset 0 0 42px rgb(0 0 0 / 42%);
   overflow: hidden;
   touch-action: pan-y;
 }
@@ -1559,7 +1576,7 @@ button:focus-visible {
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
-  background: rgb(8 7 6 / 92%);
+  background: rgb(0 0 0 / 72%);
   object-fit: contain;
   transform: translateX(calc(var(--image-dialog-index, 0) * -100%));
   transition: transform 220ms ease;
@@ -1570,9 +1587,15 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 22px;
-  color: #4c2f1f;
+  justify-self: center;
+  padding: 10px 16px;
+  border: 1px solid rgb(255 244 209 / 14%);
+  border-radius: 8px;
+  color: rgb(255 244 209 / 82%);
+  background: rgb(0 0 0 / 34%);
   font-family: var(--font-stamp);
   font-size: 22px;
+  box-shadow: inset 0 0 0 1px rgb(255 244 209 / 8%);
 }
 
 .image-dialog__controls button {
@@ -1580,19 +1603,19 @@ button:focus-visible {
   width: 54px;
   height: 44px;
   place-items: center;
-  border: 0;
+  border: 1px solid rgb(255 244 209 / 18%);
   border-radius: 6px;
-  color: #2b1c12;
-  background: rgb(255 244 209 / 42%);
+  color: rgb(255 244 209 / 88%);
+  background: rgb(255 244 209 / 10%);
   cursor: pointer;
 }
 
 .image-dialog .image-dots button {
-  background: rgb(92 58 32 / 34%);
+  background: rgb(255 244 209 / 24%);
 }
 
 .image-dialog .image-dots button.is-active {
-  background: #7f4e24;
+  background: rgb(255 244 209 / 86%);
 }
 
 @media (orientation: landscape) {
@@ -1744,6 +1767,7 @@ button:focus-visible {
   .tarot-card-summary span.tarot-card-summary__description {
     position: relative;
     overflow-y: auto;
+    padding-left: 14px;
     padding-right: 58px;
     white-space: pre-line;
   }
@@ -1851,17 +1875,12 @@ button:focus-visible {
 }
 
 .menu-dialog__gallery {
+  position: relative;
   display: flex;
   width: 100%;
   height: 100%;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.menu-dialog__gallery::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  overflow: hidden;
+  touch-action: pan-y;
 }
 
 .menu-dialog__gallery img {
@@ -1869,7 +1888,41 @@ button:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  scroll-snap-align: center;
+  transform: translateX(calc(var(--menu-dialog-image-index, 0) * -100%));
+  transition: transform 220ms ease;
+}
+
+.menu-dialog__gallery-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: #2b1c12;
+  background: rgb(255 244 209 / 58%);
+  box-shadow: inset 0 0 0 1px rgb(88 58 32 / 16%);
+}
+
+.menu-dialog__gallery-controls button {
+  display: grid;
+  width: 42px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  color: #2b1c12;
+  background: rgb(255 244 209 / 46%);
+  cursor: pointer;
+}
+
+.menu-dialog__gallery-controls span {
+  color: #2b1c12;
+  font-family: var(--font-stamp);
+  font-size: 18px;
+  line-height: 1;
 }
 
 .menu-dialog__glass {
