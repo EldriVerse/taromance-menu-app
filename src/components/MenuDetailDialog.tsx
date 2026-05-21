@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import type { LanguageCode, MenuItem } from '../domain/menu'
-import { alcoholLabels, formatAbv, formatPriceShort, text } from '../domain/formatting'
+import { formatAbv, formatPriceShort, text } from '../domain/formatting'
 import { handleImageFallback } from '../utils/imageFallback'
 
 interface MenuDetailDialogProps {
@@ -76,11 +76,7 @@ export function MenuDetailDialog({ item, language, onClose }: MenuDetailDialogPr
               {item.glassImageUrl ? (
                 <img src={item.glassImageUrl} alt="" decoding="async" draggable="false" onError={handleImageFallback} />
               ) : null}
-              {abvText ? (
-                <span>
-                  {alcoholLabels[language]} : {abvText}%
-                </span>
-              ) : null}
+              {abvText ? <span>{abvText}%</span> : null}
             </p>
           ) : null}
           {item.soldOut || priceText ? (

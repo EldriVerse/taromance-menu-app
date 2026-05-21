@@ -1,8 +1,8 @@
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { LanguageCode, MenuItem } from '../domain/menu'
-import { alcoholLabels, formatAbv, formatPriceShort, text } from '../domain/formatting'
+import { formatAbv, formatPriceShort, text } from '../domain/formatting'
 import { handleImageFallback } from '../utils/imageFallback'
 
 interface TarotCardSelectorProps {
@@ -15,6 +15,9 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
   const [activeIndex, setActiveIndex] = useState(0)
   const [summaryImageIndex, setSummaryImageIndex] = useState(0)
   const [galleryIndex, setGalleryIndex] = useState<number | null>(null)
+  const summaryDragStartX = useRef<number | null>(null)
+  const galleryDragStartX = useRef<number | null>(null)
+  const wasSummaryDragged = useRef(false)
   const activeItem = items[activeIndex]
   const visibleItems = useMemo(
     () =>
@@ -42,6 +45,42 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
 
   function moveSummaryImage(direction: -1 | 1) {
     setSummaryImageIndex((current) => (current + direction + subImageUrls.length) % subImageUrls.length)
+  }
+
+  function moveGalleryImage(direction: -1 | 1) {
+    setGalleryIndex((current) => ((current ?? 0) + direction + subImageUrls.length) % subImageUrls.length)
+  }
+
+  function handleSummaryDragEnd(clientX: number) {
+    if (summaryDragStartX.current === null || subImageUrls.length <= 1) {
+      summaryDragStartX.current = null
+      return
+    }
+
+    const deltaX = clientX - summaryDragStartX.current
+    summaryDragStartX.current = null
+
+    if (Math.abs(deltaX) > 44) {
+      wasSummaryDragged.current = true
+      moveSummaryImage(deltaX < 0 ? 1 : -1)
+      window.setTimeout(() => {
+        wasSummaryDragged.current = false
+      }, 0)
+    }
+  }
+
+  function handleGalleryDragEnd(clientX: number) {
+    if (galleryDragStartX.current === null || subImageUrls.length <= 1) {
+      galleryDragStartX.current = null
+      return
+    }
+
+    const deltaX = clientX - galleryDragStartX.current
+    galleryDragStartX.current = null
+
+    if (Math.abs(deltaX) > 44) {
+      moveGalleryImage(deltaX < 0 ? 1 : -1)
+    }
   }
 
   return (
@@ -105,7 +144,18 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
         }}
       >
         {subImageUrls.length ? (
-          <div className="tarot-card-summary__carousel" aria-label="Cocktail images" onClick={(event) => event.stopPropagation()}>
+          <div
+            className="tarot-card-summary__carousel"
+            aria-label="Cocktail images"
+            onClick={(event) => event.stopPropagation()}
+            onPointerDown={(event) => {
+              summaryDragStartX.current = event.clientX
+            }}
+            onPointerUp={(event) => handleSummaryDragEnd(event.clientX)}
+            onPointerCancel={() => {
+              summaryDragStartX.current = null
+            }}
+          >
             {subImageUrls.length > 1 ? (
               <button
                 className="tarot-card-summary__carousel-arrow"
@@ -120,7 +170,11 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
               className="tarot-card-summary__image-button"
               type="button"
               aria-label="Open cocktail image"
-              onClick={() => setGalleryIndex(summaryImageIndex)}
+              onClick={() => {
+                if (!wasSummaryDragged.current) {
+                  setGalleryIndex(summaryImageIndex)
+                }
+              }}
             >
               <img
                 src={subImageUrls[summaryImageIndex] ?? subImageUrls[0]}
@@ -159,9 +213,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
           <span className="tarot-card-summary__name">
             <strong className={activeItem.soldOut ? 'is-sold-out-text' : ''}>{text(activeItem.name, language)}</strong>
             {abvText ? (
-              <span className="tarot-card-summary__abv">
-                ( {alcoholLabels[language]} : {abvText}% )
-              </span>
+              <span className="tarot-card-summary__abv">{abvText}%</span>
             ) : null}
           </span>
           {activeItem.soldOut || priceText ? <b>{activeItem.soldOut ? 'SOLD OUT' : priceText}</b> : null}
@@ -189,7 +241,17 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
             <button className="dialog-close" type="button" aria-label="Close" onClick={() => setGalleryIndex(null)}>
               <X aria-hidden="true" />
             </button>
-            <div className="image-dialog__gallery" style={{ '--image-dialog-index': galleryIndex } as CSSProperties}>
+            <div
+              className="image-dialog__gallery"
+              style={{ '--image-dialog-index': galleryIndex } as CSSProperties}
+              onPointerDown={(event) => {
+                galleryDragStartX.current = event.clientX
+              }}
+              onPointerUp={(event) => handleGalleryDragEnd(event.clientX)}
+              onPointerCancel={() => {
+                galleryDragStartX.current = null
+              }}
+            >
               {subImageUrls.map((imageUrl, index) => (
                 <img
                   key={`${activeItem.id}-gallery-${index}`}
@@ -203,7 +265,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
             </div>
             {subImageUrls.length > 1 ? (
               <div className="image-dialog__controls">
-                <button type="button" onClick={() => setGalleryIndex((current) => ((current ?? 0) - 1 + subImageUrls.length) % subImageUrls.length)}>
+                <button type="button" onClick={() => moveGalleryImage(-1)}>
                   <ChevronLeft aria-hidden="true" />
                 </button>
                 <div className="image-dots" aria-label="Cocktail image pages">
@@ -217,7 +279,7 @@ export function TarotCardSelector({ items, language, onSelect }: TarotCardSelect
                     />
                   ))}
                 </div>
-                <button type="button" onClick={() => setGalleryIndex((current) => ((current ?? 0) + 1) % subImageUrls.length)}>
+                <button type="button" onClick={() => moveGalleryImage(1)}>
                   <ChevronRight aria-hidden="true" />
                 </button>
               </div>

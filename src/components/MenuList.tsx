@@ -1,7 +1,7 @@
 import { ImageOff } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import type { LanguageCode, MenuItem } from '../domain/menu'
-import { alcoholLabels, formatAbv, formatPriceShort, text } from '../domain/formatting'
+import { formatAbv, formatPriceShort, text } from '../domain/formatting'
 import { handleImageFallback } from '../utils/imageFallback'
 
 interface MenuListProps {
@@ -28,7 +28,7 @@ export function MenuList({ items, language, onSelect, showWhiskyPriceHeader = fa
         const opensDetailDialog = item.displayType !== 'section_header' && item.displayType !== 'spacer'
         const description = text(item.description, language)
         const tastingNote = item.tastingNote ? text(item.tastingNote, language) : ''
-        const hidesSecondaryText = item.categoryId === 'guide' && item.tabId === 'guide_rules'
+        const hidesSecondaryText = item.categoryId === 'guide'
         const secondaryText = hidesSecondaryText
           ? ''
           : item.categoryId === 'guide'
@@ -97,9 +97,7 @@ export function MenuList({ items, language, onSelect, showWhiskyPriceHeader = fa
               <span className="menu-item__title-line">
                 <strong>{text(item.name, language)}</strong>
                 {isCocktailItem && abvText ? (
-                  <span className="menu-item__abv">
-                    ( {alcoholLabels[language]} : {abvText}% )
-                  </span>
+                  <span className="menu-item__abv">{abvText}%</span>
                 ) : null}
               </span>
               {secondaryText ? <small>{secondaryText}</small> : null}
