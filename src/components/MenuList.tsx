@@ -28,7 +28,12 @@ export function MenuList({ items, language, onSelect, showWhiskyPriceHeader = fa
         const opensDetailDialog = item.displayType !== 'section_header' && item.displayType !== 'spacer'
         const description = text(item.description, language)
         const tastingNote = item.tastingNote ? text(item.tastingNote, language) : ''
-        const secondaryText = item.categoryId === 'guide' ? description : tastingNote || description || text(item.summary, language)
+        const hidesSecondaryText = item.categoryId === 'guide' && item.tabId === 'guide_rules'
+        const secondaryText = hidesSecondaryText
+          ? ''
+          : item.categoryId === 'guide'
+            ? description
+            : tastingNote || description || text(item.summary, language)
         const priceText = item.priceWon !== undefined ? formatPriceShort(item.priceWon) : ''
         const glassPriceText = item.priceGlassWon !== undefined ? formatPriceShort(item.priceGlassWon) : ''
         const bottlePriceText = item.priceBottleWon !== undefined ? formatPriceShort(item.priceBottleWon) : ''
