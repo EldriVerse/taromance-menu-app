@@ -1441,14 +1441,15 @@ button:focus-visible {
   width: 100%;
   aspect-ratio: 16 / 9;
   padding: 0;
-  border: 0;
+  border: 2px solid rgb(74 45 26 / 44%);
   border-radius: 6px;
   background: rgb(255 244 209 / 22%);
   cursor: pointer;
   overflow: hidden;
   box-shadow:
-    inset 0 0 0 1px rgb(88 58 32 / 14%),
-    0 8px 16px rgb(52 44 36 / 12%);
+    inset 0 0 0 2px rgb(255 244 209 / 28%),
+    0 8px 16px rgb(52 44 36 / 12%),
+    0 0 0 1px rgb(255 244 209 / 20%);
 }
 
 .tarot-card-summary__image-button img {
